@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Layout
+namespace SchoolPrj.BookWebsite
 {
 
 
