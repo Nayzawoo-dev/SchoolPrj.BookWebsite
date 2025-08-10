@@ -43,9 +43,11 @@
                             class="inline-block px-4 py-2 bg-indigo-500 text-white rounded-lg hover:bg-indigo-600 transition">📖 View Book
                         </a>
 
-                        <a href='<%# ResolveUrl(Eval("PdfPath").ToString()) %>' target="_blank"
-                            class="inline-block px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition">❌ Delete Book
-                        </a>
+                        <asp:Button ID="btnDelete" runat="server" Text="Delete Book"
+                            CommandArgument='<%# Eval("BookId") %>'
+                            OnClick="btnDelete_Click"
+                            OnClientClick="return confirm('Are you sure?');"
+                            CssClass="btn inline-block px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition" />
                     </div>
                 </div>
             </ItemTemplate>

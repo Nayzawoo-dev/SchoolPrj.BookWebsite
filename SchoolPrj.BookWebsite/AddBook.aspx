@@ -51,7 +51,7 @@
                 if (msg) {
                     msg.style.display = 'none';
                 }
-            }, 3000);
+            }, 5000);
         }
     </script>
 </asp:Content>

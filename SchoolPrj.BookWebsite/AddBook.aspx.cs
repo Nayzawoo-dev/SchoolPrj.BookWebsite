@@ -65,9 +65,9 @@ namespace SchoolPrj.BookWebsite
 
             // 1️⃣ Upload Image
             string imagePath = null;
-            if (imagePath == null) 
+            if (fuImage.HasFile == false) 
             {
-                lblMessage.Text = "⚠ Please enter a Book Cover Image.";
+                lblMessage.Text = "⚠ Please enter a book image.";
                 Page.ClientScript.RegisterStartupScript(this.GetType(), "HideMsg", "hideMessageAfterDelay();", true);
                 return;
             }
@@ -92,9 +92,9 @@ namespace SchoolPrj.BookWebsite
 
             // 2️⃣ Upload PDF
             string pdfPath = null;
-            if (pdfPath == null) 
+            if (fuPdf.HasFile == false)
             {
-                lblMessage.Text = "⚠ Please enter a PDF Book File.";
+                lblMessage.Text = "⚠ Please enter a book file.";
                 Page.ClientScript.RegisterStartupScript(this.GetType(), "HideMsg", "hideMessageAfterDelay();", true);
                 return;
             }
@@ -121,7 +121,7 @@ namespace SchoolPrj.BookWebsite
             using (var conn = new SqlConnection(connStr))
             {
                 string sql = @"INSERT INTO Tb_Book (BookTitle, Category, Author, Description, ImagePath, PdfPath) 
-                               VALUES (@Title, @Category, @Author, @Description, @ImagePath, @PdfPath)";
+                               VALUES (@BookTitle, @Category, @Author, @Description, @ImagePath, @PdfPath)";
                 conn.Execute(sql, new Book
                 {
                     BookTitle = title,
@@ -136,6 +136,11 @@ namespace SchoolPrj.BookWebsite
             // Success message
             lblMessage.CssClass = "block mt-4 text-green-500";
             lblMessage.Text = "✅ Book added successfully!";
+            txtTitle.Text = string.Empty;
+            txtAuthor.Text = string.Empty;
+            txtDescription.Text = string.Empty;
+            txtCategory.Text = string.Empty;
+            Page.ClientScript.RegisterStartupScript(this.GetType(), "HideMsg", "hideMessageAfterDelay();", true);
             // Redirect to Books Page
         }
     }

@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Web.UI.WebControls;
 using Dapper;
 using static SchoolPrj.BookWebsite.Book;
 
@@ -63,6 +65,31 @@ namespace SchoolPrj.BookWebsite
         {
             LoadBooks();
             pnlNoBooks.Visible = false;
+        }
+
+        protected void btnDelete_Click(object sender, EventArgs e)
+        {
+            Button btn = (Button)sender;
+            int bookId = Convert.ToInt32(btn.CommandArgument);
+
+            // Delete logic here
+            DeleteBook(bookId);
+
+            // Rebind grid or update UI
+            LoadBooks();
+        }
+
+        protected void DeleteBook(int bookId)
+        {
+            using (var connection = new SqlConnection(connStr))
+            {
+                string sql = @"DELETE FROM [dbo].[Tb_Book]
+      WHERE BookId = @BookId";
+                var res = connection.Execute(sql, new Book
+                {
+                    BookId = bookId
+                });
+            }
         }
     }
 }
