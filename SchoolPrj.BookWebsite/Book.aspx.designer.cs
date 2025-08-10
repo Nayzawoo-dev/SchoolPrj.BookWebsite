@@ -11,34 +11,52 @@ namespace SchoolPrj.BookWebsite
 {
 
 
-    public partial class SiteMaster
+    public partial class _Book
     {
 
         /// <summary>
-        /// TitleContent control.
+        /// txtSearch control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.ContentPlaceHolder TitleContent;
+        protected global::System.Web.UI.WebControls.TextBox txtSearch;
 
         /// <summary>
-        /// form1 control.
+        /// btnSearch control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlForm form1;
+        protected global::System.Web.UI.WebControls.Button btnSearch;
 
         /// <summary>
-        /// MainContent control.
+        /// rptBooks control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.ContentPlaceHolder MainContent;
+        protected global::System.Web.UI.WebControls.Repeater rptBooks;
+
+        /// <summary>
+        /// pnlNoBooks control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlNoBooks;
+
+        /// <summary>
+        /// btnUnderstand control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnUnderstand;
     }
 }

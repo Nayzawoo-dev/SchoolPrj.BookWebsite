@@ -1,23 +1,61 @@
-<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Site.Mobile.master.cs" Inherits="SchoolPrj.BookWebsite.Site_Mobile" %>
-<%@ Register Src="~/ViewSwitcher.ascx" TagPrefix="friendlyUrls" TagName="ViewSwitcher" %>
-
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Site.master.cs" Inherits="SchoolPrj.BookWebsite.SiteMaster" %>
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html lang="en">
 <head runat="server">
-    <meta name="viewport" content="width=device-width" />
-    <title></title>
-    <asp:ContentPlaceHolder runat="server" ID="HeadContent" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><asp:ContentPlaceHolder ID="TitleContent" runat="server" /></title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
+<body class="bg-gray-100 text-gray-800 font-sans">
     <form id="form1" runat="server">
-    <div>
-        <h1>Mobile Master Page</h1>
-        <asp:ContentPlaceHolder runat="server" ID="FeaturedContent" />
-        <section class="content-wrapper main-content clear-fix">
-            <asp:ContentPlaceHolder runat="server" ID="MainContent" />
-        </section>
-        <friendlyUrls:ViewSwitcher runat="server" />
-    </div>
+        <div class="flex min-h-screen">
+            <!-- Sidebar -->
+            <div id="sidebar" class="fixed md:static inset-y-0 left-0 w-64 bg-white shadow-lg flex flex-col justify-between transform -translate-x-full md:translate-x-0 transition-transform duration-300 z-50">
+                <div>
+                    <div class="px-6 py-5 text-2xl font-bold text-indigo-600 border-b border-gray-200">
+                        MyBookShelf
+                    </div>
+                    <nav class="flex flex-col space-y-2 p-4">
+                        <a href="Default.aspx" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-indigo-100 hover:text-indigo-700 transition">🏠 Home</a>
+                        <a href="Book.aspx" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-indigo-100 hover:text-indigo-700 transition">📖 Books</a>
+                        <a href="#" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-indigo-100 hover:text-indigo-700 transition">📚 Categories</a>
+                        <a href="#" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-indigo-100 hover:text-indigo-700 transition">🔐 Login</a>
+                    </nav>
+                </div>
+            </div>
+
+            <!-- Overlay (for mobile) -->
+            <div id="overlay" class="fixed inset-0 bg-black bg-opacity-50 hidden z-40 md:hidden"></div>
+
+            <!-- Main Content -->
+            <div class="flex-1 overflow-auto p-4 md:p-6 w-full">
+                <!-- Top Bar for Mobile -->
+                <div class="flex items-center justify-between mb-4 md:hidden">
+                    <button id="menuBtn" type="button" class="p-2 rounded-md bg-indigo-500 text-white focus:outline-none">
+                        ☰
+                    </button>
+                </div>
+
+                <asp:ContentPlaceHolder ID="MainContent" runat="server" />
+            </div>
+        </div>
     </form>
+
+    <script>
+        const menuBtn = document.getElementById('menuBtn');
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('overlay');
+
+        menuBtn?.addEventListener('click', () => {
+            sidebar.classList.remove('-translate-x-full');
+            overlay.classList.remove('hidden');
+        });
+
+        overlay?.addEventListener('click', () => {
+            sidebar.classList.add('-translate-x-full');
+            overlay.classList.add('hidden');
+        });
+    </script>
 </body>
 </html>

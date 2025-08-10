@@ -1,5 +1,4 @@
-﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Site.master.cs" Inherits="SchoolPrj.BookWebsite.Site" %>
-
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Site.master.cs" Inherits="SchoolPrj.BookWebsite.SiteMaster" %>
 <!DOCTYPE html>
 <html lang="en">
 <head runat="server">
@@ -8,27 +7,55 @@
     <title><asp:ContentPlaceHolder ID="TitleContent" runat="server" /></title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-50 text-gray-800 font-sans">
-    <!-- Navbar -->
-    <nav class="bg-white shadow-md">
-        <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
-            <div class="text-2xl font-bold text-indigo-600">MyBookShelf</div>
-            <div class="space-x-6">
-                <a href="home.aspx" class="text-gray-700 hover:text-indigo-600 font-medium">Home</a>
-                <a href="category.aspx" class="text-gray-700 hover:text-indigo-600 font-medium">Categories</a>
-                <a href="book.aspx" class="text-gray-700 hover:text-indigo-600 font-medium">Books</a>
+<body class="bg-gray-100 text-gray-800 font-sans">
+    <form id="form1" runat="server">
+        <div class="flex min-h-screen">
+            <!-- Sidebar -->
+            <div id="sidebar" class="fixed md:static inset-y-0 left-0 w-64 bg-white shadow-lg flex flex-col justify-between transform -translate-x-full md:translate-x-0 transition-transform duration-300 z-50">
+                <div>
+                    <div class="px-6 py-5 text-2xl font-bold text-indigo-600 border-b border-gray-200">
+                        MyBookShelf
+                    </div>
+                    <nav class="flex flex-col space-y-2 p-4">
+                        <a href="Default.aspx" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-indigo-100 hover:text-indigo-700 transition">🏠 Home</a>
+                        <a href="Book.aspx" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-indigo-100 hover:text-indigo-700 transition">📖 Books</a>
+                        <a href="#" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-indigo-100 hover:text-indigo-700 transition">📚 Categories</a>
+                        <a href="#" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-indigo-100 hover:text-indigo-700 transition">🔐 Login</a>
+                    </nav>
+                </div>
+            </div>
+
+            <!-- Overlay (for mobile) -->
+            <div id="overlay" class="fixed inset-0 bg-black bg-opacity-50 hidden z-40 md:hidden"></div>
+
+            <!-- Main Content -->
+            <div class="flex-1 overflow-auto p-4 md:p-6 w-full">
+                <!-- Top Bar for Mobile -->
+                <div class="flex items-center justify-between mb-4 md:hidden">
+                    <button id="menuBtn" type="button" class="p-2 rounded-md bg-indigo-500 text-white focus:outline-none">
+                        ☰
+                    </button>
+                </div>
+
+                <asp:ContentPlaceHolder ID="MainContent" runat="server" />
             </div>
         </div>
-    </nav>
+    </form>
 
-    <!-- Page Content Wrapper -->
-    <div class="max-w-7xl mx-auto px-4 py-6">
-        <asp:ContentPlaceHolder ID="MainContent" runat="server" />
-    </div>
+    <script>
+        const menuBtn = document.getElementById('menuBtn');
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('overlay');
 
-    <!-- Footer -->
-    <footer class="bg-white border-t mt-10 py-4 text-center text-sm text-gray-500">
-        &copy; 2025 MyBookShelf. All rights reserved.
-    </footer>
+        menuBtn?.addEventListener('click', () => {
+            sidebar.classList.remove('-translate-x-full');
+            overlay.classList.remove('hidden');
+        });
+
+        overlay?.addEventListener('click', () => {
+            sidebar.classList.add('-translate-x-full');
+            overlay.classList.add('hidden');
+        });
+    </script>
 </body>
 </html>

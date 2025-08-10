@@ -1,44 +1,32 @@
-﻿<%@ Page Title="Home Page" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="SchoolPrj.BookWebsite._Default" %>
+﻿<%@ Page Title="Home" Language="C#" MasterPageFile="~/Site.master" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="SchoolPrj.BookWebsite._Default" %>
 
-<asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
+<asp:Content ID="Content1" ContentPlaceHolderID="TitleContent" runat="server">
+    Home
+</asp:Content>
 
-    <main>
-        <section class="row" aria-labelledby="aspnetTitle">
-            <h1 id="aspnetTitle">ASP.NET</h1>
-            <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS, and JavaScript.</p>
-            <p><a href="http://www.asp.net" class="btn btn-primary btn-md">Learn more &raquo;</a></p>
-        </section>
+<asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
 
-        <div class="row">
-            <section class="col-md-4" aria-labelledby="gettingStartedTitle">
-                <h2 id="gettingStartedTitle">Getting started</h2>
-                <p>
-                    ASP.NET Web Forms lets you build dynamic websites using a familiar drag-and-drop, event-driven model.
-                A design surface and hundreds of controls and components let you rapidly build sophisticated, powerful UI-driven sites with data access.
-                </p>
-                <p>
-                    <a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301948">Learn more &raquo;</a>
-                </p>
-            </section>
-            <section class="col-md-4" aria-labelledby="librariesTitle">
-                <h2 id="librariesTitle">Get more libraries</h2>
-                <p>
-                    NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.
-                </p>
-                <p>
-                    <a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301949">Learn more &raquo;</a>
-                </p>
-            </section>
-            <section class="col-md-4" aria-labelledby="hostingTitle">
-                <h2 id="hostingTitle">Web Hosting</h2>
-                <p>
-                    You can easily find a web hosting company that offers the right mix of features and price for your applications.
-                </p>
-                <p>
-                    <a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301950">Learn more &raquo;</a>
-                </p>
-            </section>
+
+    <div class="bg-indigo-100 p-8 rounded-xl shadow mb-10">
+            <h1 class="text-4xl font-bold text-indigo-800 mb-4">📖 Welcome to MyBookShelf</h1>
+            <p class="text-gray-700 text-lg">
+                Dive into a world of books – Explore, categorize, and enjoy reading from a beautifully organized digital shelf.
+            </p>
         </div>
-    </main>
 
+    <div class="w-full mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <!-- Hero Section -->
+        <div class="bg-white p-6 sm:p-10 rounded-xl shadow-md mt-6 sm:mt-12">
+            <h1 class="text-3xl sm:text-4xl md:text-5xl font-extrabold text-indigo-700 mb-4 leading-snug sm:leading-tight">
+                📚 Free Books, Infinite Stories
+            </h1>
+            <p class="text-base sm:text-lg md:text-xl text-gray-700 mb-6">
+                Discover thousands of free books across all genres. No payment. No limit. Just read and enjoy.
+            </p>
+
+            <a href="login.aspx" class="inline-block px-5 py-3 sm:px-6 sm:py-3 bg-indigo-600 text-white rounded-full text-sm sm:text-lg hover:bg-indigo-700 transition">
+                🔐 Login to Start Reading
+            </a>
+        </div>
+    </div>
 </asp:Content>
