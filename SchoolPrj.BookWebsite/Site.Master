@@ -19,7 +19,7 @@
                     <nav class="flex flex-col space-y-2 p-4">
                         <a href="Default.aspx" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-indigo-100 hover:text-indigo-700 transition">🏠 Home</a>
                         <a href="Book.aspx" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-indigo-100 hover:text-indigo-700 transition">📖 Books</a>
-                        <a href="#" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-indigo-100 hover:text-indigo-700 transition">📚 Categories</a>
+                        <a href="Category.aspx" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-indigo-100 hover:text-indigo-700 transition">📚 Categories</a>
                         <a href="#" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-indigo-100 hover:text-indigo-700 transition">🔐 Login</a>
                     </nav>
                 </div>
