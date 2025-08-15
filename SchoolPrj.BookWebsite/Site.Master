@@ -7,7 +7,7 @@
     <title><asp:ContentPlaceHolder ID="TitleContent" runat="server" /></title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100 text-gray-800 font-sans">
+<body class="bg-white text-gray-800 font-sans">
     <form id="form1" runat="server">
         <div class="flex min-h-screen">
             <!-- Sidebar -->

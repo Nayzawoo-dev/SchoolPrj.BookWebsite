@@ -33,20 +33,22 @@
                 <div class="bg-white shadow-lg rounded-xl overflow-hidden hover:shadow-2xl transition-shadow duration-300">
                     <img src='<%# ResolveUrl(Eval("ImagePath").ToString()) %>'
                         alt='<%# Eval("BookTitle") %>'
-                        class="w-full h-48 object-cover" />
+                        class="w-full h-48 object-contain" />
                     <div class="p-4">
                         <h2 class="text-lg font-bold text-indigo-600"><%# Eval("BookTitle") %></h2>
                         <p class="text-sm text-gray-500 mb-2">
                             📚 <%# Eval("Category") %> | ✍ <%# Eval("Author") %>
                         </p>
-                        <a href='<%# ResolveUrl(Eval("PdfPath").ToString()) %>' target="_blank"
+
+                        <a href='BookDetails.aspx?BookId=<%# Eval("BookId") %>' 
                             class="inline-block px-4 py-2 bg-indigo-500 text-white rounded-lg hover:bg-indigo-600 transition">📖 View Book
                         </a>
+
 
                         <asp:Button ID="btnDelete" runat="server" Text="Delete Book"
                             CommandArgument='<%# Eval("BookId") %>'
                             OnClick="btnDelete_Click"
-                            OnClientClick="return confirm('Are you sure?');"
+                            OnClientClick="return confirm('Are you sure want to delete?');"
                             CssClass="btn inline-block px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition" />
                     </div>
                 </div>
