@@ -23,12 +23,12 @@
             OnClick="btnSearch_Click" />
         <!-- Add New Book Button -->
         <asp:HyperLink ID="btnAddBook" runat="server" NavigateUrl="AddBook.aspx" Visible="false"
-            CssClass="w-full sm:w-auto flex justify-center items-center px-4 py-2 bg-indigo-600 text-white rounded-lg shadow hover:bg-indigo-700 transition text-sm sm:text-base">Add</asp:HyperLink>
+            CssClass="w-full sm:w-auto flex justify-center items-center px-4 py-2 bg-indigo-600 text-white rounded-lg shadow hover:bg-indigo-700 transition text-sm sm:text-base">Add New Book</asp:HyperLink>
     </div>
 
     <!-- Books Grid -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        <asp:Repeater ID="rptBooks" runat="server">
+        <asp:Repeater ID="rptBooks" runat="server" OnItemDataBound="Repeater_ItemDataBound">
             <ItemTemplate>
                 <div class="bg-white shadow-lg rounded-xl overflow-hidden hover:shadow-2xl transition-shadow duration-300">
                     <img src='<%# ResolveUrl(Eval("ImagePath").ToString()) %>'
@@ -45,10 +45,9 @@
                         </a>
 
 
-                        <asp:Button ID="btnDelete" runat="server" Text="Delete Book" CommandArgument='<%# Eval("BookId") %>' OnClick="btnDelete_Click"
+                        <asp:Button ID="btnDelete" runat="server" Text="🗑" Visible="false" CommandArgument='<%# Eval("BookId") %>' OnClick="btnDelete_Click"
                             OnClientClick="return confirm('Are you sure want to delete?');"
                             CssClass="btn inline-block px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition" />
-
                     </div>
                 </div>
             </ItemTemplate>

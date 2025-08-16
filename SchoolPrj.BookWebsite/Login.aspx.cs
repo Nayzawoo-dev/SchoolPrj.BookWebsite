@@ -18,6 +18,23 @@ namespace SchoolPrj.BookWebsite
                     "SELECT * FROM Users WHERE Username = @Username or Email = @Email",
                     new User{ Username = txtUsername.Text.Trim(),Email = txtUsername.Text.Trim() });
 
+                if(user is null)
+                {
+                    var admin = connection.QueryFirstOrDefault<Admins>("SELECT * FROM Admins WHERE Username = @Username or Email = @Email",
+                        new Admins { Username = txtUsername.Text.Trim(), Email = txtUsername.Text.Trim() });
+
+                    Session["UserId"] = admin.UserId;
+                    Session["Username"] = admin.Username;
+                    Session["Role"] = admin.Role;
+                    Session["ProfileImage"] = admin.ProfileImagePath;
+
+                    // Cookie (3 days login)
+                    HttpCookie authCookie = new HttpCookie("UserAuth");
+                    authCookie.Values["UserId"] = admin.UserId.ToString();
+                    authCookie.Expires = DateTime.Now.AddDays(3);
+                    Response.Cookies.Add(authCookie);
+                    Response.Redirect("Book.aspx");
+                }
 
 
                 if (user != null && VerifyPassword(txtPassword.Text, user.PasswordHash, user.PasswordSalt))
@@ -33,7 +50,6 @@ namespace SchoolPrj.BookWebsite
                     authCookie.Values["UserId"] = user.UserId.ToString();
                     authCookie.Expires = DateTime.Now.AddDays(3);
                     Response.Cookies.Add(authCookie);
-
                     Response.Redirect("Book.aspx");
                 }
                 else

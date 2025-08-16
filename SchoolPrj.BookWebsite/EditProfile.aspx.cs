@@ -58,7 +58,6 @@ namespace SchoolPrj.BookWebsite
                 string fileName = Guid.NewGuid() + Path.GetExtension(fileUploadProfile.FileName);
                 string filePath = Path.Combine(folderPath, fileName);
                 fileUploadProfile.SaveAs(filePath);
-
                 profilePath = "~/uploads/" + fileName;
             }
 

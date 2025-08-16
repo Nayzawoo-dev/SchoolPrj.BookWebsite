@@ -32,9 +32,17 @@ namespace SchoolPrj.BookWebsite
         {
             using (var connection = new SqlConnection(connStr))
             {
-                string sql = "SELECT Username, Email, Role, ProfileImagePath FROM Users WHERE UserId = @UserId";
+                string sql = @"SELECT Username, Email, Role, ProfileImagePath FROM Users WHERE UserId = @UserId";
                 var user = connection.QuerySingleOrDefault(sql, new { UserId = Session["UserId"] });
-
+                if (user == null)
+                {
+                    string query = @"SELECT Username, Email, Role, ProfileImagePath FROM Admins WHERE UserId = @UserId";
+                    var admin = connection.QuerySingleOrDefault(query, new { UserId = Session["UserId"] });
+                    lblFullName.Text = admin.Username;
+                    lblEmail.Text = admin.Email;
+                    lblRole.Text = admin.Role;
+                    imgProfile.ImageUrl = admin.ProfileImagePath;
+                }
                 if (user != null)
                 {
                     lblFullName.Text = user.Username;

@@ -323,6 +323,9 @@
     <Compile Include="AddBook.aspx.designer.cs">
       <DependentUpon>AddBook.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Admins.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="About.aspx.cs">
       <DependentUpon>About.aspx</DependentUpon>

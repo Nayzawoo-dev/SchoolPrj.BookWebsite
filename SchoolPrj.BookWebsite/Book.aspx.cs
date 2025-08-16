@@ -6,7 +6,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Web.UI.WebControls;
 using Dapper;
-using static SchoolPrj.BookWebsite.Book;
+using static SchoolPrj.BookWebsite._Book;
 
 namespace SchoolPrj.BookWebsite
 {
@@ -18,14 +18,28 @@ namespace SchoolPrj.BookWebsite
         {
             if (!IsPostBack)
             {
-                if (Session["Role"] != null && Session["Role"].ToString() == "User")
+                if (Session["Role"] != null && Session["Role"].ToString() == "Admin")
                 {
-                    btnAddBook.Visible = false;
-                    
+                    btnAddBook.Visible = true;
                 }
                 LoadBooks();
             }
         }
+
+
+        protected void Repeater_ItemDataBound(object sender, RepeaterItemEventArgs e)
+        {
+            if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
+            {
+                var btnDelete = (Button)e.Item.FindControl("btnDelete");
+                if (btnDelete != null) // Null ဖြစ်မဖြစ် စစ်ပေး
+                {
+                    if (Session["Role"] != null && Session["Role"].ToString() == "Admin")
+                        btnDelete.Visible = true;
+                }
+            }
+        }
+
 
         private void LoadBooks()
         {

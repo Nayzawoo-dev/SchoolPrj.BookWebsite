@@ -27,7 +27,8 @@
                             <asp:Image ID="imgProfile" runat="server" CssClass="w-10 h-10 rounded-full border" />
                             <asp:Label ID="lblUserName" runat="server" CssClass="font-medium"></asp:Label>
                             <asp:HyperLink ID="profileLink" NavigateUrl="Profile.aspx" runat="server"
-                                CssClass="ml-2 text-indigo-600">Profile</asp:HyperLink>
+                                CssClass="ml-2 text-indigo-600">View Profile
+                            </asp:HyperLink>
                         </asp:Panel>
 
 
