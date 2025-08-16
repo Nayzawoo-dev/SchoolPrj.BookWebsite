@@ -18,15 +18,17 @@ namespace SchoolPrj.BookWebsite
         {
             if (!IsPostBack)
             {
+                if (Session["Role"] != null && Session["Role"].ToString() == "User")
+                {
+                    btnAddBook.Visible = false;
+                    
+                }
                 LoadBooks();
             }
         }
 
-
         private void LoadBooks()
         {
-
-
             using (var connection = new SqlConnection(connStr))
             {
                 string sql = "SELECT * FROM Tb_Book";
@@ -48,7 +50,6 @@ namespace SchoolPrj.BookWebsite
             rptBooks.DataBind();
 
             pnlNoBooks.Visible = (Books.Count == 0);
-
         }
 
         protected void btnSearch_Click(object sender, EventArgs e)
@@ -72,10 +73,10 @@ namespace SchoolPrj.BookWebsite
             Button btn = (Button)sender;
             int bookId = Convert.ToInt32(btn.CommandArgument);
 
-            // Delete logic here
+            // Delete logic here  
             DeleteBook(bookId);
 
-            // Rebind grid or update UI
+            // Rebind grid or update UI  
             LoadBooks();
         }
 
@@ -83,8 +84,8 @@ namespace SchoolPrj.BookWebsite
         {
             using (var connection = new SqlConnection(connStr))
             {
-                string sql = @"DELETE FROM [dbo].[Tb_Book]
-      WHERE BookId = @BookId";
+                string sql = @"DELETE FROM [dbo].[Tb_Book]  
+         WHERE BookId = @BookId";
                 var res = connection.Execute(sql, new Book
                 {
                     BookId = bookId

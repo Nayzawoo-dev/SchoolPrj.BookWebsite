@@ -8,7 +8,7 @@
         <div class="relative w-full max-w-full sm:max-w-sm">
             <asp:TextBox ID="txtSearch" runat="server"
                 CssClass="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm sm:text-base"
-                placeholder="Search books...">
+                placeholder="Search books...">  
             </asp:TextBox>
             <svg xmlns="http://www.w3.org/2000/svg"
                 class="h-5 w-5 text-gray-400 absolute left-3 top-2.5"
@@ -22,9 +22,9 @@
             CssClass="w-full sm:w-auto px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition text-sm sm:text-base"
             OnClick="btnSearch_Click" />
         <!-- Add New Book Button -->
-        <a href="AddBook.aspx" class="w-full sm:w-auto flex justify-center items-center px-4 py-2 bg-indigo-600 text-white rounded-lg shadow hover:bg-indigo-700 transition text-sm sm:text-base">Add</a>
+        <asp:HyperLink ID="btnAddBook" runat="server" NavigateUrl="AddBook.aspx" Visible="false"
+            CssClass="w-full sm:w-auto flex justify-center items-center px-4 py-2 bg-indigo-600 text-white rounded-lg shadow hover:bg-indigo-700 transition text-sm sm:text-base">Add</asp:HyperLink>
     </div>
-
 
     <!-- Books Grid -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -40,16 +40,15 @@
                             📚 <%# Eval("Category") %> | ✍ <%# Eval("Author") %>
                         </p>
 
-                        <a href='BookDetails.aspx?BookId=<%# Eval("BookId") %>' 
-                            class="inline-block px-4 py-2 bg-indigo-500 text-white rounded-lg hover:bg-indigo-600 transition">📖 View Book
+                        <a href='BookDetails.aspx?BookId=<%# Eval("BookId") %>'
+                            class="inline-block px-4 py-2 bg-indigo-500 text-white rounded-lg hover:bg-indigo-600 transition">📖 View Book  
                         </a>
 
 
-                        <asp:Button ID="btnDelete" runat="server" Text="Delete Book"
-                            CommandArgument='<%# Eval("BookId") %>'
-                            OnClick="btnDelete_Click"
+                        <asp:Button ID="btnDelete" runat="server" Text="Delete Book" CommandArgument='<%# Eval("BookId") %>' OnClick="btnDelete_Click"
                             OnClientClick="return confirm('Are you sure want to delete?');"
                             CssClass="btn inline-block px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition" />
+
                     </div>
                 </div>
             </ItemTemplate>
@@ -60,11 +59,10 @@
     <asp:Panel ID="pnlNoBooks" runat="server" Visible="false"
         CssClass="mt-10 mx-auto max-w-xs sm:max-w-md p-4 bg-gray-50 border border-gray-200 rounded-lg shadow-sm text-center">
         <div class="text-gray-700 text-sm sm:text-md mb-3">
-            😕 No books found matching your search.
+            😕 No books found matching your search.  
         </div>
         <asp:Button ID="btnUnderstand" runat="server" Text="I Understand"
             CssClass="px-4 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300 transition text-sm sm:text-base"
             OnClick="btnUnderstand_Click" />
     </asp:Panel>
 </asp:Content>
-
