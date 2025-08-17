@@ -27,7 +27,7 @@
 
     <!-- Books Grid -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        <asp:Repeater ID="repBooks" runat="server">
+        <asp:Repeater ID="repBooks" runat="server" OnItemDataBound="Repeater_ItemDataBound">
             <ItemTemplate>
                 <div class="bg-white shadow-lg rounded-xl overflow-hidden hover:shadow-2xl transition-shadow duration-300">
                     <img src='<%# ResolveUrl(Eval("ImagePath").ToString()) %>'
@@ -44,7 +44,7 @@
 
 
 
-                        <asp:Button ID="btnDelete" runat="server" Text="Delete Book"
+                        <asp:Button ID="btnDelete" runat="server" Text="🗑" Visible="false"
                             CommandArgument='<%# Eval("BookId") %>'
                             OnClick="btnDelete_Click"
                             OnClientClick="return confirm('Are you sure want to delete?');"

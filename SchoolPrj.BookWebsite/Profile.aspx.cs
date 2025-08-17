@@ -52,5 +52,22 @@ namespace SchoolPrj.BookWebsite
                 }
             }
         }
+
+        protected void btnLogout_Click(object sender, EventArgs e)
+        {
+            // Session clear
+            Session.Clear();
+            Session.Abandon();
+
+            // Authentication cookie (ASP.NET Forms Auth သုံးထားရင်)
+            if (Request.Cookies["UserAuth"] != null)
+            {
+                Response.Cookies["UserAuth"].Expires = DateTime.Now.AddDays(-1);
+            }
+
+            // Website အစ Login Page သို့ ပြန်ပို့
+            Response.Redirect("~/Login.aspx");
+        }
+
     }
 }

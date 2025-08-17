@@ -25,6 +25,18 @@ namespace SchoolPrj.BookWebsite
             }
         }
 
+        protected void Repeater_ItemDataBound(object sender, RepeaterItemEventArgs e)
+        {
+            if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
+            {
+                var btnDelete = (Button)e.Item.FindControl("btnDelete");
+                if (btnDelete != null) // Null ဖြစ်မဖြစ် စစ်ပေး
+                {
+                    if (Session["Role"] != null && Session["Role"].ToString() == "Admin")
+                        btnDelete.Visible = true;
+                }
+            }
+        }
         private void LoadBooks()
         {
 
