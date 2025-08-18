@@ -3,6 +3,7 @@ using System.Data.SqlClient;
 using Dapper;
 using System.Security.Cryptography;
 using System.Configuration;
+using System.Text.RegularExpressions;
 
 namespace SchoolPrj.BookWebsite
 {
@@ -16,8 +17,8 @@ namespace SchoolPrj.BookWebsite
             lblMessage.Text = string.Empty;
             Labelemail.Text = string.Empty;
             string fullName = txtFullName.Text.Trim();
-            string username = txtUsername.Text.Trim();
-            string email = txtEmail.Text.Trim();
+            string username = txtUsername.Text.Trim().Replace(" ","");
+            string email = txtEmail.Text.Trim().Replace(" ","");
             string password = txtPassword.Text.Trim();
             string role = "User";
 
@@ -51,6 +52,15 @@ namespace SchoolPrj.BookWebsite
                     lblMessage.Text = "*Username already exists!";
                 }
 
+                string pattern = @"^[a-zA-Z0-9._]{10,14}@gmail\.com$";
+                if (Regex.IsMatch(email, "[A-Z]"))
+                {
+                    Labelemail.Text = "*Email must be in lowercase.";
+                }
+                if (!Regex.IsMatch(email,pattern))
+                {
+                    Labelemail.Text = "*Email must be a valid Gmail address and between 10 to 14 characters long.";
+                }
                 string check = "select * from Users where Email = @Email";
                 var result = connection.QueryFirstOrDefault<User>(check, new User { Email = email });
                 if (result != null)
@@ -62,7 +72,6 @@ namespace SchoolPrj.BookWebsite
                 {
                     return;
                 }
-
 
 
                 string sql = @"INSERT INTO Users (Username, PasswordHash, PasswordSalt, FullName, Email, Role, ProfileImagePath)
@@ -80,8 +89,8 @@ namespace SchoolPrj.BookWebsite
                         Role = role,
                         ProfileImagePath = profilePath
                     });
-
-                    Response.Redirect("~/Login.aspx?lblMessage=Successfully Register You Can Now Login!");
+                    Session["RegisterMessage"] = "Registration successful! You can now log in.";
+                    Response.Redirect("~/Login.aspx");
 
                 }
                 catch (Exception ex)

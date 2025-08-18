@@ -4,6 +4,7 @@ using System.IO;
 using Dapper;
 using System.Security.Cryptography;
 using System.Configuration;
+using static SchoolPrj.BookWebsite._Login;
 
 namespace SchoolPrj.BookWebsite
 {
@@ -29,8 +30,15 @@ namespace SchoolPrj.BookWebsite
             using (var connection = new SqlConnection(connectionString))
             {
                 string sql = "SELECT * FROM Users WHERE UserId = @UserId";
+                string query = "select * from Admins where UserId = @UserId";
                 var user = connection.QuerySingleOrDefault(sql, new { UserId = Session["UserId"] });
-
+                var admin = connection.QuerySingleOrDefault(query, new { UserId = Session["UserId"] });
+                if (admin != null)
+                {
+                    txtFullName.Text = admin.Username;
+                    txtEmail.Text = admin.Email;
+                    imgProfile.ImageUrl = admin.ProfileImagePath;
+                }
                 if (user != null)
                 {
                     txtFullName.Text = user.Username;
@@ -62,42 +70,79 @@ namespace SchoolPrj.BookWebsite
             }
 
             // Hash password if changed
-            string sql;
-            object parameters;
-            if (!string.IsNullOrEmpty(password))
+            if (Session["Role"].ToString() == "User")
             {
-                var saltBytes = new byte[16];
-                using (var rng = RandomNumberGenerator.Create())
+                string sql;
+                object parameters;
+                if (!string.IsNullOrEmpty(password))
                 {
-                    rng.GetBytes(saltBytes);
-                }
-                string salt = Convert.ToBase64String(saltBytes);
+                    var saltBytes = new byte[16];
+                    using (var rng = RandomNumberGenerator.Create())
+                    {
+                        rng.GetBytes(saltBytes);
+                    }
+                    string salt = Convert.ToBase64String(saltBytes);
 
-                string hashedPassword = HashPassword(password, salt);
+                    string hashedPassword = HashPassword(password, salt);
 
-                sql = @"UPDATE Users SET Username=@Username, Email=@Email, ProfileImagePath=@ProfileImagePath,
+                    sql = @"UPDATE Users SET Username=@Username, Email=@Email, ProfileImagePath=@ProfileImagePath,
                         PasswordHash=@PasswordHash, PasswordSalt=@PasswordSalt
                         WHERE UserId=@UserId";
-                parameters = new { Username = fullName, Email = email, ProfileImagePath = profilePath, PasswordHash = hashedPassword, PasswordSalt = salt, UserId = Session["UserId"] };
-            }
-            else
-            {
-                sql = @"UPDATE Users SET Username=@Username, Email=@Email, ProfileImagePath=@ProfileImagePath
+                    parameters = new { Username = fullName, Email = email, ProfileImagePath = profilePath, PasswordHash = hashedPassword, PasswordSalt = salt, UserId = Session["UserId"] };
+                }
+                else
+                {
+                    sql = @"UPDATE Users SET Username=@Username, Email=@Email, ProfileImagePath=@ProfileImagePath
                         WHERE UserId=@UserId";
-                parameters = new { Username = fullName, Email = email, ProfileImagePath = profilePath, UserId = Session["UserId"] };
+                    parameters = new { Username = fullName, Email = email, ProfileImagePath = profilePath, UserId = Session["UserId"] };
+                }
+
+                using (var connection = new SqlConnection(connectionString))
+                {
+                    var res = connection.QuerySingleOrDefault("select * from Users where Username= @Username", new User { Username = fullName });
+                    if (res != null)
+                    {
+                        lblMessage.CssClass = "text-red-600 font-medium";
+                        lblMessage.Text = "❌ Username already exists!";
+                        return;
+                    }
+                    connection.Execute(sql, parameters);
+                    goto result;
+                }
+
             }
 
-            using (var connection = new SqlConnection(connectionString))
+            if (Session["Role"].ToString() == "Admin")
             {
-                connection.Execute(sql, parameters);
+                string sql;
+                object parameters;
+                if (!string.IsNullOrEmpty(password))
+                {
+                    sql = @"UPDATE Admins SET Username=@Username, Email=@Email, ProfileImagePath=@ProfileImagePath WHERE UserId = @UserId";
+                    parameters = new { Username = fullName, Email = email, ProfileImagePath = profilePath, Password = password, UserId = Session["UserId"] };
+                }
+                sql = @"UPDATE Admins SET Username=@Username, Email=@Email, ProfileImagePath=@ProfileImagePath, Password = @Password WHERE UserId = @UserId";
+                parameters = new {Username = fullName, Email = email, ProfileImagePath = profilePath, Password = password, UserId = Session["UserId"] };
+
+                using(var connection = new SqlConnection(connectionString))
+                {
+                    var res = connection.QuerySingleOrDefault("select * from Admins where Username= @Username", new Admins { Username = fullName });
+                    if (res != null)
+                    {
+                        lblMessage.CssClass = "text-red-600 font-medium";
+                        lblMessage.Text = "❌ Username already exists!";
+                        return;
+                    }
+                    connection.Execute(sql, parameters);
+                    goto result;
+                }
             }
 
+        result:
             // Update session (so master page reflects new data)
             Session["Username"] = fullName;
             Session["ProfileImage"] = profilePath;
-
-            lblMessage.CssClass = "text-green-600 font-medium";
-            lblMessage.Text = "✅ Profile updated successfully!";
+            Session["ProfileMessage"] = "Profile updated successfully!";
             Response.Redirect("~/Profile.aspx");
         }
 

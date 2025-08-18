@@ -26,6 +26,12 @@ namespace SchoolPrj.BookWebsite
             {
                 LoadProfile();
             }
+
+            if (Session["ProfileMessage"] != null)
+            {
+                lblMessage.Text = Session["ProfileMessage"].ToString();
+                Session["ProfileMessage"] = null;
+            }
         }
 
         private void LoadProfile()

@@ -1,7 +1,11 @@
 ﻿<%@ Page Title="Profile" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Profile.aspx.cs" Inherits="SchoolPrj.BookWebsite._Profile" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
+
     <div class="max-w-xl mx-auto bg-white shadow-lg rounded-lg p-6">
+        <div class="mt-4">
+            <asp:Label ID="lblMessage" runat="server" CssClass="text-sm"></asp:Label>
+        </div>
         <div class="flex items-center space-x-4">
             <asp:Image ID="imgProfile" runat="server" CssClass="w-20 h-20 rounded-full border-2 border-indigo-500" />
             <div>

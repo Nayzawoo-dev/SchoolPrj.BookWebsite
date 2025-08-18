@@ -9,6 +9,15 @@ namespace SchoolPrj.BookWebsite
 {
     public partial class _Login : System.Web.UI.Page
     {
+        protected void Page_Load(object sender, EventArgs e)
+        {
+            if (Session["RegisterMessage"] != null)
+            {
+                lblMessage.CssClass = "text-green-500";
+                lblMessage.Text = Session["RegisterMessage"].ToString();
+                Session["RegisterMessage"] = null;
+            }
+        }
         string connStr = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
         protected void btnLogin_Click(object sender, EventArgs e)
         {
