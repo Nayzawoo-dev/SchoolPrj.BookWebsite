@@ -4,7 +4,6 @@
     <div class="max-w-md mx-auto bg-white p-6 rounded-lg shadow-md">
         <h2 class="text-2xl font-bold text-center mb-4 text-indigo-600">📝 Register</h2>
 
-        <!-- Error / Success Message -->
 
 
         <!-- Profile Image Upload + Preview -->
@@ -13,16 +12,17 @@
             <asp:FileUpload ID="fuProfile" runat="server" CssClass="w-full" onchange="previewRegisterImage(this)" />
         </div>
 
+        <!-- Error / Success Message -->
+        <asp:Label ID="lblMessage" runat="server" CssClass="block mt-3 text-red-500"></asp:Label>
+
+
         <!-- Full Name -->
-        <asp:Label ID="lblNull" runat="server" CssClass="block mt-3 text-red-500"></asp:Label>
         <asp:TextBox ID="txtFullName" runat="server" CssClass="w-full p-2 border rounded mb-3" placeholder="Full Name"></asp:TextBox>
 
         <!-- Username -->
-        <asp:Label ID="lblMessage" runat="server" CssClass="block mt-3 text-red-500"></asp:Label>
         <asp:TextBox ID="txtUsername" runat="server" CssClass="w-full p-2 border rounded mb-3" placeholder="Username"></asp:TextBox>
 
         <!-- Email -->
-        <asp:Label ID="Labelemail" runat="server" CssClass="block mt-3 text-red-500"></asp:Label>
         <asp:TextBox ID="txtEmail" runat="server" CssClass="w-full p-2 border rounded mb-3" placeholder="Email"></asp:TextBox>
 
         <!-- Password -->
@@ -48,6 +48,15 @@
 
                 reader.readAsDataURL(input.files[0]);
             }
+        }
+
+        function hideMessageAfterDelay() {
+            setTimeout(function () {
+                var msg = document.getElementById('<%= lblMessage.ClientID %>');
+                if (msg) {
+                    msg.style.display = 'none';
+                }
+            }, 5000);
         }
     </script>
 </asp:Content>

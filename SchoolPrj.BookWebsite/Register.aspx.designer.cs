@@ -33,13 +33,13 @@ namespace SchoolPrj.BookWebsite
         protected global::System.Web.UI.WebControls.FileUpload fuProfile;
 
         /// <summary>
-        /// lblNull control.
+        /// lblMessage control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblNull;
+        protected global::System.Web.UI.WebControls.Label lblMessage;
 
         /// <summary>
         /// txtFullName control.
@@ -51,15 +51,6 @@ namespace SchoolPrj.BookWebsite
         protected global::System.Web.UI.WebControls.TextBox txtFullName;
 
         /// <summary>
-        /// lblMessage control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblMessage;
-
-        /// <summary>
         /// txtUsername control.
         /// </summary>
         /// <remarks>
@@ -67,15 +58,6 @@ namespace SchoolPrj.BookWebsite
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtUsername;
-
-        /// <summary>
-        /// Labelemail control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label Labelemail;
 
         /// <summary>
         /// txtEmail control.

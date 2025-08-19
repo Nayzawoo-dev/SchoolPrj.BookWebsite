@@ -25,4 +25,16 @@
             </div>
         </div>
     </div>
+
+    <script>
+        function hideMessageAfterDelay() {
+            setTimeout(function () {
+                var msg = document.getElementById('<%= lblMessage.ClientID %>');
+                if (msg) {
+                    msg.style.display = 'none';
+                }
+            }, 5000);
+                }
+    </script>
+
 </asp:Content>

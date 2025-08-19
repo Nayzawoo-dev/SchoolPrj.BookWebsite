@@ -13,9 +13,7 @@ namespace SchoolPrj.BookWebsite
         string connStr = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
         protected void btnRegister_Click(object sender, EventArgs e)
         {
-            lblNull.Text = string.Empty;
             lblMessage.Text = string.Empty;
-            Labelemail.Text = string.Empty;
             string fullName = txtFullName.Text.Trim();
             string username = txtUsername.Text.Trim().Replace(" ","");
             string email = txtEmail.Text.Trim().Replace(" ","");
@@ -24,7 +22,8 @@ namespace SchoolPrj.BookWebsite
 
             if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
             {
-                lblNull.Text = "*Username and Password are required.";
+                lblMessage.Text = "*Username and Password are required.";
+                Page.ClientScript.RegisterStartupScript(this.GetType(), "HideMsg", "hideMessageAfterDelay();", true);
                 return;
             }
 
@@ -50,26 +49,29 @@ namespace SchoolPrj.BookWebsite
                 if (result1 != null)
                 {
                     lblMessage.Text = "*Username already exists!";
+                    Page.ClientScript.RegisterStartupScript(this.GetType(), "HideMsg", "hideMessageAfterDelay();", true);
+                    return;
                 }
 
                 string pattern = @"^[a-zA-Z0-9._]{10,14}@gmail\.com$";
                 if (Regex.IsMatch(email, "[A-Z]"))
                 {
-                    Labelemail.Text = "*Email must be in lowercase.";
+                    lblMessage.Text = "*Email must be in lowercase.";
+                    Page.ClientScript.RegisterStartupScript(this.GetType(), "HideMsg", "hideMessageAfterDelay();", true);
+                    return;
                 }
                 if (!Regex.IsMatch(email,pattern))
                 {
-                    Labelemail.Text = "*Email must be a valid Gmail address and between 10 to 14 characters long.";
+                    lblMessage.Text = "*Email must be a valid Gmail address and between 10 to 14 characters long.";
+                    Page.ClientScript.RegisterStartupScript(this.GetType(), "HideMsg", "hideMessageAfterDelay();", true);
+                    return;
                 }
                 string check = "select * from Users where Email = @Email";
                 var result = connection.QueryFirstOrDefault<User>(check, new User { Email = email });
                 if (result != null)
                 {
-                    Labelemail.Text = "*Email already exists!";                  
-                }
-
-                if(!string.IsNullOrEmpty(lblMessage.Text) || !string.IsNullOrEmpty(Labelemail.Text))
-                {
+                    lblMessage.Text = "*Email already exists!";
+                    Page.ClientScript.RegisterStartupScript(this.GetType(), "HideMsg", "hideMessageAfterDelay();", true);
                     return;
                 }
 
