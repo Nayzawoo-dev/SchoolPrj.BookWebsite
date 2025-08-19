@@ -44,11 +44,10 @@
                             class="inline-block px-4 py-2 bg-indigo-500 text-white rounded-lg hover:bg-indigo-600 transition">📖 View Book  
                         </a>
 
-                        <asp:HyperLink ID="btnEditBook" runat="server"
+                        <asp:HyperLink ID="btnEditBook" runat="server" Text="✏️ Edit Book"
                             NavigateUrl='<%# "EditBook.aspx?BookId=" + Eval("BookId") %>'
-                            Visible="true"
-                            CssClass="inline-block px-4 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition">
-                             ✏️ Edit Book
+                            Visible="false"
+                            CssClass="inline-block px-4 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition">                             
                         </asp:HyperLink>
 
 

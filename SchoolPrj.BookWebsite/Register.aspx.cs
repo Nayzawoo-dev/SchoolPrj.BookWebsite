@@ -14,15 +14,22 @@ namespace SchoolPrj.BookWebsite
         protected void btnRegister_Click(object sender, EventArgs e)
         {
             lblMessage.Text = string.Empty;
-            string fullName = txtFullName.Text.Trim();
-            string username = txtUsername.Text.Trim().Replace(" ","");
-            string email = txtEmail.Text.Trim().Replace(" ","");
+            string fullName = txtFullName.Text.Trim().Replace(" ","");
+            string username = txtUsername.Text.Trim();
+            string email = txtEmail.Text.Trim();
             string password = txtPassword.Text.Trim();
             string role = "User";
 
             if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
             {
                 lblMessage.Text = "*Username and Password are required.";
+                Page.ClientScript.RegisterStartupScript(this.GetType(), "HideMsg", "hideMessageAfterDelay();", true);
+                return;
+            }
+
+            if (email.Contains(" ") || username.Contains(" ") || password.Contains(" "))
+            {
+                lblMessage.Text = "*Email and Username and Password are must no space";
                 Page.ClientScript.RegisterStartupScript(this.GetType(), "HideMsg", "hideMessageAfterDelay();", true);
                 return;
             }
@@ -53,7 +60,8 @@ namespace SchoolPrj.BookWebsite
                     return;
                 }
 
-                string pattern = @"^[a-zA-Z0-9._]{10,14}@gmail\.com$";
+                string pattern = @"^[a-zA-Z0-9._]{10,16}@gmail\.com$";
+              
                 if (Regex.IsMatch(email, "[A-Z]"))
                 {
                     lblMessage.Text = "*Email must be in lowercase.";

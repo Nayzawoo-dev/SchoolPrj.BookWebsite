@@ -30,10 +30,15 @@ namespace SchoolPrj.BookWebsite
             if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
             {
                 var btnDelete = (Button)e.Item.FindControl("btnDelete");
-                if (btnDelete != null) // Null ဖြစ်မဖြစ် စစ်ပေး
+                var btnEdit = (HyperLink)e.Item.FindControl("btnEdit");
+                if (btnDelete != null || btnEdit != null) // Null ဖြစ်မဖြစ် စစ်ပေး
                 {
                     if (Session["Role"] != null && Session["Role"].ToString() == "Admin")
+                    {
                         btnDelete.Visible = true;
+                        btnEdit.Visible = true;
+                    }
+
                 }
             }
         }
