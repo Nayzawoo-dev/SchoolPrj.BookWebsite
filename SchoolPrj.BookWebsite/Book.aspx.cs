@@ -67,6 +67,7 @@ namespace SchoolPrj.BookWebsite
             }
             rptBooks.DataSource = Books;
             rptBooks.DataBind();
+            //san tr
 
             pnlNoBooks.Visible = (Books.Count == 0);
         }
