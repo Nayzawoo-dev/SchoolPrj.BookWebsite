@@ -251,6 +251,8 @@
     <Content Include="EditProfile.aspx" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
+    <Content Include="GoogleCallback.aspx" />
+    <Content Include="GoogleLogin.aspx" />
     <Content Include="Login.aspx" />
     <Content Include="Profile.aspx" />
     <Content Include="Register.aspx" />
@@ -388,6 +390,20 @@
     </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="GoogleCallback.aspx.cs">
+      <DependentUpon>GoogleCallback.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="GoogleCallback.aspx.designer.cs">
+      <DependentUpon>GoogleCallback.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="GoogleLogin.aspx.cs">
+      <DependentUpon>GoogleLogin.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="GoogleLogin.aspx.designer.cs">
+      <DependentUpon>GoogleLogin.aspx</DependentUpon>
     </Compile>
     <Compile Include="Login.aspx.cs">
       <DependentUpon>Login.aspx</DependentUpon>

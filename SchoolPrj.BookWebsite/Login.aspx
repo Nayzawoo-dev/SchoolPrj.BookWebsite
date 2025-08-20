@@ -18,6 +18,14 @@
                     <asp:TextBox ID="txtPassword" runat="server" TextMode="Password" CssClass="w-full p-2 border rounded-lg" />
                 </div>
 
+                <!-- Google Login Button -->
+                <asp:HyperLink ID="lnkGoogleLogin" runat="server"
+                    NavigateUrl="~/GoogleLogin.aspx"
+                    CssClass="w-full bg-red-600 text-white py-2 rounded-lg hover:bg-red-700 transition block text-center">
+                    Login with Google
+                </asp:HyperLink>
+
+
                 <asp:Button ID="btnLogin" runat="server" Text="Login" OnClick="btnLogin_Click"
                     CssClass="w-full bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700 transition" />
                 <asp:HyperLink ID="lnkRegister" runat="server" NavigateUrl="~/Register.aspx"
