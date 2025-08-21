@@ -25,6 +25,7 @@ namespace SchoolPrj.BookWebsite
             if (!IsPostBack)
             {
                 LoadProfile();
+                BindSavedBooks();
             }
 
             if (Session["ProfileMessage"] != null)
@@ -73,6 +74,41 @@ namespace SchoolPrj.BookWebsite
 
             // Website အစ Login Page သို့ ပြန်ပို့
             Response.Redirect("~/Login.aspx");
+        }
+
+        private void BindSavedBooks()
+        {
+            int userId = Convert.ToInt32(Session["UserId"]);
+
+            using (var con = new SqlConnection(connStr))
+            {
+                var books = con.Query<Save>("SELECT * FROM Tb_SaveBook WHERE UserId = @UserId", new Save{ UserId = userId }).ToList();
+                rptSavedBooks.DataSource = books;
+                rptSavedBooks.DataBind();
+            }
+        }
+
+        protected void btnDelete_Click(object sender, EventArgs e)
+        {
+            Button btn = (Button)sender;
+            int saveId = Convert.ToInt32(btn.CommandArgument);
+
+            // Delete logic here  
+            DeleteBook(saveId);
+            BindSavedBooks();
+        }
+
+        protected void DeleteBook(int saveId)
+        {
+            using (var connection = new SqlConnection(connStr))
+            {
+                string sql = @"DELETE FROM [dbo].[Tb_SaveBook]
+      WHERE SaveId = @SaveId";
+                var res = connection.Execute(sql, new Save
+                {
+                    SaveId = saveId
+                });
+            }
         }
 
     }

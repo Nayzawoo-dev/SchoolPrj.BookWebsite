@@ -19,7 +19,8 @@
                     <asp:Label ID="lblAuthor" runat="server" />
                 </p>
                 <p class="text-gray-700 mb-2">
-                    <asp:Label ID="lblDescription" runat="server" /></p>
+                    <asp:Label ID="lblDescription" runat="server" />
+                </p>
             </div>
 
             <div class="flex flex-col sm:flex-row gap-4">
@@ -31,6 +32,13 @@
                     class="inline-block py-2 px-5 bg-green-500 text-white rounded-lg hover:bg-green-600 transition text-center"
                     download>⬇️ Download
                 </a>
+
+                <asp:Button ID="btnSaveBook" runat="server"
+                    Text="💾 Save Book"
+                    CssClass="inline-block py-2 px-5 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition text-center"
+                    OnClick="btnSaveBook_Click" />
+
+
             </div>
         </div>
     </div>
