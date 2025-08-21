@@ -31,7 +31,7 @@ namespace SchoolPrj.BookWebsite
         {
             if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
             {
-                var btnDelete = (Button)e.Item.FindControl("btnDelete");
+                var btnDelete = (LinkButton)e.Item.FindControl("btnDelete");
                 var btnEditBook = (HyperLink)e.Item.FindControl("btnEditBook");
                 if (btnDelete != null || btnEditBook != null) // Null ဖြစ်မဖြစ် စစ်ပေး
                 {

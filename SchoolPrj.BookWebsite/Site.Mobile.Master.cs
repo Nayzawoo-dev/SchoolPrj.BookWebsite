@@ -14,15 +14,22 @@ namespace SchoolPrj.BookWebsite
             if (Session["UserId"] != null)
             {
                 loginLink.Visible = false;
+                loginLinkMobile.Visible = false;
                 HyperLink1.Visible = false;
+                HyperLink1Mobile.Visible = false;
                 profilePanel.Visible = true;
+                profilePanelMobile.Visible = true;
                 lblUserName.Text = Session["Username"].ToString();
+                lblUserNameMobile.Text = Session["Username"].ToString();
                 imgProfile.ImageUrl = Session["ProfileImage"].ToString();
+                imgProfileMobile2.ImageUrl = Session["ProfileImage"].ToString();
             }
             else
             {
                 loginLink.Visible = true;
+                loginLinkMobile.Visible = true;
                 profilePanel.Visible = false;
+                profilePanelMobile.Visible = false;
             }
         }
     }

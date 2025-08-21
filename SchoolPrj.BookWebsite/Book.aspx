@@ -1,73 +1,103 @@
 ﻿<%@ Page Title="Books" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Book.aspx.cs" Inherits="SchoolPrj.BookWebsite._Book" %>
 
-<asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
+<asp:Content ID="Content1" ContentPlaceHolderID="TitleContent" runat="server">
+    Books | MyBookShelf - Explore Our Collection
+</asp:Content>
 
-    <!-- Top Bar: Search + Add Book -->
-    <div class="flex flex-col sm:flex-row items-center mb-6 gap-4">
-        <!-- Search Bar -->
-        <div class="relative w-full max-w-full sm:max-w-sm">
-            <asp:TextBox ID="txtSearch" runat="server"
-                CssClass="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm sm:text-base"
-                placeholder="Search books...">  
-            </asp:TextBox>
-            <svg xmlns="http://www.w3.org/2000/svg"
-                class="h-5 w-5 text-gray-400 absolute left-3 top-2.5"
-                fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 1110.5 3a7.5 7.5 0 016.15 13.65z" />
-            </svg>
+<asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
+    <!-- Search and Action Bar -->
+    <div class="bg-white rounded-xl p-4 shadow-md mb-4">
+        <div class="flex flex-col md:flex-row gap-4 items-center">
+            <!-- Search Section -->
+            <div class="flex-1 flex flex-col sm:flex-row gap-4">
+                <div class="relative flex-1">
+                    <asp:TextBox ID="txtSearch" runat="server"
+                        CssClass="w-full pl-12 pr-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
+                        placeholder="Search by title, author">  
+                    </asp:TextBox>
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <i class="fas fa-search text-gray-400"></i>
+                    </div>
+                </div>
+                <asp:Button ID="btnSearch" runat="server" Text="Search"
+                    CssClass="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-all font-medium shadow-md hover:shadow-lg"
+                    OnClick="btnSearch_Click" />
+            </div>
+
+            <!-- Add Book Button -->
+            <asp:HyperLink ID="btnAddBook" runat="server" NavigateUrl="AddBook.aspx" Visible="false"
+                CssClass="flex items-center justify-center px-6 py-3 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-all font-medium shadow-md hover:shadow-lg">
+                <i class="fas fa-plus-circle mr-2"></i> Add New Book
+            </asp:HyperLink>
         </div>
-        <!-- Search Button -->
-        <asp:Button ID="btnSearch" runat="server" Text="Search"
-            CssClass="w-full sm:w-auto px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition text-sm sm:text-base"
-            OnClick="btnSearch_Click" />
-        <!-- Add New Book Button -->
-        <asp:HyperLink ID="btnAddBook" runat="server" NavigateUrl="AddBook.aspx" Visible="false"
-            CssClass="w-full sm:w-auto flex justify-center items-center px-4 py-2 bg-indigo-600 text-white rounded-lg shadow hover:bg-indigo-700 transition text-sm sm:text-base">Add New Book</asp:HyperLink>
     </div>
 
     <!-- Books Grid -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         <asp:Repeater ID="rptBooks" runat="server" OnItemDataBound="Repeater_ItemDataBound">
             <ItemTemplate>
-                <div class="bg-white shadow-lg rounded-xl overflow-hidden hover:shadow-2xl transition-shadow duration-300">
-                    <img src='<%# ResolveUrl(Eval("ImagePath").ToString()) %>'
-                        alt='<%# Eval("BookTitle") %>'
-                        class="w-full h-48 object-contain" />
-                    <div class="p-4">
-                        <h2 class="text-lg font-bold text-indigo-600"><%# Eval("BookTitle") %></h2>
-                        <p class="text-sm text-gray-500 mb-2">
-                            📚 <%# Eval("Category") %> | ✍ <%# Eval("Author") %>
-                        </p>
+                <!-- Book Card -->
+                <div class="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 border border-gray-100">
+                    <!-- Book Image -->
+                    <div class="h-56 bg-indigo-50 flex items-center justify-center overflow-hidden">
+                        <img src='<%# ResolveUrl(Eval("ImagePath").ToString()) %>'
+                            alt='<%# Eval("BookTitle") %>'
+                            class="w-full h-full object-contain p-4" />
+                    </div>
 
-                        <a href='BookDetails.aspx?BookId=<%# Eval("BookId") %>'
-                            class="inline-block px-4 py-2 bg-indigo-500 text-white rounded-lg hover:bg-indigo-600 transition">📖 View Book  
-                        </a>
+                    <!-- Book Details -->
+                    <div class="p-5">
+                        <h3 class="text-lg font-bold text-gray-800 mb-2 truncate"><%# Eval("BookTitle") %></h3>
 
-                        <asp:HyperLink ID="btnEditBook" runat="server" Text="✏️ Edit Book"
-                            NavigateUrl='<%# "EditBook.aspx?BookId=" + Eval("BookId") %>'
-                            Visible="false"
-                            CssClass="inline-block px-4 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition">                             
-                        </asp:HyperLink>
+                        <div class="flex items-center text-sm text-gray-600 mb-3">
+                            <i class="fas fa-user-circle text-indigo-500 mr-2"></i>
+                            <span class="truncate"><%# Eval("Author") %></span>
+                        </div>
 
+                        <div class="flex items-center text-sm text-gray-600 mb-4">
+                            <i class="fas fa-tag text-indigo-500 mr-2"></i>
+                            <span class="truncate"><%# Eval("Category") %></span>
+                        </div>
 
-                        <asp:Button ID="btnDelete" runat="server" Text="🗑" Visible="false" CommandArgument='<%# Eval("BookId") %>' OnClick="btnDelete_Click"
-                            OnClientClick="return confirm('Are you sure want to delete?');"
-                            CssClass="btn inline-block px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition" />
+                        <!-- Action Buttons -->
+                        <div class="flex justify-between items-center">
+                            <a href='BookDetails.aspx?BookId=<%# Eval("BookId") %>'
+                                class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-all text-sm font-medium flex items-center">
+                                <i class="fas fa-eye mr-2"></i>View
+                            </a>
+
+                            <div class="flex space-x-2">
+                                <asp:HyperLink ID="btnEditBook" runat="server"
+                                    NavigateUrl='<%# "EditBook.aspx?BookId=" + Eval("BookId") %>'
+                                    Visible="false"
+                                    CssClass="px-3 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition-all flex items-center">
+                                    <i class="fas fa-edit"></i>
+                                </asp:HyperLink>
+
+                                <asp:LinkButton ID="btnDelete" runat="server" Visible="false"
+                                    CommandArgument='<%# Eval("BookId") %>'
+                                    OnClientClick="return confirm('Are you sure you want to delete this book?');"
+                                    CssClass="px-3 py-2 bg-red-500 text-white rounded">
+                                <i class="fas fa-trash"></i>
+                                </asp:LinkButton>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </ItemTemplate>
         </asp:Repeater>
     </div>
 
-    <!-- Warning Message -->
+    <!-- No Books Found Message -->
     <asp:Panel ID="pnlNoBooks" runat="server" Visible="false"
-        CssClass="mt-10 mx-auto max-w-xs sm:max-w-md p-4 bg-gray-50 border border-gray-200 rounded-lg shadow-sm text-center">
-        <div class="text-gray-700 text-sm sm:text-md mb-3">
-            😕 No books found matching your search.  
+        CssClass="mt-12 bg-white rounded-xl p-8 shadow-md text-center max-w-2xl mx-auto">
+        <div class="text-6xl text-gray-300 mb-4">
+            <i class="fas fa-book-open"></i>
         </div>
-        <asp:Button ID="btnUnderstand" runat="server" Text="I Understand"
-            CssClass="px-4 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300 transition text-sm sm:text-base"
+        <h3 class="text-xl font-semibold text-gray-700 mb-2">No books found</h3>
+        <p class="text-gray-600 mb-6">We couldn't find any books matching your search criteria.</p>
+        <asp:Button ID="btnUnderstand" runat="server" Text="Clear Search"
+            CssClass="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-all font-medium"
             OnClick="btnUnderstand_Click" />
     </asp:Panel>
 </asp:Content>

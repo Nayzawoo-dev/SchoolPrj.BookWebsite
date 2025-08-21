@@ -29,8 +29,8 @@ namespace SchoolPrj.BookWebsite
         {
             if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
             {
-                var btnDelete = (Button)e.Item.FindControl("btnDelete");
-                var btnEdit = (HyperLink)e.Item.FindControl("btnEdit");
+                var btnDelete = (LinkButton)e.Item.FindControl("btnDelete");
+                var btnEdit = (HyperLink)e.Item.FindControl("btnEditBook");
                 if (btnDelete != null || btnEdit != null) // Null ဖြစ်မဖြစ် စစ်ပေး
                 {
                     if (Session["Role"] != null && Session["Role"].ToString() == "Admin")
@@ -59,7 +59,7 @@ namespace SchoolPrj.BookWebsite
         protected void btnUnderstand_Click(object sender, EventArgs e)
         {
             LoadBooks();
-            pnlNoBook.Visible = false;
+            pnlNoBooks.Visible = false;
         }
 
         protected void btnFilter_Click(object sender, EventArgs e)
@@ -92,7 +92,7 @@ namespace SchoolPrj.BookWebsite
                 }).AsList();
                 if (Books.Count <= 0)
                 {
-                    pnlNoBook.Visible = true;
+                    pnlNoBooks.Visible = true;
                 }
                 repBooks.DataSource = Books;
                 repBooks.DataBind();

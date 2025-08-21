@@ -15,6 +15,7 @@ namespace SchoolPrj.BookWebsite
             {
                 lblMessage.CssClass = "text-green-500";
                 lblMessage.Text = Session["RegisterMessage"].ToString();
+                lblMessage.Visible = true;
                 Session["RegisterMessage"] = null;
 
                 Page.ClientScript.RegisterStartupScript(this.GetType(), "HideMsg", "hideMessageAfterDelay();", true);
@@ -73,6 +74,7 @@ namespace SchoolPrj.BookWebsite
                 else
                 {
                     lblMessage.Text = "Invalid username or password!";
+                    lblMessage.Visible = true;
                     Page.ClientScript.RegisterStartupScript(this.GetType(), "HideMsg", "hideMessageAfterDelay();", true);
                 }
             }

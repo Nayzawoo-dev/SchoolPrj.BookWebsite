@@ -79,11 +79,11 @@ namespace SchoolPrj.BookWebsite
         private void BindSavedBooks()
         {
             int userId = Convert.ToInt32(Session["UserId"]);
-
             using (var con = new SqlConnection(connStr))
             {
                 var books = con.Query<Save>("SELECT * FROM Tb_SaveBook WHERE UserId = @UserId", new Save{ UserId = userId }).ToList();
                 rptSavedBooks.DataSource = books;
+                pnlSaveSection.Visible = books.Count > 0;
                 rptSavedBooks.DataBind();
             }
         }

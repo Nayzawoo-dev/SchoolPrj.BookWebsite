@@ -42,6 +42,15 @@ namespace SchoolPrj.BookWebsite
         protected global::System.Web.UI.WebControls.Button btnFilter;
 
         /// <summary>
+        /// litResultCount control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal litResultCount;
+
+        /// <summary>
         /// repBooks control.
         /// </summary>
         /// <remarks>
@@ -51,22 +60,21 @@ namespace SchoolPrj.BookWebsite
         protected global::System.Web.UI.WebControls.Repeater repBooks;
 
         /// <summary>
-        /// pnlNoBook control.
+        /// pnlNoBooks control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel pnlNoBook;
+        protected global::System.Web.UI.WebControls.Panel pnlNoBooks;
 
         /// <summary>
-        /// btnUn control.
+        /// btnUnderstand control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnUn;
-
+        protected global::System.Web.UI.WebControls.Button btnUnderstand;
     }
 }

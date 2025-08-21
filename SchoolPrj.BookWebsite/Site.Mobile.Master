@@ -9,70 +9,200 @@
         <asp:ContentPlaceHolder ID="TitleContent" runat="server" />
     </title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@preline/index@2.0.0/dist/index.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <style>
+        .mobile-menu {
+            transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+            transform: translateY(-10px);
+            opacity: 0;
+            display: none;
+        }
+
+            .mobile-menu.open {
+                transform: translateY(0);
+                opacity: 1;
+                display: block;
+            }
+    </style>
 </head>
-<body class="bg-white text-gray-800 font-sans">
+<body class="bg-gradient-to-br from-indigo-50 to-purple-100 min-h-screen font-sans">
     <form id="form1" runat="server">
-        <div class="flex min-h-screen">
-            <!-- Sidebar -->
-            <div id="sidebar" class="fixed md:static inset-y-0 left-0 w-64 bg-white shadow-lg flex flex-col justify-between transform -translate-x-full md:translate-x-0 transition-transform duration-300 z-50">
-                <div>
-                    <div class="px-6 py-5 text-2xl font-bold text-indigo-600 border-b border-gray-200">
-                        MyBookShelf
+        <!-- Header/Navigation -->
+        <header class="bg-white/90 backdrop-blur-md border-b border-indigo-100 sticky top-0 z-50 shadow-sm">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center h-16">
+                    <!-- Logo -->
+                    <div class="flex-shrink-0 flex items-center">
+                        <span class="text-2xl font-bold text-indigo-700 flex items-center">
+                            <i class="fas fa-book-open mr-2"></i>MyBookShelf
+                        </span>
                     </div>
 
-                    <nav class="flex flex-col space-y-2 p-4">
-                        <!-- Profile UI -->
+                    <!-- Desktop Navigation -->
+                    <nav class="hidden md:flex items-center space-x-2">
+                        <asp:HyperLink ID="HyperLink1" NavigateUrl="Default.aspx" runat="server"
+                            CssClass="px-4 py-2 text-gray-700 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-all duration-200 flex items-center">
+                            <i class="fas fa-home mr-2"></i>Home
+                        </asp:HyperLink>
+
+                        <a href="Book.aspx" class="px-4 py-2 text-gray-700 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-all duration-200 flex items-center">
+                            <i class="fas fa-book mr-2"></i>Books
+                        </a>
+
+                        <a href="Category.aspx" class="px-4 py-2 text-gray-700 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-all duration-200 flex items-center">
+                            <i class="fas fa-tags mr-2"></i>Categories
+                        </a>
+
+                        <asp:HyperLink ID="loginLink" NavigateUrl="Login.aspx" runat="server"
+                            CssClass="px-4 py-2 text-gray-700 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-all duration-200 flex items-center">
+                            <i class="fas fa-key mr-2"></i>Login
+                        </asp:HyperLink>
+
+                        <!-- Profile Panel (Desktop) -->
                         <asp:Panel ID="profilePanel" runat="server" Visible="false"
-                            CssClass="flex items-center space-x-2 p-2 bg-gray-100 rounded-lg">
-                            <asp:Image ID="imgProfile" runat="server" CssClass="w-10 h-10 rounded-full border" />
-                            <asp:Label ID="lblUserName" runat="server" CssClass="font-medium"></asp:Label>
+                            CssClass="ml-4 flex items-center space-x-2 p-2 bg-indigo-50 rounded-lg border border-indigo-100">
+                            <asp:Image ID="imgProfile" runat="server" CssClass="w-8 h-8 rounded-full border-2 border-white shadow-sm" />
+                            <asp:Label ID="lblUserName" runat="server" CssClass="font-medium text-sm text-gray-700"></asp:Label>
                             <asp:HyperLink ID="profileLink" NavigateUrl="Profile.aspx" runat="server"
-                                CssClass="ml-2 text-indigo-600">Profile
+                                CssClass="ml-2 text-indigo-600 text-sm hover:underline flex items-center">
+                                Profile
                             </asp:HyperLink>
                         </asp:Panel>
-
-
-                        <asp:HyperLink ID="HyperLink1" NavigateUrl="Default.aspx" runat="server"
-                            CssClass="px-4 py-2 rounded-lg hover:bg-indigo-100">🏠 Home</asp:HyperLink>
-                        <a href="Book.aspx" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-indigo-100 hover:text-indigo-700 transition">📖 Books</a>
-                        <a href="Category.aspx" class="px-4 py-2 rounded-lg text-gray-700 hover:bg-indigo-100 hover:text-indigo-700 transition">📚 Categories</a>
-                        <asp:HyperLink ID="loginLink" NavigateUrl="Login.aspx" runat="server"
-                            CssClass="px-4 py-2 rounded-lg hover:bg-indigo-100">🔐 Login</asp:HyperLink>
-
                     </nav>
+
+                    <!-- Mobile menu button -->
+                    <div class="md:hidden flex items-center">
+                        <asp:Panel ID="mobileProfilePanel" runat="server" Visible="false" class="mr-3">
+                            <asp:Image ID="imgProfileMobile" runat="server" CssClass="w-8 h-8 rounded-full border-2 border-white shadow-sm" />
+                        </asp:Panel>
+                        <button type="button" id="mobile-menu-button" class="p-2 rounded-md text-gray-600 hover:text-indigo-600 hover:bg-indigo-50 focus:outline-none focus:ring-2 focus:ring-indigo-200" aria-label="Toggle menu">
+                            <i class="fas fa-bars text-xl"></i>
+                        </button>
+                    </div>
                 </div>
             </div>
 
-            <!-- Overlay (for mobile) -->
-            <div id="overlay" class="fixed inset-0 bg-black bg-opacity-50 hidden z-40 md:hidden"></div>
+            <!-- Mobile Navigation Menu -->
+            <div id="mobile-menu" class="mobile-menu md:hidden bg-white/95 backdrop-blur-md border-b border-indigo-100 shadow-md">
 
-            <!-- Main Content -->
-            <div class="flex-1 overflow-auto p-4 md:p-6 w-full">
-                <!-- Top Bar for Mobile -->
-                <div class="flex items-center justify-between mb-4 md:hidden">
-                    <button id="menuBtn" type="button" class="p-2 rounded-md bg-indigo-500 text-white focus:outline-none">
-                        ☰
-                    </button>
+                <!-- Profile Panel (Mobile) -->
+                <asp:Panel ID="profilePanelMobile" runat="server" Visible="false"
+                    CssClass="border-t border-indigo-100 pt-3 mt-3">
+                    <div class="flex items-center px-3 py-2">
+                        <asp:Image ID="imgProfileMobile2" runat="server" CssClass="w-10 h-10 rounded-full border-2 border-white shadow-sm mr-3" />
+                        <div>
+                            <asp:Label ID="lblUserNameMobile" runat="server" CssClass="font-medium text-gray-700 block"></asp:Label>
+                            <asp:HyperLink ID="profileLinkMobile" NavigateUrl="Profile.aspx" runat="server"
+                                CssClass="text-indigo-600 text-sm hover:underline flex items-center">
+                                    Profile
+                            </asp:HyperLink>
+                        </div>
+                    </div>
+                </asp:Panel>
+
+                <div class="px-4 py-3 space-y-1">
+                    <asp:HyperLink ID="HyperLink1Mobile" NavigateUrl="Default.aspx" runat="server"
+                        CssClass="flex items-center px-3 py-2 rounded-md text-gray-700 hover:text-indigo-600 hover:bg-indigo-50">
+                        <i class="fas fa-home mr-3"></i>Home
+                    </asp:HyperLink>
+
+                    <a href="Book.aspx" class="flex items-center px-3 py-2 rounded-md text-gray-700 hover:text-indigo-600 hover:bg-indigo-50">
+                        <i class="fas fa-book mr-3"></i>Books
+                    </a>
+
+                    <a href="Category.aspx" class="flex items-center px-3 py-2 rounded-md text-gray-700 hover:text-indigo-600 hover:bg-indigo-50">
+                        <i class="fas fa-tags mr-3"></i>Categories
+                    </a>
+
+                    <asp:HyperLink ID="loginLinkMobile" NavigateUrl="Login.aspx" runat="server"
+                        CssClass="flex items-center px-3 py-2 rounded-md text-gray-700 hover:text-indigo-600 hover:bg-indigo-50">
+                        <i class="fas fa-key mr-3"></i>Login
+                    </asp:HyperLink>
+
+
                 </div>
-
-                <asp:ContentPlaceHolder ID="MainContent" runat="server" />
             </div>
-        </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <asp:ContentPlaceHolder ID="MainContent" runat="server" />
+        </main>
+
+        <!-- Footer -->
+        <footer class="bg-white border-t border-indigo-100 mt-12">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+                <div class="md:flex md:items-center md:justify-between">
+                    <div class="flex justify-center md:order-2 space-x-6">
+                        <a href="#" class="text-gray-400 hover:text-indigo-600">
+                            <i class="fab fa-facebook text-lg"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-indigo-600">
+                            <i class="fab fa-instagram text-lg"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-indigo-600">
+                            <i class="fab fa-twitter text-lg"></i>
+                        </a>
+                    </div>
+                    <div class="mt-4 md:mt-0 md:order-1">
+                        <p class="text-center text-sm text-gray-500">
+                            &copy; 2023 MyBookShelf. All rights reserved.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </footer>
     </form>
 
+    <!-- Scripts -->
     <script>
-        const menuBtn = document.getElementById('menuBtn');
-        const sidebar = document.getElementById('sidebar');
-        const overlay = document.getElementById('overlay');
+        // Simple mobile menu toggle without external dependencies
+        document.addEventListener('DOMContentLoaded', function () {
+            const menuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
 
-        menuBtn?.addEventListener('click', () => {
-            sidebar.classList.remove('-translate-x-full');
-            overlay.classList.remove('hidden');
-        });
+            if (menuButton && mobileMenu) {
+                menuButton.addEventListener('click', function () {
+                    mobileMenu.classList.toggle('open');
 
-        overlay?.addEventListener('click', () => {
-            sidebar.classList.add('-translate-x-full');
-            overlay.classList.add('hidden');
+                    // Change icon based on menu state
+                    const icon = menuButton.querySelector('i');
+                    if (mobileMenu.classList.contains('open')) {
+                        icon.classList.remove('fa-bars');
+                        icon.classList.add('fa-times');
+                    } else {
+                        icon.classList.remove('fa-times');
+                        icon.classList.add('fa-bars');
+                    }
+                });
+
+                // Close menu when clicking on a link
+                const mobileLinks = mobileMenu.querySelectorAll('a');
+                mobileLinks.forEach(link => {
+                    link.addEventListener('click', () => {
+                        mobileMenu.classList.remove('open');
+                        const icon = menuButton.querySelector('i');
+                        icon.classList.remove('fa-times');
+                        icon.classList.add('fa-bars');
+                    });
+                });
+            }
+
+            // Close menu when clicking outside
+            document.addEventListener('click', function (event) {
+                if (mobileMenu && menuButton && mobileMenu.classList.contains('open')) {
+                    const isClickInsideMenu = mobileMenu.contains(event.target);
+                    const isClickOnMenuButton = menuButton.contains(event.target);
+
+                    if (!isClickInsideMenu && !isClickOnMenuButton) {
+                        mobileMenu.classList.remove('open');
+                        const icon = menuButton.querySelector('i');
+                        icon.classList.remove('fa-times');
+                        icon.classList.add('fa-bars');
+                    }
+                }
+            });
         });
     </script>
 </body>
