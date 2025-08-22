@@ -62,7 +62,7 @@ namespace SchoolPrj.BookWebsite
         {
             using (var connection = new SqlConnection(connStr))
             {
-                string sql = "select * from Tb_Book where BookTitle like @keyword or Author like @keyword";
+                string sql = "select * from Tb_Book where BookTitle like '%' + @keyword + '%' or Author like '%' + @keyword + '%' ";
                 Books = connection.Query<Book>(sql, new Book { keyword = keyword }).AsList();
             }
             rptBooks.DataSource = Books;
@@ -74,6 +74,7 @@ namespace SchoolPrj.BookWebsite
 
         protected void btnSearch_Click(object sender, EventArgs e)
         {
+            pnlNoBooks.Visible = false;
             string keyword = txtSearch.Text.Trim();
             if (!string.IsNullOrEmpty(keyword))
             {

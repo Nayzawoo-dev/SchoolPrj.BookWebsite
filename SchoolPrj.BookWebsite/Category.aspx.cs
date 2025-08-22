@@ -44,8 +44,6 @@ namespace SchoolPrj.BookWebsite
         }
         private void LoadBooks()
         {
-
-
             using (var connection = new SqlConnection(connStr))
             {
                 string sql = "SELECT * FROM Tb_Book";
@@ -64,6 +62,7 @@ namespace SchoolPrj.BookWebsite
 
         protected void btnFilter_Click(object sender, EventArgs e)
         {
+            pnlNoBooks.Visible = false;
             string selectedAuthor = ddlAuthor.SelectedValue;
             string selectedCategory = ddlCategory.SelectedValue;
             string query = string.Empty;
@@ -75,12 +74,12 @@ namespace SchoolPrj.BookWebsite
 
             if (string.IsNullOrEmpty(selectedAuthor))
             {
-                query = "select * from Tb_Book where Category = @Category";
+                query = "select * from Tb_Book where Category like '%' + @Category + '%' ";
             }
 
             if (!string.IsNullOrEmpty(selectedCategory) && !string.IsNullOrEmpty(selectedAuthor))
             {
-                query = "select * from Tb_Book where Author = @Author and Category = @Category";
+                query = "select * from Tb_Book where Author = @Author and Category like '%' + @Category + '%'";
             }
 
             using (var connection = new SqlConnection(connStr))

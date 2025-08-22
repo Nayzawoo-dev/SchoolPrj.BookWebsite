@@ -119,7 +119,7 @@
 
     <!-- No Books Found Message -->
     <asp:Panel ID="pnlNoBooks" runat="server" Visible="false"
-        CssClass="mt-12 bg-white rounded-xl p-8 shadow-md text-center max-w-2xl mx-auto">
+        CssClass="mt-12 mb-24 bg-white rounded-xl p-8 shadow-md text-center max-w-2xl mx-auto">
         <div class="text-6xl text-gray-300 mb-4">
             <i class="fas fa-book-open"></i>
         </div>

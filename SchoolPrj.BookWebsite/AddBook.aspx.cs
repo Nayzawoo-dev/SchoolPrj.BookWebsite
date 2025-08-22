@@ -13,6 +13,7 @@ namespace SchoolPrj.BookWebsite
 
         protected void btnSave_Click(object sender, EventArgs e)
         {
+            lblMessage.Text = string.Empty;
             string title = txtTitle.Text.Trim();
             string category = txtCategory.Text.Trim();
             string author = txtAuthor.Text.Trim();
@@ -21,6 +22,7 @@ namespace SchoolPrj.BookWebsite
             if (string.IsNullOrEmpty(title))
             {
                 lblMessage.Text = "⚠ Please enter a book title.";
+                lblMessage.Visible=true;
                 Page.ClientScript.RegisterStartupScript(this.GetType(), "HideMsg", "hideMessageAfterDelay();", true);
                 return;
             }
@@ -36,6 +38,7 @@ namespace SchoolPrj.BookWebsite
                 if(res != null)
                 {
                     lblMessage.Text = "⚠ This Book Is Already Exits.";
+                    lblMessage.Visible = true;
                     Page.ClientScript.RegisterStartupScript(this.GetType(), "HideMsg", "hideMessageAfterDelay();", true);
                     return;
                 }
@@ -45,6 +48,7 @@ namespace SchoolPrj.BookWebsite
             if (string.IsNullOrEmpty(category))
             {
                 lblMessage.Text = "⚠ Please enter a book category.";
+                lblMessage.Visible = true;
                 Page.ClientScript.RegisterStartupScript(this.GetType(), "HideMsg", "hideMessageAfterDelay();", true);
                 return;
             }
@@ -52,6 +56,7 @@ namespace SchoolPrj.BookWebsite
             if (string.IsNullOrEmpty(author))
             {
                 lblMessage.Text = "⚠ Please enter a book author.";
+                lblMessage.Visible = true;
                 Page.ClientScript.RegisterStartupScript(this.GetType(), "HideMsg", "hideMessageAfterDelay();", true);
                 return;
             }
@@ -59,6 +64,7 @@ namespace SchoolPrj.BookWebsite
             if (string.IsNullOrEmpty(description))
             {
                 lblMessage.Text = "⚠ Please enter a book description.";
+                lblMessage.Visible = true;
                 Page.ClientScript.RegisterStartupScript(this.GetType(), "HideMsg", "hideMessageAfterDelay();", true);
                 return;
             }
@@ -68,6 +74,7 @@ namespace SchoolPrj.BookWebsite
             if (fuImage.HasFile == false) 
             {
                 lblMessage.Text = "⚠ Please enter a book image.";
+                lblMessage.Visible = true;
                 Page.ClientScript.RegisterStartupScript(this.GetType(), "HideMsg", "hideMessageAfterDelay();", true);
                 return;
             }
@@ -77,6 +84,7 @@ namespace SchoolPrj.BookWebsite
                 if (ext != ".jpg" && ext != ".png" && ext != ".jpeg")
                 {
                     lblMessage.Text = "⚠ Only JPG, JPEG, PNG allowed for images.";
+                    lblMessage.Visible = true;
                     Page.ClientScript.RegisterStartupScript(this.GetType(), "HideMsg", "hideMessageAfterDelay();", true);
                     return;
                 }
@@ -95,6 +103,7 @@ namespace SchoolPrj.BookWebsite
             if (fuPdf.HasFile == false)
             {
                 lblMessage.Text = "⚠ Please enter a book file.";
+                lblMessage.Visible = true;
                 Page.ClientScript.RegisterStartupScript(this.GetType(), "HideMsg", "hideMessageAfterDelay();", true);
                 return;
             }
@@ -104,6 +113,7 @@ namespace SchoolPrj.BookWebsite
                 if (ext != ".pdf")
                 {
                     lblMessage.Text = "⚠ Only PDF files are allowed.";
+                    lblMessage.Visible = true;
                     Page.ClientScript.RegisterStartupScript(this.GetType(), "HideMsg", "hideMessageAfterDelay();", true);
                     return;
                 }
@@ -134,8 +144,9 @@ namespace SchoolPrj.BookWebsite
             }
 
             // Success message
-            lblMessage.CssClass = "block mt-4 text-green-500";
+            lblMessage.CssClass = "bg-red-50 text-green-700 p-4 rounded-xl mb-6 block text-center";
             lblMessage.Text = "✅ Book added successfully!";
+            lblMessage.Visible = true;
             txtTitle.Text = string.Empty;
             txtAuthor.Text = string.Empty;
             txtDescription.Text = string.Empty;
