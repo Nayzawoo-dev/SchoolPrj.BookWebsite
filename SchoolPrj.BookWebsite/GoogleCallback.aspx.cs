@@ -75,7 +75,7 @@ namespace SchoolPrj.BookWebsite
                         var id = connection.QuerySingle<int>("SELECT UserId FROM Users WHERE Email=@Email", new User { Email = email });
                         HttpCookie authCookie = new HttpCookie("UserAuth");
                         authCookie.Values["UserId"] = id.ToString();
-                        authCookie.Expires = DateTime.Now.AddDays(3);
+                        authCookie.Expires = DateTime.Now.AddDays(5);
                         Response.Cookies.Add(authCookie);
                         Response.Redirect("Book.aspx");
                     }

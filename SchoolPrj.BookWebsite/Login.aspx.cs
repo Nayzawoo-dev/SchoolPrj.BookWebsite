@@ -13,7 +13,7 @@ namespace SchoolPrj.BookWebsite
         {
             if (Session["RegisterMessage"] != null)
             {
-                lblMessage.CssClass = "text-green-500";
+                lblMessage.CssClass = "text-green-500 mb-4 block text-sm bg-green-50 p-3 rounded-lg text-center";
                 lblMessage.Text = Session["RegisterMessage"].ToString();
                 lblMessage.Visible = true;
                 Session["RegisterMessage"] = null;
@@ -50,7 +50,7 @@ namespace SchoolPrj.BookWebsite
                     // Cookie (3 days login)
                     HttpCookie authCookie = new HttpCookie("UserAuth");
                     authCookie.Values["UserId"] = admin.UserId.ToString();
-                    authCookie.Expires = DateTime.Now.AddDays(3);
+                    authCookie.Expires = DateTime.Now.AddDays(5);
                     Response.Cookies.Add(authCookie);
                     Response.Redirect("Book.aspx");
                 }

@@ -26,7 +26,7 @@
                             ImageUrl="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%239C92AC'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='1' d='M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z'%3E%3C/path%3E%3C/svg%3E" />
 
                         <!-- label အကြောင့် FileInput ကို click လုပ်လို့ရပြီ၊ JS click မလိုတော့ -->
-                        <label for="<%= fuProfile.ClientID %>" class="absolute bottom-0 right-0 bg-indigo-600 text-white p-2 rounded-full shadow-md cursor-pointer hover:bg-indigo-700 transition-all">
+                        <label for="<%= fuProfile.ClientID %>" class="absolute bottom-0 right-0 bg-indigo-600 text-white px-2 py-1 rounded-full shadow-md cursor-pointer hover:bg-indigo-700 transition-all">
                             <i class="fas fa-camera text-sm"></i>
                         </label>
 

@@ -144,7 +144,7 @@ namespace SchoolPrj.BookWebsite
             }
 
             // Success message
-            lblMessage.CssClass = "bg-red-50 text-green-700 p-4 rounded-xl mb-6 block text-center";
+            lblMessage.CssClass = "bg-green-50 text-green-700 p-4 rounded-xl mb-6 block text-center";
             lblMessage.Text = "✅ Book added successfully!";
             lblMessage.Visible = true;
             txtTitle.Text = string.Empty;

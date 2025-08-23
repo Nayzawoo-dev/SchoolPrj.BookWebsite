@@ -14,7 +14,7 @@ namespace SchoolPrj.BookWebsite
     {
 
         string connStr = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
-
+        public List<Save> SavedBooks { get; set; }
         protected void Page_Load(object sender, EventArgs e)
         {
             if (Session["UserId"] == null)
@@ -31,6 +31,7 @@ namespace SchoolPrj.BookWebsite
             if (Session["ProfileMessage"] != null)
             {
                 lblMessage.Text = Session["ProfileMessage"].ToString();
+                lblMessage.Visible = true;
                 Page.ClientScript.RegisterStartupScript(this.GetType(), "HideMsg", "hideMessageAfterDelay();", true);
                 Session["ProfileMessage"] = null;
             }
@@ -82,11 +83,13 @@ namespace SchoolPrj.BookWebsite
             int userId = Convert.ToInt32(Session["UserId"]);
             using (var con = new SqlConnection(connStr))
             {
-                var books = con.Query<Save>("SELECT * FROM Tb_SaveBook WHERE UserId = @UserId", new Save{ UserId = userId }).ToList();
-                rptSavedBooks.DataSource = books;
-                pnlSaveSection.Visible = books.Count > 0;
+                SavedBooks = con.Query<Save>("SELECT * FROM Tb_SaveBook WHERE UserId = @UserId", new Save { UserId = userId }).ToList();
+                pnlSaveSection.Visible = SavedBooks.Count > 0;
+                rptSavedBooks.DataSource = SavedBooks;
                 rptSavedBooks.DataBind();
+                pnlNoSavedBooks.Visible = SavedBooks.Count == 0;
             }
+
         }
 
         protected void btnDelete_Click(object sender, EventArgs e)
@@ -111,6 +114,8 @@ namespace SchoolPrj.BookWebsite
                 });
             }
         }
+
+
 
     }
 }
