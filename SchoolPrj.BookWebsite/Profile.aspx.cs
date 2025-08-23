@@ -31,6 +31,7 @@ namespace SchoolPrj.BookWebsite
             if (Session["ProfileMessage"] != null)
             {
                 lblMessage.Text = Session["ProfileMessage"].ToString();
+                Page.ClientScript.RegisterStartupScript(this.GetType(), "HideMsg", "hideMessageAfterDelay();", true);
                 Session["ProfileMessage"] = null;
             }
         }

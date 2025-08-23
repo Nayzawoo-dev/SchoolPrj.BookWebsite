@@ -7,7 +7,7 @@
             <asp:Label ID="lblMessage" runat="server" CssClass="text-sm"></asp:Label>
         </div>
         <div class="flex items-center space-x-4">
-            <asp:Image ID="imgProfile" runat="server" CssClass="w-20 h-20 rounded-full border-2 border-indigo-500" />
+            <asp:Image ID="imgProfile" runat="server" CssClass="w-24 h-24 rounded-full border-4 border-white shadow-lg object-cover mx-auto" />
             <div>
                 <h2 class="text-2xl font-bold text-gray-800">
                     <asp:Label ID="lblFullName" runat="server" />
@@ -63,4 +63,14 @@
         </div>
     </asp:Panel>
 
+    <script>
+        function hideMessageAfterDelay() {
+            const message = document.getElementById('<%= lblMessage.ClientID %>');
+              if (message && message.innerText.trim() !== '') {
+                  setTimeout(function () {
+                      message.classList.add('hidden');
+                  }, 5000); // Hide after 5 seconds
+              }
+          }
+    </script>
 </asp:Content>

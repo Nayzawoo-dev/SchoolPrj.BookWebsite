@@ -70,6 +70,7 @@ namespace SchoolPrj.BookWebsite
                         Session["Username"] = name.Replace(" ","");
                         Session["UserId"] = user?.UserId ?? connection.QuerySingle<int>("SELECT UserId FROM Users WHERE Email=@Email", new { Email = email });
                         Session["Role"] = "User";
+                        Session["google"] = "google";
                         Session["ProfileImage"] = "~/uploads/images/default.jpg"; // Default profile image
                         var id = connection.QuerySingle<int>("SELECT UserId FROM Users WHERE Email=@Email", new User { Email = email });
                         HttpCookie authCookie = new HttpCookie("UserAuth");

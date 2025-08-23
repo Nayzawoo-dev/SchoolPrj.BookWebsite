@@ -23,6 +23,10 @@ namespace SchoolPrj.BookWebsite
             {
                 LoadProfile();
             }
+            if (Session["google"] == "google")
+            {
+                Pw.Visible = false;
+            }
         }
 
         private void LoadProfile()
@@ -99,13 +103,6 @@ namespace SchoolPrj.BookWebsite
 
                 using (var connection = new SqlConnection(connectionString))
                 {
-                    var res = connection.QuerySingleOrDefault("select * from Users where Username= @Username", new User { Username = fullName });
-                    if (res != null)
-                    {
-                        lblMessage.CssClass = "text-red-600 font-medium";
-                        lblMessage.Text = "❌ Username already exists!";
-                        return;
-                    }
                     connection.Execute(sql, parameters);
                     goto result;
                 }
@@ -116,23 +113,19 @@ namespace SchoolPrj.BookWebsite
             {
                 string sql;
                 object parameters;
-                if (!string.IsNullOrEmpty(password))
+                if (string.IsNullOrEmpty(password))
                 {
                     sql = @"UPDATE Admins SET Username=@Username, Email=@Email, ProfileImagePath=@ProfileImagePath WHERE UserId = @UserId";
                     parameters = new { Username = fullName, Email = email, ProfileImagePath = profilePath, Password = password, UserId = Session["UserId"] };
                 }
-                sql = @"UPDATE Admins SET Username=@Username, Email=@Email, ProfileImagePath=@ProfileImagePath, Password = @Password WHERE UserId = @UserId";
-                parameters = new {Username = fullName, Email = email, ProfileImagePath = profilePath, Password = password, UserId = Session["UserId"] };
-
-                using(var connection = new SqlConnection(connectionString))
+                else
                 {
-                    var res = connection.QuerySingleOrDefault("select * from Admins where Username= @Username", new Admins { Username = fullName });
-                    if (res != null)
-                    {
-                        lblMessage.CssClass = "text-red-600 font-medium";
-                        lblMessage.Text = "❌ Username already exists!";
-                        return;
-                    }
+                    sql = @"UPDATE Admins SET Username=@Username, Email=@Email, ProfileImagePath=@ProfileImagePath, Password = @Password WHERE UserId = @UserId";
+                    parameters = new { Username = fullName, Email = email, ProfileImagePath = profilePath, Password = password, UserId = Session["UserId"] };
+                }
+
+                using (var connection = new SqlConnection(connectionString))
+                {
                     connection.Execute(sql, parameters);
                     goto result;
                 }

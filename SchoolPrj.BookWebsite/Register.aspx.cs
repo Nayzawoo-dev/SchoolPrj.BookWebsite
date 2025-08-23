@@ -23,6 +23,7 @@ namespace SchoolPrj.BookWebsite
             if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
             {
                 lblMessage.Text = "*Username and Password are required.";
+                lblMessage.Visible = true;
                 Page.ClientScript.RegisterStartupScript(this.GetType(), "HideMsg", "hideMessageAfterDelay();", true);
                 return;
             }
@@ -30,6 +31,7 @@ namespace SchoolPrj.BookWebsite
             if (email.Contains(" ") || username.Contains(" ") || password.Contains(" "))
             {
                 lblMessage.Text = "*Email and Username and Password are must no space";
+                lblMessage.Visible = true;
                 Page.ClientScript.RegisterStartupScript(this.GetType(), "HideMsg", "hideMessageAfterDelay();", true);
                 return;
             }
@@ -56,6 +58,7 @@ namespace SchoolPrj.BookWebsite
                 if (result1 != null)
                 {
                     lblMessage.Text = "*Username already exists!";
+                    lblMessage.Visible = true;
                     Page.ClientScript.RegisterStartupScript(this.GetType(), "HideMsg", "hideMessageAfterDelay();", true);
                     return;
                 }
@@ -65,12 +68,14 @@ namespace SchoolPrj.BookWebsite
                 if (Regex.IsMatch(email, "[A-Z]"))
                 {
                     lblMessage.Text = "*Email must be in lowercase.";
+                    lblMessage.Visible = true;
                     Page.ClientScript.RegisterStartupScript(this.GetType(), "HideMsg", "hideMessageAfterDelay();", true);
                     return;
                 }
                 if (!Regex.IsMatch(email,pattern))
                 {
                     lblMessage.Text = "*Email must be a valid Gmail address and between 10 to 14 characters long.";
+                    lblMessage.Visible = true;
                     Page.ClientScript.RegisterStartupScript(this.GetType(), "HideMsg", "hideMessageAfterDelay();", true);
                     return;
                 }
@@ -79,6 +84,7 @@ namespace SchoolPrj.BookWebsite
                 if (result != null)
                 {
                     lblMessage.Text = "*Email already exists!";
+                    lblMessage.Visible= true;
                     Page.ClientScript.RegisterStartupScript(this.GetType(), "HideMsg", "hideMessageAfterDelay();", true);
                     return;
                 }

@@ -84,7 +84,7 @@
 
                     <!-- Submit Button -->
                     <div class="mt-8 flex justify-end">
-                        <asp:Button ID="btnSave" runat="server" Text="Save Book" OnClick="btnSave_Click"
+                        <asp:Button ID="btnSave" runat="server" Text="Add Book" OnClick="btnSave_Click"
                             CssClass="px-8 py-3.5 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 transition-all font-medium shadow-md hover:shadow-lg flex items-center" />
                     </div>
                 </div>

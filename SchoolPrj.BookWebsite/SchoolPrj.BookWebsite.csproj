@@ -246,7 +246,6 @@
     <Content Include="Content\bootstrap.rtl.css" />
     <Content Include="Content\bootstrap.rtl.min.css" />
     <Content Include="Content\Site.css" />
-    <Content Include="d418bf39-1d64-4a98-aa19-33a4c647d8e9.jpg" />
     <Content Include="Default.aspx" />
     <Content Include="default.jpg" />
     <Content Include="EditBook.aspx" />
