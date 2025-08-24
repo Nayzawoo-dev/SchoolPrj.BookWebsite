@@ -84,7 +84,7 @@
                                     </div>
 
                                     <!-- Action Buttons -->
-                                    <div class="flex flex-col sm:flex-row gap-2 mt-4 md:mt-0">
+                                    <div class="flex flex-row sm:flex-row gap-2 md:mt-0">
                                         <a href='BookDetails.aspx?BookId=<%# Eval("BookId") %>'
                                             class="px-4 py-2 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 transition-all text-sm font-medium flex items-center justify-center shadow-md">
                                             <i class="fas fa-eye mr-2"></i>View
