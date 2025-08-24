@@ -48,11 +48,11 @@
                             OnClick="btnSaveBook_Click" />
 
                         <!-- Heart Section -->
-                        <div class="flex items-center gap-3">
+                        <div class="flex items-center gap-1">
                             <asp:Button ID="btnHeart" runat="server" Text="♡"
                                 CssClass="heart-btn text-3xl text-gray-400 hover:text-red-500 transition-transform duration-300"
                                 OnClick="btnHeart_Click" />
-                                <asp:Label ID="lblHeartCount" runat="server" Text="0" />
+                                <asp:Label ID="lblHeartCount" runat="server" Text="0" CssClass="text-gray-400" />
                         </div>
                     </div>
                 </div>

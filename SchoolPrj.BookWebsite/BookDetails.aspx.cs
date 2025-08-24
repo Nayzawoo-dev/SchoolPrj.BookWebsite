@@ -37,12 +37,18 @@ namespace SchoolPrj.BookWebsite
         {
             using (var conn = new SqlConnection(connStr))
             {
-                var count = conn.ExecuteScalar<long?>(
+                var count = conn.Query<React>(
                     "SELECT HeartCount FROM Tb_React WHERE BookId = @BookId",
                     new React { BookId = bookId }
-                ) ?? 0;
-
-                lblHeartCount.Text = count.ToString();
+                ).ToList();
+                if (count.Count == 0)
+                {
+                    lblHeartCount.Text = "0";
+                }
+                else
+                {
+                    lblHeartCount.Text = count.Count.ToString();
+                }
 
                 var react = conn.QueryFirstOrDefault<React>(
                     "SELECT * FROM Tb_React WHERE UserId = @UserId",
@@ -52,9 +58,9 @@ namespace SchoolPrj.BookWebsite
                 {
                     IsHearted = true;
                 }
-                else 
-                { 
-                    IsHearted = false; 
+                else
+                {
+                    IsHearted = false;
                 }
                 UpdateHeartButton();
             }
@@ -64,7 +70,7 @@ namespace SchoolPrj.BookWebsite
         {
             using (var conn = new SqlConnection(connStr))
             {
-                if(Session["UserId"] == null)
+                if (Session["UserId"] == null)
                 {
                     ClientScript.RegisterStartupScript(this.GetType(), "alert", "alert('❌ Please login to react this book!');", true);
                     return;
