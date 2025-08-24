@@ -44,7 +44,7 @@
                         </asp:HyperLink>
 
                         <asp:Button ID="btnLogout" runat="server" Text="Logout"
-                            CssClass="inline-flex items-center justify-center gap-2 rounded-xl bg-rose-500 px-4 py-2.5 text-white font-medium shadow hover:bg-rose-600 focus:ring-2 focus:ring-rose-500" />
+                            CssClass="inline-flex items-center justify-center gap-2 rounded-xl bg-rose-500 px-4 py-2.5 text-white font-medium shadow hover:bg-rose-600 focus:ring-2 focus:ring-rose-500" OnClick="btnLogout_Click" />
                     </div>
                 </div>
             </div>
@@ -90,7 +90,7 @@
                                             <i class="fas fa-eye mr-2"></i>View
                                         </a>
 
-                                        <asp:Button ID="btnDelete" runat="server" Text="Delete"
+                                        <asp:Button ID="btnDelete" runat="server" Text="Remove"
                                             CommandArgument='<%# Eval("SaveId") %>' OnClick="btnDelete_Click"
                                             OnClientClick="return confirm('Are you sure you want to remove this book from your saved items?');"
                                             CssClass="px-4 py-2 bg-red-500 text-white rounded-xl hover:bg-red-600 transition-all text-sm font-medium flex items-center justify-center shadow-md" />

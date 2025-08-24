@@ -14,17 +14,92 @@ namespace SchoolPrj.BookWebsite
     public partial class _BookDetails : System.Web.UI.Page
     {
         private readonly string connStr = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+        protected int bookId => int.Parse(Request.QueryString["BookId"]);
 
         protected void Page_Load(object sender, EventArgs e)
         {
             if (Request.QueryString["BookId"] != null)
             {
-                int bookId = int.Parse(Request.QueryString["BookId"]);
                 LoadBookDetails(bookId);
+                LoadHeartCount();
             }
 
 
         }
+        protected bool IsHearted
+        {
+            get => ViewState["IsHearted"] != null && (bool)ViewState["IsHearted"];
+            set => ViewState["IsHearted"] = value;
+        }
+
+
+        private void LoadHeartCount()
+        {
+            using (var conn = new SqlConnection(connStr))
+            {
+                var count = conn.ExecuteScalar<long?>(
+                    "SELECT HeartCount FROM Tb_React WHERE BookId = @BookId",
+                    new React { BookId = bookId }
+                ) ?? 0;
+
+                lblHeartCount.Text = count.ToString();
+
+                var react = conn.QueryFirstOrDefault<React>(
+                    "SELECT * FROM Tb_React WHERE UserId = @UserId",
+                    new { UserId = Session["UserId"] }
+                );
+                if (react != null)
+                {
+                    IsHearted = true;
+                }
+                else 
+                { 
+                    IsHearted = false; 
+                }
+                UpdateHeartButton();
+            }
+        }
+
+        protected void btnHeart_Click(object sender, EventArgs e)
+        {
+            using (var conn = new SqlConnection(connStr))
+            {
+                if(Session["UserId"] == null)
+                {
+                    ClientScript.RegisterStartupScript(this.GetType(), "alert", "alert('❌ Please login to react this book!');", true);
+                    return;
+                }
+                if (!IsHearted)
+                {
+                    // Increase Heart Count
+                    var query = @"INSERT INTO Tb_React(UserId,BookId, HeartCount) VALUES(@UserId,@BookId,1)";
+                    conn.Execute(query, new { UserId = Session["UserId"], BookId = bookId });
+                    IsHearted = true;
+                }
+                else
+                {
+                    // Decrease Heart Count
+                    var query = @"
+                        DELETE FROM Tb_React
+                        WHERE UserId = @UserId";
+                    conn.Execute(query, new { UserId = Session["UserId"] });
+
+                    IsHearted = false;
+                }
+            }
+
+            LoadHeartCount();
+            UpdateHeartButton();
+        }
+
+        private void UpdateHeartButton()
+        {
+            btnHeart.Text = IsHearted ? "❤️" : "♡";
+            btnHeart.CssClass = IsHearted ? "heart-btn text-3sm heart-active" : "heart-btn text-3xl";
+        }
+
+
+
 
         private void LoadBookDetails(int bookId)
         {
