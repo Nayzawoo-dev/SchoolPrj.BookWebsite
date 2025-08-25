@@ -52,12 +52,55 @@
                             <asp:Button ID="btnHeart" runat="server" Text="♡"
                                 CssClass="heart-btn text-3xl text-gray-400 hover:text-red-500 transition-transform duration-300"
                                 OnClick="btnHeart_Click" />
-                                <asp:Label ID="lblHeartCount" runat="server" Text="0" CssClass="text-gray-400" />
+                            <asp:Label ID="lblHeartCount" runat="server" Text="0" CssClass="text-gray-400" />
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
+        <!-- Comment Section -->
+        <div class="mt-8 bg-white shadow rounded-xl p-6">
+            <h2 class="text-xl font-bold mb-4">💬 Comments</h2>
+
+            <!-- Comment Form -->
+            <asp:Panel ID="pnlAddComment" runat="server" Visible="true">
+                <asp:TextBox ID="txtComment" runat="server"
+                    CssClass="w-full p-3 border rounded-lg mb-3"
+                    TextMode="MultiLine" Rows="3" placeholder="Write a comment..."></asp:TextBox>
+                <asp:FileUpload ID="fuVideo" runat="server" CssClass="mb-3" />
+                <asp:Button ID="btnAddComment" runat="server" Text="Post Comment"
+                    CssClass="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
+                    OnClick="btnAddComment_Click" />
+            </asp:Panel>
+        </div>
+
+        <!-- Comments List -->
+        <asp:Repeater ID="rptComments" runat="server">
+            <ItemTemplate>
+                <div class="flex items-start gap-3 border-b border-gray-200 p-4 bg-white mt-4 rounded-xl">
+                    <img src='<%# ResolveUrl(Eval("UserProfile").ToString()) %>'
+                        class="w-10 h-10 rounded-full object-cover" />
+                    <div>
+                        <span class="px-1 py-1 text-sm bg-indigo-100 text-indigo-700 rounded-full">
+                            <%# Eval("Role") %>
+                        </span>
+                        <p class="font-bold text-gray-800"><%# Eval("UserName") %></p>
+                        <p class="text-sm text-gray-400 mt-1"><%# Eval("Date", "{0:yyyy-MM-dd}") %></p>
+                        <p class="text-gray-700"><%# Eval("Comment") %></p>
+                        <asp:PlaceHolder ID="phVideo" runat="server"
+                            Visible='<%# Eval("VideoPath") != DBNull.Value && Eval("VideoPath") != null %>'>
+                            <video src='<%# Eval("VideoPath") == null ? "#" : ResolveUrl(Eval("VideoPath").ToString()) %>' controls class="mt-2 w-60 rounded border border-gray-200"></video>
+                        </asp:PlaceHolder>
+                        <asp:PlaceHolder ID="phImage" runat="server"
+                            Visible='<%# Eval("ImagePath") != DBNull.Value && Eval("ImagePath") != null %>'>
+                            <img src='<%# Eval("ImagePath") == null ? "#" : ResolveUrl(Eval("ImagePath").ToString()) %>' class="mt-2 w-60 rounded border border-gray-200">
+                        </asp:PlaceHolder>
+                    </div>
+                </div>
+            </ItemTemplate>
+        </asp:Repeater>
+
     </div>
 
     <style>

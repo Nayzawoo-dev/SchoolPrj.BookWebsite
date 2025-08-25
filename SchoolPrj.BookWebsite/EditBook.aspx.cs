@@ -61,7 +61,7 @@ namespace SchoolPrj.BookWebsite
                 }
 
                 string fileName = Guid.NewGuid() + System.IO.Path.GetExtension(fuImage.FileName);
-                string savePath = "~/Uploads/Images/" + fileName;
+                string savePath = "~/uploads/images/" + fileName;
                 fuImage.SaveAs(Server.MapPath(savePath));
                 imagePath = savePath;
             }
@@ -78,7 +78,7 @@ namespace SchoolPrj.BookWebsite
                 }
 
                 string fileName = Guid.NewGuid() + System.IO.Path.GetExtension(fuPdf.FileName);
-                string savePath = "~/Uploads/Pdfs/" + fileName;
+                string savePath = "~/uploads/pdfs/" + fileName;
                 fuPdf.SaveAs(Server.MapPath(savePath));
                 pdfPath = savePath;
             }

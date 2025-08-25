@@ -1,12 +1,14 @@
-﻿using System;
+﻿using Dapper;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.EnterpriseServices;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Web.UI.WebControls;
-using Dapper;
 using static SchoolPrj.BookWebsite._BookDetails;
 
 namespace SchoolPrj.BookWebsite
@@ -15,14 +17,15 @@ namespace SchoolPrj.BookWebsite
     {
         private readonly string connStr = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
         protected int bookId => int.Parse(Request.QueryString["BookId"]);
-
         protected void Page_Load(object sender, EventArgs e)
         {
             if (Request.QueryString["BookId"] != null)
             {
                 LoadBookDetails(bookId);
+                BindComments();
                 LoadHeartCount();
             }
+
 
 
         }
@@ -72,7 +75,7 @@ namespace SchoolPrj.BookWebsite
             {
                 if (Session["UserId"] == null)
                 {
-                    ClientScript.RegisterStartupScript(this.GetType(), "alert", "alert('❌ Please login to react this book!');", true);
+                    Response.Write("<script>alert('Please login first!');</script>");
                     return;
                 }
                 if (!IsHearted)
@@ -183,6 +186,89 @@ namespace SchoolPrj.BookWebsite
 
             ClientScript.RegisterStartupScript(this.GetType(), "alert", "alert('✅ Book saved successfully!');", true);
         }
+
+        protected void btnAddComment_Click(object sender, EventArgs e)
+        {
+            if (Session["UserId"] == null)
+            {
+                Response.Write("<script>alert('Please login first!');</script>");
+                return;
+            }
+
+            int userId = Convert.ToInt32(Session["UserId"]);
+            string comment = txtComment.Text.Trim();
+            string videoPath = null;
+
+            // Upload Video if exists
+            if (fuVideo.HasFile)
+            {
+                string folder = Server.MapPath("~/uploads/videos/");
+                if (!Directory.Exists(folder)) Directory.CreateDirectory(folder);
+
+                string filename = Guid.NewGuid() + Path.GetExtension(fuVideo.FileName);
+                fuVideo.SaveAs(Path.Combine(folder, filename));
+
+                videoPath = "~/uploads/videos/" + filename;
+            }
+
+            using (var conn = new SqlConnection(connStr))
+            {
+                string query = @"INSERT INTO Tb_Comment (BookId, UserId, Comment, VideoPath, Date,UserProfile,UserName,ImagePath,Role)
+                                 VALUES (@BookId, @UserId, @Comment, @VideoPath, @Date,@UserProfile,@UserName,@ImagePath,@Role)";
+
+                string ProfileImagePath = Session["ProfileImage"]?.ToString();
+                string Username = Session["Username"]?.ToString();
+                string Role = Session["Role"]?.ToString();
+                if (videoPath == null)
+                {
+                    conn.Execute(query, new _Comment { BookId = bookId, UserId = userId, Comment = comment, VideoPath = null, ImagePath = null, Date = DateTime.Now, UserProfile = ProfileImagePath, UserName = Username ,Role = Role});
+                }
+                else
+
+                if (videoPath.ToLower().Contains(".mp4") || videoPath.ToLower().Contains(".mov") || videoPath.ToLower().Contains(".avi") || videoPath.ToLower().Contains(".wmv") || videoPath.ToLower().Contains(".flv") || videoPath.ToLower().Contains(".mkv"))
+                {
+                    conn.Execute(query, new _Comment { BookId = bookId, UserId = userId, Comment = comment, VideoPath = videoPath, ImagePath = null, Date = DateTime.Now, UserProfile = ProfileImagePath, UserName = Username , Role = Role });
+                }
+                else
+                {
+                    conn.Execute(query, new _Comment { BookId = bookId, UserId = userId, Comment = comment, VideoPath = null, ImagePath = videoPath, Date = DateTime.Now, UserProfile = ProfileImagePath, UserName = Username ,Role = Role});
+                }
+
+            }
+
+            txtComment.Text = "";
+            BindComments();
+        }
+
+        private void BindComments()
+        {
+            using (var conn = new SqlConnection(connStr))
+            {
+                string query = @"select * from Tb_Comment where BookId = BookId order by CommentId desc";
+
+                var comments = conn.Query<_Comment>(query, new _Comment { BookId = bookId }).ToList();
+                rptComments.DataSource = comments;
+                rptComments.DataBind();
+            }
+        }
+
+    }
+
+    public class _Comment
+    {
+        public int CommentId { get; set; }
+
+        public string UserProfile { get; set; }
+        public string UserName { get; set; }
+        public int BookId { get; set; }
+        public int UserId { get; set; }
+        public string Comment { get; set; }
+        public string VideoPath { get; set; } = null;
+        public DateTime Date { get; set; }
+
+        public string ImagePath { get; set; } = null;
+
+        public string Role { get; set; }
     }
 
 }
