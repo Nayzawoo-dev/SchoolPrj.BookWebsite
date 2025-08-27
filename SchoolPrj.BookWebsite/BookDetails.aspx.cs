@@ -22,8 +22,11 @@ namespace SchoolPrj.BookWebsite
             if (Request.QueryString["BookId"] != null)
             {
                 LoadBookDetails(bookId);
-                BindComments();
                 LoadHeartCount();
+            }
+            if (!IsPostBack)
+            {
+                BindComments();
             }
 
 
@@ -240,16 +243,85 @@ namespace SchoolPrj.BookWebsite
             BindComments();
         }
 
+        protected void rptComments_ItemCommand(object source, RepeaterCommandEventArgs e)
+        {
+
+            if (e.CommandName == "AddReply")
+            {
+                int userId = Convert.ToInt32(Session["UserId"]);
+                string ProfileImagePath = Session["ProfileImage"]?.ToString();
+                string Username = Session["Username"]?.ToString();
+                string Role = Session["Role"]?.ToString();
+                int commentId = Convert.ToInt32(e.CommandArgument);
+                TextBox txtReply = (TextBox)e.Item.FindControl("txtReply");
+                if (!string.IsNullOrEmpty(txtReply.Text))
+                {
+                    using (var con = new SqlConnection(connStr))
+                    {
+                        string query = @"
+                    INSERT INTO Tb_Reply 
+                    (CommentId, UserId, ReplyText, UserProfile, UserName, Role,Date,ReplyUserName)
+                    VALUES (@CommentId, @UserId, @ReplyText, @UserProfile, @UserName, @Role,@Date,@ReplyUserName)";
+                      var res = con.QueryFirstOrDefault<_Comment>("select UserName from Tb_Comment where CommentId=@CommentId", new _Comment{ CommentId = commentId });
+                      string replyusername = res.UserName;
+                        con.Execute(query, new Reply
+                        {
+                            CommentId = commentId,
+                            UserId = userId, // Current user ID
+                            ReplyText = txtReply.Text,
+                            UserProfile = ProfileImagePath,
+                            UserName = Username,
+                            ReplyUserName = replyusername,
+                            Date = DateTime.Now,
+                            Role = Role
+                        });
+                    }
+
+                    BindComments(); 
+                }
+            }
+        }
+
+
         private void BindComments()
         {
-            using (var conn = new SqlConnection(connStr))
+            using (var con = new SqlConnection(connStr))
             {
-                string query = @"select * from Tb_Comment where BookId = BookId order by CommentId desc";
+                // Load all comments
+                var comments = con.Query<_Comment>(
+                    "select * from Tb_Comment where BookId = @BookId order by CommentId desc", new _Comment
+                    {
+                        BookId = bookId
+                    }).ToList();
 
-                var comments = conn.Query<_Comment>(query, new _Comment { BookId = bookId }).ToList();
+                // Load replies for each comment
+                foreach (var comment in comments)
+                {
+                    var replies = con.Query<Reply>(
+                        "SELECT * FROM Tb_Reply WHERE CommentId = @CommentId order by ReplyId desc",
+                        new Reply { CommentId = comment.CommentId}).ToList();
+
+                    comment.Replies = replies;
+                }
+
                 rptComments.DataSource = comments;
                 rptComments.DataBind();
             }
+        }
+
+        public static string GetRelativeTime(DateTime dateTime)
+        {
+            var ts = DateTime.Now - dateTime;
+
+            if (ts.TotalMinutes < 1)
+                return "just now";
+            if (ts.TotalMinutes < 60)
+                return $"{Math.Floor(ts.TotalMinutes)} minutes ago";
+            if (ts.TotalHours < 24)
+                return $"{Math.Floor(ts.TotalHours)} hr ago";
+            if (ts.TotalDays < 7)
+                return $"{Math.Floor(ts.TotalDays)} day{(ts.TotalDays >= 2 ? "s" : "")} ago";
+            return dateTime.ToString("MMM dd, yyyy");
         }
 
     }
@@ -268,9 +340,22 @@ namespace SchoolPrj.BookWebsite
 
         public string ImagePath { get; set; } = null;
 
+        public List<Reply> Replies { get; set; } = new List<Reply>();
+
         public string Role { get; set; }
     }
 
+    public class Reply
+    {
+        public int ReplyId { get; set; }
+        public int CommentId { get; set; }
+        public int UserId { get; set; }
+        public string ReplyText { get; set; }
+        public string UserProfile { get; set; }
+        public string UserName { get; set; }
+        public string Role { get; set; }
+
+        public string ReplyUserName { get; set; }
+        public DateTime Date { get; set; }
+    }
 }
-
-

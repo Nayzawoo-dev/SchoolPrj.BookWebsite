@@ -1,4 +1,4 @@
-﻿<%@ Page Title="Book Details" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="BookDetails.aspx.cs" Inherits="SchoolPrj.BookWebsite._BookDetails" %>
+﻿<%@ Page Title="Category" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="BookDetails.aspx.cs" Inherits="SchoolPrj.BookWebsite._BookDetails" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
 
@@ -76,7 +76,7 @@
         </div>
 
         <!-- Comments List -->
-        <asp:Repeater ID="rptComments" runat="server">
+        <asp:Repeater ID="rptComments" runat="server" OnItemCommand="rptComments_ItemCommand">
             <ItemTemplate>
                 <div class="flex items-start gap-3 border-b border-gray-200 p-4 bg-white mt-4 rounded-xl">
                     <img src='<%# ResolveUrl(Eval("UserProfile").ToString()) %>'
@@ -96,7 +96,37 @@
                             Visible='<%# Eval("ImagePath") != DBNull.Value && Eval("ImagePath") != null %>'>
                             <img src='<%# Eval("ImagePath") == null ? "#" : ResolveUrl(Eval("ImagePath").ToString()) %>' class="mt-2 w-60 rounded border border-gray-200">
                         </asp:PlaceHolder>
-                        <p class="text-sm text-gray-400 mt-1"><%# Eval("Date", "{0:hhhh}") %>hr ago</p>
+                        <p class="text-sm text-gray-400 mt-1"><%# GetRelativeTime(Convert.ToDateTime(Eval("Date"))) %></p>
+
+                        <!-- Reply List -->
+                        <asp:Repeater ID="rptReplies" runat="server" DataSource='<%# Eval("Replies") %>'>
+                            <ItemTemplate>
+                                <div class="ml-10 mt-3 flex gap-3">
+                                    <div class="bg-gray-100 p-2 rounded-lg w-fit">
+                                        <img src='<%# ResolveUrl(Eval("UserProfile").ToString()) %>'
+                                            class="w-8 h-8 rounded-full object-cover" />
+                                        <span class="px-1 py-1 text-sm bg-indigo-100 text-indigo-700 rounded-full">
+                                            <%# Eval("Role") %>
+                                        </span>
+                                        <span class="text-sm font-bold">
+                                            <p class="font-bold text-gray-800"><%# Eval("UserName") %></p>
+                                        </span>
+                                        <p class="text-sm text-gray-700"><span class="text-sm text-blue-500"><%# Eval("ReplyUserName") %></span><%# Eval("ReplyText") %></p>
+                                    </div>
+                                </div>
+                                <p class="text-sm text-gray-400 mt-1"><%# GetRelativeTime(Convert.ToDateTime(Eval("Date"))) %></p>
+                            </ItemTemplate>
+                        </asp:Repeater>
+
+                        <!-- Reply Form -->
+                        <asp:Panel ID="pnlReply" runat="server" CssClass="mt-3 ml-10">
+                            <asp:TextBox ID="txtReply" runat="server"
+                                CssClass="w-full p-2 border rounded-lg mb-2"
+                                TextMode="MultiLine" Rows="2" placeholder="Write a reply..."></asp:TextBox>
+                            <asp:Button ID="btnReply" runat="server" Text="Reply"
+                                CssClass="bg-green-500 text-white px-3 py-1 rounded-lg hover:bg-green-600"
+                                CommandName="AddReply" CommandArgument='<%# Eval("CommentId") %>' />
+                        </asp:Panel>
                     </div>
                 </div>
             </ItemTemplate>
