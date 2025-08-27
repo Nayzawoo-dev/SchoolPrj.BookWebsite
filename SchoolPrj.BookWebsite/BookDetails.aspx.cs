@@ -75,7 +75,7 @@ namespace SchoolPrj.BookWebsite
             {
                 if (Session["UserId"] == null)
                 {
-                    Response.Write("<script>alert('Please login first!');</script>");
+                    ClientScript.RegisterStartupScript(this.GetType(), "alert", "alert('❌ Please login to react this book!');", true);
                     return;
                 }
                 if (!IsHearted)
@@ -191,7 +191,7 @@ namespace SchoolPrj.BookWebsite
         {
             if (Session["UserId"] == null)
             {
-                Response.Write("<script>alert('Please login first!');</script>");
+                ClientScript.RegisterStartupScript(this.GetType(), "alert", "alert('❌ Please login ');", true);
                 return;
             }
 
@@ -221,17 +221,17 @@ namespace SchoolPrj.BookWebsite
                 string Role = Session["Role"]?.ToString();
                 if (videoPath == null)
                 {
-                    conn.Execute(query, new _Comment { BookId = bookId, UserId = userId, Comment = comment, VideoPath = null, ImagePath = null, Date = DateTime.Now, UserProfile = ProfileImagePath, UserName = Username ,Role = Role});
+                    conn.Execute(query, new _Comment { BookId = bookId, UserId = userId, Comment = comment, VideoPath = null, ImagePath = null, Date = DateTime.Now, UserProfile = ProfileImagePath, UserName = Username, Role = Role });
                 }
                 else
 
                 if (videoPath.ToLower().Contains(".mp4") || videoPath.ToLower().Contains(".mov") || videoPath.ToLower().Contains(".avi") || videoPath.ToLower().Contains(".wmv") || videoPath.ToLower().Contains(".flv") || videoPath.ToLower().Contains(".mkv"))
                 {
-                    conn.Execute(query, new _Comment { BookId = bookId, UserId = userId, Comment = comment, VideoPath = videoPath, ImagePath = null, Date = DateTime.Now, UserProfile = ProfileImagePath, UserName = Username , Role = Role });
+                    conn.Execute(query, new _Comment { BookId = bookId, UserId = userId, Comment = comment, VideoPath = videoPath, ImagePath = null, Date = DateTime.Now, UserProfile = ProfileImagePath, UserName = Username, Role = Role });
                 }
                 else
                 {
-                    conn.Execute(query, new _Comment { BookId = bookId, UserId = userId, Comment = comment, VideoPath = null, ImagePath = videoPath, Date = DateTime.Now, UserProfile = ProfileImagePath, UserName = Username ,Role = Role});
+                    conn.Execute(query, new _Comment { BookId = bookId, UserId = userId, Comment = comment, VideoPath = null, ImagePath = videoPath, Date = DateTime.Now, UserProfile = ProfileImagePath, UserName = Username, Role = Role });
                 }
 
             }

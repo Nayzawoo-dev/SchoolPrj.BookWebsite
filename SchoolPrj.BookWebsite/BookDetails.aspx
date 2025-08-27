@@ -96,6 +96,7 @@
                             Visible='<%# Eval("ImagePath") != DBNull.Value && Eval("ImagePath") != null %>'>
                             <img src='<%# Eval("ImagePath") == null ? "#" : ResolveUrl(Eval("ImagePath").ToString()) %>' class="mt-2 w-60 rounded border border-gray-200">
                         </asp:PlaceHolder>
+                        <p class="text-sm text-gray-400 mt-1"><%# Eval("Date", "{0:hhhh}") %>hr ago</p>
                     </div>
                 </div>
             </ItemTemplate>
