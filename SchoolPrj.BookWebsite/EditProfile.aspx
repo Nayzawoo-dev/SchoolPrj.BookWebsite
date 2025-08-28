@@ -64,21 +64,21 @@
 
                 <!-- Password (Optional) -->
                 <asp:Panel ID="Pw" CssClass="mb-5" runat="server">
-                    <label class="block text-sm font-medium text-gray-700 mb-2">New Password (leave blank if not changing)</label>
-                    <div class="relative">
-                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <i class="fas fa-lock text-gray-400"></i>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">New Password (leave blank if not changing)</label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <i class="fas fa-lock text-gray-400"></i>
+                            </div>
+                            <asp:TextBox ID="txtPassword" runat="server" TextMode="Password"
+                                CssClass="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
+                                placeholder="Enter new password" />
+                            <!-- Eye icon for password visibility toggle -->
+                            <div class="absolute inset-y-0 right-0 pr-3 flex items-center">
+                                <button type="button" id="togglePassword" class="text-gray-400 hover:text-gray-500 focus:outline-none">
+                                    <i class="fas fa-eye" id="eyeIcon"></i>
+                                </button>
+                            </div>
                         </div>
-                        <asp:TextBox ID="txtPassword" runat="server" TextMode="Password"
-                            CssClass="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
-                            placeholder="Enter new password" />
-                        <!-- Eye icon for password visibility toggle -->
-                        <div class="absolute inset-y-0 right-0 pr-3 flex items-center">
-                            <button type="button" id="togglePassword" class="text-gray-400 hover:text-gray-500 focus:outline-none">
-                                <i class="fas fa-eye" id="eyeIcon"></i>
-                            </button>
-                        </div>
-                    </div>
                 </asp:Panel>
 
                 <!-- Save Button -->
