@@ -22,9 +22,9 @@
     </script>
 
 <!-- Hero Section -->
-<section class="relative bg-gradient-to-r from-indigo-600 to-purple-700 text-white py-16 md:py-24 rounded-xl overflow-hidden mb-12 shadow-lg">
+<section class="relative  bg-gradient-to-r mt-8 from-indigo-600 to-purple-700 text-white py-8 md:py-10 rounded-xl overflow-hidden mb-12 shadow-lg">
   <!-- Overlay -->
-  <div class="absolute inset-0 bg-black opacity-10"></div>
+  <div class="absolute inset-0 bg-black opacity-10 "></div>
 
   <div class="container mx-auto px-6 lg:px-12 relative z-10">
     <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
@@ -49,7 +49,7 @@
 
       <!-- Right Image -->
       <div class="relative flex justify-center md:justify-end" data-aos="fade-left">
-        <img src="uploads/images/default.jpg" alt="Books" class="rounded-2xl shadow-2xl transform hover:scale-105 transition duration-500">
+        <img src="uploads/images/default.jpg" alt="Books" class="rounded-2xl size-[300px] shadow-2xl transform hover:scale-105 transition duration-500">
       </div>
     </div>
   </div>
