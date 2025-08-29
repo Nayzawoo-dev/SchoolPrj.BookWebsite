@@ -252,6 +252,7 @@ namespace SchoolPrj.BookWebsite
                 string Role = Session["Role"]?.ToString();
                 int commentId = Convert.ToInt32(e.CommandArgument);
                 TextBox txtReply = (TextBox)e.Item.FindControl("txtReply");
+
                 if (!string.IsNullOrEmpty(txtReply.Text))
                 {
                     using (var con = new SqlConnection(connStr))
@@ -299,13 +300,15 @@ namespace SchoolPrj.BookWebsite
         {
             if (e.CommandName == "AddNestedReply")
             {
+                RepeaterItem replyItem = (RepeaterItem)e.Item;
                 int userId = Convert.ToInt32(Session["UserId"]);
                 string ProfileImagePath = Session["ProfileImage"]?.ToString();
                 string Username = Session["Username"]?.ToString();
                 string Role = Session["Role"]?.ToString();
                 int replyId = Convert.ToInt32(e.CommandArgument);
+                HiddenField hdnCommentId = (HiddenField)replyItem.FindControl("hdnCommentId");
+                string commentId = hdnCommentId.Value;
                 TextBox txtReply = (TextBox)e.Item.FindControl("txtNesReply");
-
                 if (!string.IsNullOrEmpty(txtReply.Text))
                 {
                     using (var con = new SqlConnection(connStr))
@@ -318,7 +321,7 @@ namespace SchoolPrj.BookWebsite
                         string replyusername = res.UserName;
                         con.Execute(query, new Reply
                         {
-                            CommentId = replyId,
+                            CommentId = Convert.ToInt32(commentId),
                             UserId = userId, // Current user ID
                             ReplyText = txtReply.Text,
                             UserProfile = ProfileImagePath,

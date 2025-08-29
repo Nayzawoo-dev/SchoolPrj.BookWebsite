@@ -1,5 +1,7 @@
 ﻿<%@ Page Title="Category" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="BookDetails.aspx.cs" Inherits="SchoolPrj.BookWebsite._BookDetails" %>
 
+
+
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
 
     <div class="max-w-6xl mx-auto p-4 sm:p-6 lg:p-8">
@@ -107,15 +109,15 @@
                                 CssClass="bg-green-500 text-white px-3 py-1 rounded-lg hover:bg-green-600"
                                 CommandName="AddReply" CommandArgument='<%# Eval("CommentId") %>' />
 
-                            <asp:Button ID="btnDelete" runat="server" Text="Delete" 
+                            <asp:Button ID="btnDelete" runat="server" Text="Delete"
                                 CssClass="bg-green-500 text-white px-3 py-1 rounded-lg hover:bg-green-600"
                                 CommandName="Delete" CommandArgument='<%# Eval("CommentId") %>' />
 
                         </asp:Panel>
 
-
                         <!-- Reply List -->
                         <asp:Repeater ID="rptReplies" runat="server" DataSource='<%# Eval("Replies") %>' OnItemCommand="rptReply_ItemCommand">
+
                             <ItemTemplate>
                                 <div class="ml-10 mt-3 flex gap-3">
                                     <div class="bg-gray-100 p-2 rounded-lg w-fit">
@@ -136,6 +138,10 @@
                                     <asp:TextBox ID="txtNesReply" runat="server"
                                         CssClass="w-full p-2 border rounded-lg mb-2"
                                         TextMode="MultiLine" Rows="2" placeholder="Write a reply..."></asp:TextBox>
+
+                                    <asp:HiddenField ID="hdnCommentId" runat="server"
+                                        Value='<%# Eval("CommentId") %>' />
+
                                     <asp:Button ID="btnReply" runat="server" Text="Reply"
                                         CssClass="bg-green-500 text-white px-3 py-1 rounded-lg hover:bg-green-600"
                                         CommandName="AddNestedReply" CommandArgument='<%# Eval("ReplyId") %>' />
