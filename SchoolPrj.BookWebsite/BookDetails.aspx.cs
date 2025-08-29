@@ -29,8 +29,6 @@ namespace SchoolPrj.BookWebsite
                 BindComments();
             }
 
-
-
         }
         protected bool IsHearted
         {
@@ -57,8 +55,8 @@ namespace SchoolPrj.BookWebsite
                 }
 
                 var react = conn.QueryFirstOrDefault<React>(
-                    "SELECT * FROM Tb_React WHERE UserId = @UserId",
-                    new { UserId = Session["UserId"] }
+                    "SELECT * FROM Tb_React WHERE UserId = @UserId and BookId = @BookId",
+                    new { UserId = Session["UserId"], BookId = bookId }
                 );
                 if (react != null)
                 {
@@ -262,8 +260,8 @@ namespace SchoolPrj.BookWebsite
                     INSERT INTO Tb_Reply 
                     (CommentId, UserId, ReplyText, UserProfile, UserName, Role,Date,ReplyUserName)
                     VALUES (@CommentId, @UserId, @ReplyText, @UserProfile, @UserName, @Role,@Date,@ReplyUserName)";
-                      var res = con.QueryFirstOrDefault<_Comment>("select UserName from Tb_Comment where CommentId=@CommentId", new _Comment{ CommentId = commentId });
-                      string replyusername = res.UserName;
+                        var res = con.QueryFirstOrDefault<_Comment>("select UserName from Tb_Comment where CommentId=@CommentId", new _Comment { CommentId = commentId });
+                        string replyusername = res.UserName;
                         con.Execute(query, new Reply
                         {
                             CommentId = commentId,
@@ -277,8 +275,77 @@ namespace SchoolPrj.BookWebsite
                         });
                     }
 
-                    BindComments(); 
+                    BindComments();
                 }
+            }
+
+            if (e.CommandName == "Delete")
+            {
+                int commentId = Convert.ToInt32(e.CommandArgument);
+                using (var con = new SqlConnection(connStr))
+                {
+                    string query = @"DELETE FROM [dbo].[Tb_Comment]
+      WHERE CommentId = @CommentId";
+                    con.Execute(query, new _Comment
+                    {
+                        CommentId = commentId,
+                    });
+                }
+                BindComments();
+            }
+        }
+
+        protected void rptReply_ItemCommand(object sender, RepeaterCommandEventArgs e)
+        {
+            if (e.CommandName == "AddNestedReply")
+            {
+                int userId = Convert.ToInt32(Session["UserId"]);
+                string ProfileImagePath = Session["ProfileImage"]?.ToString();
+                string Username = Session["Username"]?.ToString();
+                string Role = Session["Role"]?.ToString();
+                int replyId = Convert.ToInt32(e.CommandArgument);
+                TextBox txtReply = (TextBox)e.Item.FindControl("txtNesReply");
+
+                if (!string.IsNullOrEmpty(txtReply.Text))
+                {
+                    using (var con = new SqlConnection(connStr))
+                    {
+                        string query = @"
+                    INSERT INTO Tb_Reply 
+                    (CommentId, UserId, ReplyText, UserProfile, UserName, Role,Date,ReplyUserName)
+                    VALUES (@CommentId, @UserId, @ReplyText, @UserProfile, @UserName, @Role,@Date,@ReplyUserName)";
+                        var res = con.QueryFirstOrDefault<Reply>("select UserName from Tb_Reply where ReplyId=@ReplyId", new Reply { ReplyId = replyId });
+                        string replyusername = res.UserName;
+                        con.Execute(query, new Reply
+                        {
+                            CommentId = replyId,
+                            UserId = userId, // Current user ID
+                            ReplyText = txtReply.Text,
+                            UserProfile = ProfileImagePath,
+                            UserName = Username,
+                            ReplyUserName = replyusername,
+                            Date = DateTime.Now,
+                            Role = Role
+                        });
+                    }
+
+                    BindComments();
+                }
+            }
+
+            if (e.CommandName == "delete")
+            {
+                int replyId = Convert.ToInt32(e.CommandArgument);
+                using (var con = new SqlConnection(connStr))
+                {
+                    string query = @"DELETE FROM [dbo].[Tb_Reply]
+      WHERE ReplyId = @ReplyId";
+                    con.Execute(query, new Reply
+                    {
+                        ReplyId = replyId,
+                    });
+                }
+                BindComments();
             }
         }
 
@@ -298,8 +365,8 @@ namespace SchoolPrj.BookWebsite
                 foreach (var comment in comments)
                 {
                     var replies = con.Query<Reply>(
-                        "SELECT * FROM Tb_Reply WHERE CommentId = @CommentId order by ReplyId desc",
-                        new Reply { CommentId = comment.CommentId}).ToList();
+                        "SELECT * FROM Tb_Reply WHERE CommentId = @CommentId",
+                        new Reply { CommentId = comment.CommentId }).ToList();
 
                     comment.Replies = replies;
                 }
@@ -358,4 +425,5 @@ namespace SchoolPrj.BookWebsite
         public string ReplyUserName { get; set; }
         public DateTime Date { get; set; }
     }
+
 }

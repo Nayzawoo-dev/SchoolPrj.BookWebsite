@@ -98,8 +98,24 @@
                         </asp:PlaceHolder>
                         <p class="text-sm text-gray-400 mt-1"><%# GetRelativeTime(Convert.ToDateTime(Eval("Date"))) %></p>
 
+                        <!-- Reply Form -->
+                        <asp:Panel ID="pnlReply" runat="server" CssClass="mt-3 ml-10">
+                            <asp:TextBox ID="txtReply" runat="server"
+                                CssClass="w-full p-2 border rounded-lg mb-2"
+                                TextMode="MultiLine" Rows="2" placeholder="Write a reply..."></asp:TextBox>
+                            <asp:Button ID="btnReply" runat="server" Text="Reply"
+                                CssClass="bg-green-500 text-white px-3 py-1 rounded-lg hover:bg-green-600"
+                                CommandName="AddReply" CommandArgument='<%# Eval("CommentId") %>' />
+
+                            <asp:Button ID="btnDelete" runat="server" Text="Delete" 
+                                CssClass="bg-green-500 text-white px-3 py-1 rounded-lg hover:bg-green-600"
+                                CommandName="Delete" CommandArgument='<%# Eval("CommentId") %>' />
+
+                        </asp:Panel>
+
+
                         <!-- Reply List -->
-                        <asp:Repeater ID="rptReplies" runat="server" DataSource='<%# Eval("Replies") %>'>
+                        <asp:Repeater ID="rptReplies" runat="server" DataSource='<%# Eval("Replies") %>' OnItemCommand="rptReply_ItemCommand">
                             <ItemTemplate>
                                 <div class="ml-10 mt-3 flex gap-3">
                                     <div class="bg-gray-100 p-2 rounded-lg w-fit">
@@ -115,22 +131,30 @@
                                     </div>
                                 </div>
                                 <p class="text-sm text-gray-400 mt-1"><%# GetRelativeTime(Convert.ToDateTime(Eval("Date"))) %></p>
+                                <!--nested reply form-->
+                                <asp:Panel ID="pnlReply" runat="server" CssClass="mt-3 ml-10">
+                                    <asp:TextBox ID="txtNesReply" runat="server"
+                                        CssClass="w-full p-2 border rounded-lg mb-2"
+                                        TextMode="MultiLine" Rows="2" placeholder="Write a reply..."></asp:TextBox>
+                                    <asp:Button ID="btnReply" runat="server" Text="Reply"
+                                        CssClass="bg-green-500 text-white px-3 py-1 rounded-lg hover:bg-green-600"
+                                        CommandName="AddNestedReply" CommandArgument='<%# Eval("ReplyId") %>' />
+
+                                    <asp:Button ID="btnDelete" runat="server" Text="delete"
+                                        CssClass="bg-green-500 text-white px-3 py-1 rounded-lg hover:bg-green-600"
+                                        CommandName="delete" CommandArgument='<%# Eval("ReplyId") %>' />
+
+                                </asp:Panel>
+
+
+
                             </ItemTemplate>
                         </asp:Repeater>
-
-                        <!-- Reply Form -->
-                        <asp:Panel ID="pnlReply" runat="server" CssClass="mt-3 ml-10">
-                            <asp:TextBox ID="txtReply" runat="server"
-                                CssClass="w-full p-2 border rounded-lg mb-2"
-                                TextMode="MultiLine" Rows="2" placeholder="Write a reply..."></asp:TextBox>
-                            <asp:Button ID="btnReply" runat="server" Text="Reply"
-                                CssClass="bg-green-500 text-white px-3 py-1 rounded-lg hover:bg-green-600"
-                                CommandName="AddReply" CommandArgument='<%# Eval("CommentId") %>' />
-                        </asp:Panel>
                     </div>
                 </div>
             </ItemTemplate>
         </asp:Repeater>
+
 
     </div>
 
