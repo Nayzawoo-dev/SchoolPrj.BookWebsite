@@ -358,6 +358,8 @@ namespace SchoolPrj.BookWebsite
                 {
                     // Then delete the comment
                     string deleteCommentQuery = "DELETE FROM Tb_Comment WHERE CommentId = @CommentId";
+                    string deleteRepliesQuery = "DELETE FROM Tb_Reply WHERE CommentId = @CommentId";
+                    con.Execute(deleteRepliesQuery, new Reply { CommentId = commentId });
                     con.Execute(deleteCommentQuery, new _Comment { CommentId = commentId });
                     BindComments();
                 }

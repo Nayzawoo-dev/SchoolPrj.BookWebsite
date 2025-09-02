@@ -60,24 +60,37 @@
                                 <!-- Action Buttons - Compact on mobile -->
                                 <div class="flex flex-row justify-end gap-2">
                                     <a id="lnkPdf" runat="server" target="_blank"
-                                        class="inline-flex items-center px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors shadow-md flex-shrink-0">
-                                        <svg class="w-4 h-4 mr-1 md:mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                        class="inline-flex items-center px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-full md:rounded-lg transition-colors shadow-md flex-shrink-0">
+                                        <svg class="w-4 h-4 mx-auto md:mr-2" fill="currentColor" viewBox="0 0 20 20">
                                             <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clip-rule="evenodd" />
                                         </svg>
                                         <span class="hidden sm:inline">Read</span>
                                     </a>
 
                                     <a id="lnkDownload" runat="server" download
-                                        class="inline-flex items-center px-3 py-2 bg-gray-800 hover:bg-gray-900 text-white text-sm font-medium rounded-lg transition-colors shadow-md flex-shrink-0">
-                                        <svg class="w-4 h-4 mr-1 md:mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                        class="inline-flex items-center px-3 py-2 bg-gray-800 hover:bg-gray-900 text-white text-sm font-medium rounded-full md:rounded-lg transition-colors shadow-md flex-shrink-0">
+                                        <svg class="w-4 h-4 mx-auto md:mr-2" fill="currentColor" viewBox="0 0 20 20">
                                             <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd" />
                                         </svg>
                                         <span class="hidden sm:inline">Download</span>
                                     </a>
 
-                                    <asp:Button ID="btnSaveBook" runat="server" Text="Save"
-                                        CssClass="inline-flex items-center px-3 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-medium rounded-lg transition-colors shadow-md cursor-pointer flex-shrink-0"
-                                        OnClick="btnSaveBook_Click" />
+                                    <button id="btnSaveBook" runat="server"
+                                        onserverclick="btnSaveBook_Click"
+                                        class="inline-flex items-center px-3 py-2 bg-green-600 hover:bg-green-700 
+           text-white text-sm font-medium rounded-full  md:rounded-lg transition-colors 
+           shadow-md cursor-pointer flex-shrink-0">
+
+                                        <!-- Save Icon SVG -->
+                                        <svg class="w-4 h-4 mx-auto md:mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M5 3h12.586a2 2 0 011.414.586l1.414 1.414A2 2 0 0121 6.414V19a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2z" />
+                                            <path d="M8 3h8v6H8z" />
+                                            <path d="M6 13h12v5a1 1 0 01-1 1H7a1 1 0 01-1-1v-5z" />
+                                        </svg>
+
+                                        <span class="hidden sm:inline">Save</span>
+                                    </button>
+
                                 </div>
                             </div>
                         </div>
@@ -113,7 +126,6 @@
                             <div class="relative flex-grow">
                                 <asp:FileUpload ID="fuVideo" runat="server"
                                     CssClass="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" />
-                                <p class="mt-1 text-xs text-gray-500">Upload a video (optional)</p>
                             </div>
 
                             <asp:Button ID="btnAddComment" runat="server" Text="Post Comment" OnClick="btnAddComment_Click"
@@ -123,10 +135,14 @@
 
                     <!-- No Comments -->
                     <asp:Panel ID="pnlNoComments" runat="server" Visible="false" CssClass="text-center py-10 px-4 bg-gray-50 rounded-xl border border-gray-200">
-                        <svg class="w-16 h-16 mx-auto text-gray-400 mb-4" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
-                            <path d="M7 5.5C7 5.224 7.224 5 7.5 5h1a.5.5 0 0 1 0 1h-1A.5.5 0 0 1 7 5.5zm0 3c0 .276.224.5.5.5h1a.5.5 0 0 0 0-1h-1a.5.5 0 0 0-.5.5zM6.5 10a.5.5 0 0 0 0 1h3a.5.5 0 0 0 0-1h-3z" />
+                        <svg class="w-16 h-16 mx-auto text-gray-400 mb-4" xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                            <!-- Comment Bubble -->
+                            <path d="M12 2C6.48 2 2 6.03 2 10.5c0 2.16 1.02 4.12 2.71 5.57-.16.94-.59 2.29-1.37 3.31-.16.21-.23.49-.13.74.1.25.34.4.6.4.36 0 .72-.08 1.07-.24 1.24-.57 2.72-1.47 3.62-2.18.99.26 2.05.4 3.2.4 5.52 0 10-4.03 10-8.5S17.52 2 12 2z" />
+                            <!-- Slash Line -->
+                            <line x1="4" y1="20" x2="20" y2="4" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
                         </svg>
+
                         <h3 class="text-xl font-semibold text-gray-700 mb-2">No comments yet</h3>
                         <p class="text-gray-500 max-w-md mx-auto">Be the first to share your thoughts about this book! Your insights could help other readers.</p>
                     </asp:Panel>
@@ -141,12 +157,10 @@
                                 alt="User profile" />
                             <div class="flex-1 min-w-0">
                                 <div class="flex flex-wrap items-center gap-2 mb-2">
+                                    <p class="font-semibold text-gray-800 text-sm"><%# Eval("UserName") %></p>
                                     <span class="px-2 py-1 text-xs bg-indigo-100 text-indigo-800 rounded-full font-medium">
                                         <%# Eval("Role") %>
                                     </span>
-                                    <p class="font-semibold text-gray-800 text-sm"><%# Eval("UserName") %></p>
-                                    <span class="text-xs text-gray-500">•</span>
-                                    <p class="text-xs text-gray-500"><%# Eval("Date", "{0:MMM dd, yyyy}") %></p>
                                 </div>
 
                                 <p class="text-gray-700 mb-3 text-sm"><%# Eval("Comment") %></p>
@@ -183,10 +197,11 @@
                                 <asp:Panel ID="pnlReply" runat="server" CssClass="mt-4 pl-4 border-l-2 border-gray-200 hidden reply-form">
                                     <h4 class="text-sm font-semibold text-gray-700 mb-2">Post a reply</h4>
                                     <asp:TextBox ID="txtReply" runat="server"
-                                        CssClass="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+                                        CssClass="max-w-xs px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
                                         TextMode="MultiLine" Rows="2" placeholder="Write a reply..."></asp:TextBox>
-                                    <div class="mt-2">
-                                        <asp:FileUpload ID="fuReVideo" runat="server" CssClass="text-xs" />
+                                    <div class="mt-2 mb-2">
+                                        <asp:FileUpload ID="fuReVideo" runat="server"
+                                            CssClass="text-xs text-gray-500 file:mr-4 file:py-2 file:px-2 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" />
                                     </div>
                                     <div class="mt-2 flex gap-2">
                                         <asp:Button ID="btnReply" runat="server" Text="Reply"
@@ -204,14 +219,12 @@
                                                 <img src='<%# ResolveUrl(Eval("UserProfile").ToString()) %>'
                                                     class="w-8 h-8 rounded-full object-cover border border-white shadow"
                                                     alt="User profile" />
-                                                <div class="flex-1">
-                                                    <div class="flex flex-wrap items-center gap-2 mb-1">
+                                                <div class="flex-1 min-w-0">
+                                                    <div class="flex flex-row items-center gap-2 mb-1">
+                                                        <span class="text-sm font-semibold text-gray-800"><%# Eval("UserName") %></span>
                                                         <span class="px-1.5 py-0.5 text-xs bg-indigo-100 text-indigo-800 rounded-full">
                                                             <%# Eval("Role") %>
                                                         </span>
-                                                        <span class="text-2xs font-semibold text-gray-800"><%# Eval("UserName") %></span>
-                                                        <span class="text-2xs text-gray-500">•</span>
-                                                        <p class="text-2xs text-gray-500"><%# Eval("Date", "{0:MMM dd, yyyy}") %></p>
                                                     </div>
                                                     <p class="text-gray-700 text-sm"><span class="text-sm text-blue-500 mr-2"><%# Eval("ReplyUserName") %></span><%# Eval("ReplyText") %></p>
 
@@ -247,10 +260,10 @@
                                                     <asp:Panel ID="pnlReply" runat="server" CssClass="mt-3 pl-3 border-l-2 border-gray-200 hidden nested-reply-form">
                                                         <h4 class="text-xs font-semibold text-gray-700 mb-1">Post a reply</h4>
                                                         <asp:TextBox ID="txtNesReply" runat="server"
-                                                            CssClass="w-full px-3 py-1.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+                                                            CssClass="max-w-xs px-3 py-1.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
                                                             TextMode="MultiLine" Rows="2" placeholder="Write a reply..."></asp:TextBox>
                                                         <div class="mt-1.5">
-                                                            <asp:FileUpload ID="fuNesVideo" runat="server" CssClass="text-xs" />
+                                                            <asp:FileUpload ID="fuNesVideo" runat="server" CssClass="text-xs text-gray-500 file:mr-4 file:py-2 file:px-2 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" />
                                                         </div>
                                                         <asp:HiddenField ID="hdnCommentId" runat="server"
                                                             Value='<%# Eval("CommentId") %>' />
@@ -276,7 +289,6 @@
             </Triggers>
         </asp:UpdatePanel>
     </div>
-
     <style>
         .heart-btn {
             background: none;
