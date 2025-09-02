@@ -138,7 +138,7 @@
                         <svg class="w-16 h-16 mx-auto text-gray-400 mb-4" xmlns="http://www.w3.org/2000/svg"
                             viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                             <!-- Comment Bubble -->
-                            <path d="M12 2C6.48 2 2 6.03 2 10.5c0 2.16 1.02 4.12 2.71 5.57-.16.94-.59 2.29-1.37 3.31-.16.21-.23.49-.13.74.1.25.34.4.6.4.36 0 .72-.08 1.07-.24 1.24-.57 2.72-1.47 3.62-2.18.99.26 2.05.4 3.2.4 5.52 0 10-4.03 10-8.5S17.52 2 12 2z" />
+                            <path d="M12 2C6.48 2 2 6.03 2 10.5c0 2.16 1.02 4.12 2.71 5.57-.16.94-.59 2.29-1.37 3.31-.16.21-.23.49-.13.74.1.25.34.4.60.4.36 0 .72-.08 1.07-.24 1.24-.57 2.72-1.47 3.62-2.18.99.26 2.05.4 3.20.4 5.52 0 10-4.03 10-8.5S17.52 2 12 2z" />
                             <!-- Slash Line -->
                             <line x1="4" y1="20" x2="20" y2="4" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
                         </svg>
@@ -182,9 +182,17 @@
                                     </div>
                                 </asp:PlaceHolder>
 
-                                <div class="flex items-center gap-3 mt-3 text-xs text-gray-500">
-                                    <span><%# GetRelativeTime(Convert.ToDateTime(Eval("Date"))) %></span>
+                                <div class="flex flex-row items-center gap-2 mt-3 text-[9px] md:text-xs text-gray-500">
+                                    <span class="relative-time"
+                                        data-time='<%# Eval("Date", "{0:O}") %>'>
+                                        <%# GetRelativeTime(Convert.ToDateTime(Eval("Date"))) %>
+                                    </span>
+
                                     <button type="button" class="text-blue-600 hover:text-blue-800 font-medium reply-trigger">Reply</button>
+                                    <!-- View Replies Button -->
+                                    <button type="button" class="view-replies-btn text-blue-600 hover:text-blue-800 font-medium flex items-center">
+                                        View Replies
+                                    </button>
 
                                     <asp:Button ID="btnCommentDelete" runat="server" Text="Delete"
                                         CssClass="text-red-600 hover:text-red-800 font-medium ml-auto"
@@ -211,74 +219,81 @@
                                     </div>
                                 </asp:Panel>
 
+
+
                                 <!-- Reply List -->
-                                <asp:Repeater ID="rptReplies" runat="server" DataSource='<%# Eval("Replies") %>' OnItemCommand="rptReply_ItemCommand" OnItemDataBound="rptReply_ItemDataBound">
-                                    <ItemTemplate>
-                                        <div class="mt-4 pl-4 border-l-2 border-gray-200">
-                                            <div class="flex items-start gap-3">
-                                                <img src='<%# ResolveUrl(Eval("UserProfile").ToString()) %>'
-                                                    class="w-8 h-8 rounded-full object-cover border border-white shadow"
-                                                    alt="User profile" />
-                                                <div class="flex-1 min-w-0">
-                                                    <div class="flex flex-row items-center gap-2 mb-1">
-                                                        <span class="text-sm font-semibold text-gray-800"><%# Eval("UserName") %></span>
-                                                        <span class="px-1.5 py-0.5 text-xs bg-indigo-100 text-indigo-800 rounded-full">
-                                                            <%# Eval("Role") %>
-                                                        </span>
+                                <div class="replies-container hidden mt-3">
+                                    <asp:Repeater ID="rptReplies" runat="server" DataSource='<%# Eval("Replies") %>' OnItemCommand="rptReply_ItemCommand" OnItemDataBound="rptReply_ItemDataBound">
+                                        <ItemTemplate>
+                                            <div class="mt-4 pl-4 border-l-2 border-gray-200">
+                                                <div class="flex items-start gap-3">
+                                                    <img src='<%# ResolveUrl(Eval("UserProfile").ToString()) %>'
+                                                        class="w-8 h-8 rounded-full object-cover border border-white shadow"
+                                                        alt="User profile" />
+                                                    <div class="flex-1 min-w-0">
+                                                        <div class="flex flex-row items-center gap-2 mb-1">
+                                                            <span class="text-sm font-semibold text-gray-800"><%# Eval("UserName") %></span>
+                                                            <span class="px-1.5 py-0.5 text-xs bg-indigo-100 text-indigo-800 rounded-full">
+                                                                <%# Eval("Role") %>
+                                                            </span>
+                                                        </div>
+                                                        <p class="text-gray-700 text-sm"><span class="text-sm text-blue-500 mr-2"><%# Eval("ReplyUserName") %></span><%# Eval("ReplyText") %></p>
+
+                                                        <asp:PlaceHolder ID="phVideo" runat="server"
+                                                            Visible='<%# Eval("VideoPath") != DBNull.Value && Eval("VideoPath") != null %>'>
+                                                            <div class="mt-2 mb-2">
+                                                                <video src='<%# Eval("VideoPath") == null ? "#" : ResolveUrl(Eval("VideoPath").ToString()) %>'
+                                                                    controls class="max-w-2xs md:max-w-xs rounded-lg border border-gray-200 shadow-sm">
+                                                                </video>
+                                                            </div>
+                                                        </asp:PlaceHolder>
+
+                                                        <asp:PlaceHolder ID="phImage" runat="server"
+                                                            Visible='<%# Eval("ImagePath") != DBNull.Value && Eval("ImagePath") != null %>'>
+                                                            <div class="mt-2 mb-2">
+                                                                <img src='<%# Eval("ImagePath") == null ? "#" : ResolveUrl(Eval("ImagePath").ToString()) %>'
+                                                                    class="max-w-2xs md:max-w-xs rounded-lg border border-gray-200 shadow-sm" alt="Reply image">
+                                                            </div>
+                                                        </asp:PlaceHolder>
+
+                                                        <div class="flex items-center gap-2 mt-2 text-[9px] md:text-xs text-gray-500">
+                                                            <span class="relative-time"
+                                                                data-time='<%# Eval("Date", "{0:O}") %>'>
+                                                                <%# GetRelativeTime(Convert.ToDateTime(Eval("Date"))) %>
+                                                            </span>
+                                                            <button type="button" class="text-blue-600 hover:text-blue-800 font-medium nested-reply-trigger">Reply</button>
+
+                                                            <asp:Button ID="btnReplyDelete" runat="server" Text="Delete"
+                                                                CssClass="text-red-600 hover:text-red-800 font-medium ml-auto"
+                                                                OnClientClick="return confirm('Are you sure you want to delete this reply?');"
+                                                                CommandName="deleteReply" CommandArgument='<%# Eval("ReplyId") %>'
+                                                                Visible="false" />
+                                                        </div>
+
+                                                        <!-- Nested Reply Form -->
+                                                        <asp:Panel ID="pnlReply" runat="server" CssClass="mt-3 pl-3 border-l-2 border-gray-200 hidden nested-reply-form">
+                                                            <h4 class="text-xs font-semibold text-gray-700 mb-1">Post a reply</h4>
+                                                            <asp:TextBox ID="txtNesReply" runat="server"
+                                                                CssClass="max-w-xs px-3 py-1.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+                                                                TextMode="MultiLine" Rows="2" placeholder="Write a reply..."></asp:TextBox>
+                                                            <div class="mt-1.5">
+                                                                <asp:FileUpload ID="fuNesVideo" runat="server" CssClass="text-xs text-gray-500 file:mr-4 file:py-2 file:px-2 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" />
+                                                            </div>
+                                                            <asp:HiddenField ID="hdnCommentId" runat="server"
+                                                                Value='<%# Eval("CommentId") %>' />
+                                                            <div class="mt-1.5 flex gap-2">
+                                                                <asp:Button ID="btnNesReply" runat="server" Text="Reply"
+                                                                    CssClass="px-2.5 py-1 bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium rounded-lg transition-colors duration-200"
+                                                                    CommandName="AddNestedReply" CommandArgument='<%# Eval("ReplyId") %>' />
+                                                                <button type="button" class="px-2.5 py-1 bg-gray-200 hover:bg-gray-300 text-gray-800 text-xs font-medium rounded-lg transition-colors duration-200 cancel-nested-reply">Cancel</button>
+                                                            </div>
+                                                        </asp:Panel>
                                                     </div>
-                                                    <p class="text-gray-700 text-sm"><span class="text-sm text-blue-500 mr-2"><%# Eval("ReplyUserName") %></span><%# Eval("ReplyText") %></p>
-
-                                                    <asp:PlaceHolder ID="phVideo" runat="server"
-                                                        Visible='<%# Eval("VideoPath") != DBNull.Value && Eval("VideoPath") != null %>'>
-                                                        <div class="mt-2 mb-2">
-                                                            <video src='<%# Eval("VideoPath") == null ? "#" : ResolveUrl(Eval("VideoPath").ToString()) %>'
-                                                                controls class="max-w-2xs md:max-w-xs rounded-lg border border-gray-200 shadow-sm">
-                                                            </video>
-                                                        </div>
-                                                    </asp:PlaceHolder>
-
-                                                    <asp:PlaceHolder ID="phImage" runat="server"
-                                                        Visible='<%# Eval("ImagePath") != DBNull.Value && Eval("ImagePath") != null %>'>
-                                                        <div class="mt-2 mb-2">
-                                                            <img src='<%# Eval("ImagePath") == null ? "#" : ResolveUrl(Eval("ImagePath").ToString()) %>'
-                                                                class="max-w-2xs md:max-w-xs rounded-lg border border-gray-200 shadow-sm" alt="Reply image">
-                                                        </div>
-                                                    </asp:PlaceHolder>
-
-                                                    <div class="flex items-center gap-2 mt-2 text-xs text-gray-500">
-                                                        <span><%# GetRelativeTime(Convert.ToDateTime(Eval("Date"))) %></span>
-                                                        <button type="button" class="text-blue-600 hover:text-blue-800 font-medium nested-reply-trigger">Reply</button>
-
-                                                        <asp:Button ID="btnReplyDelete" runat="server" Text="Delete"
-                                                            CssClass="text-red-600 hover:text-red-800 font-medium ml-auto"
-                                                            OnClientClick="return confirm('Are you sure you want to delete this reply?');"
-                                                            CommandName="deleteReply" CommandArgument='<%# Eval("ReplyId") %>'
-                                                            Visible="false" />
-                                                    </div>
-
-                                                    <!-- Nested Reply Form -->
-                                                    <asp:Panel ID="pnlReply" runat="server" CssClass="mt-3 pl-3 border-l-2 border-gray-200 hidden nested-reply-form">
-                                                        <h4 class="text-xs font-semibold text-gray-700 mb-1">Post a reply</h4>
-                                                        <asp:TextBox ID="txtNesReply" runat="server"
-                                                            CssClass="max-w-xs px-3 py-1.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
-                                                            TextMode="MultiLine" Rows="2" placeholder="Write a reply..."></asp:TextBox>
-                                                        <div class="mt-1.5">
-                                                            <asp:FileUpload ID="fuNesVideo" runat="server" CssClass="text-xs text-gray-500 file:mr-4 file:py-2 file:px-2 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" />
-                                                        </div>
-                                                        <asp:HiddenField ID="hdnCommentId" runat="server"
-                                                            Value='<%# Eval("CommentId") %>' />
-                                                        <div class="mt-1.5 flex gap-2">
-                                                            <asp:Button ID="btnNesReply" runat="server" Text="Reply"
-                                                                CssClass="px-2.5 py-1 bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium rounded-lg transition-colors duration-200"
-                                                                CommandName="AddNestedReply" CommandArgument='<%# Eval("ReplyId") %>' />
-                                                            <button type="button" class="px-2.5 py-1 bg-gray-200 hover:bg-gray-300 text-gray-800 text-xs font-medium rounded-lg transition-colors duration-200 cancel-nested-reply">Cancel</button>
-                                                        </div>
-                                                    </asp:Panel>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </ItemTemplate>
-                                </asp:Repeater>
+                                        </ItemTemplate>
+                                    </asp:Repeater>
+                                </div>
                             </div>
                         </div>
                     </ItemTemplate>
@@ -316,6 +331,27 @@
                 transform: scale(1.1);
             }
         }
+
+        .view-replies-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            transition: color 0.2s;
+        }
+
+            .view-replies-btn svg {
+                transition: transform 0.3s ease;
+            }
+
+            .view-replies-btn.active svg {
+                transform: rotate(180deg);
+            }
+
+        .replies-container.hidden {
+            display: none;
+        }
     </style>
 
     <script>
@@ -346,6 +382,42 @@
                 const form = e.target.closest('.nested-reply-form');
                 form.classList.add('hidden');
             }
+
+
+            // View replies toggling
+            if (e.target.classList.contains('view-replies-btn') || e.target.closest('.view-replies-btn')) {
+                e.preventDefault();
+                const btn = e.target.classList.contains('view-replies-btn') ? e.target : e.target.closest('.view-replies-btn');
+                const repliesContainer = btn.closest('.flex-1').querySelector('.replies-container');
+
+                if (repliesContainer) {
+                    repliesContainer.classList.toggle('hidden');
+                    btn.classList.toggle('active');
+                }
+            }
         });
+
+        function getRelativeTime(dateString) {
+            const date = new Date(dateString);
+            const now = new Date();
+            const diff = (now - date) / 1000; // seconds
+            if (diff < 60) return "just now";
+            if (diff < 3600) return `${Math.floor(diff / 60)} minutes ago`;
+            if (diff < 86400) return `${Math.floor(diff / 3600)} hr ago`;
+            if (diff < 604800) return `${Math.floor(diff / 86400)} days ago`;
+            return date.toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" });
+        }
+
+        function updateRelativeTimes() {
+            document.querySelectorAll('.relative-time').forEach(el => {
+                const dateString = el.getAttribute('data-time');
+                el.textContent = getRelativeTime(dateString);
+            });
+        }
+
+        // Run once immediately
+        updateRelativeTimes();
+        // Update every 60 seconds
+        setInterval(updateRelativeTimes, 60000);
     </script>
 </asp:Content>

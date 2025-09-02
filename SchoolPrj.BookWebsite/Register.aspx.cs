@@ -63,7 +63,7 @@ namespace SchoolPrj.BookWebsite
                     return;
                 }
 
-                string pattern = @"^[a-zA-Z0-9._]{10,16}@gmail\.com$";
+                string pattern = @"^[a-zA-Z0-9._]{8,16}@gmail\.com$";
               
                 if (Regex.IsMatch(email, "[A-Z]"))
                 {
@@ -74,7 +74,7 @@ namespace SchoolPrj.BookWebsite
                 }
                 if (!Regex.IsMatch(email,pattern))
                 {
-                    lblMessage.Text = "*Email must be a valid Gmail address and between 10 to 14 characters long.";
+                    lblMessage.Text = "*Email must be a valid Gmail address and between 8 to 14 characters long.";
                     lblMessage.Visible = true;
                     Page.ClientScript.RegisterStartupScript(this.GetType(), "HideMsg", "hideMessageAfterDelay();", true);
                     return;

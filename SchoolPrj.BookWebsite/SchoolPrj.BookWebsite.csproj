@@ -247,7 +247,6 @@
     <Content Include="Content\bootstrap.rtl.min.css" />
     <Content Include="Content\Site.css" />
     <Content Include="Default.aspx" />
-    <Content Include="default.jpg" />
     <Content Include="EditBook.aspx" />
     <Content Include="EditProfile.aspx" />
     <Content Include="favicon.ico" />
