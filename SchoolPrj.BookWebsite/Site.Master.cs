@@ -15,8 +15,6 @@ namespace SchoolPrj.BookWebsite
             {
                 loginLink.Visible = false;
                 loginLinkMobile.Visible = false;
-                HyperLink1.Visible = false;
-                HyperLink1Mobile.Visible = false;
                 profilePanel.Visible = true;
                 profilePanelMobile.Visible = true;
                 lblUserName.Text = Session["Username"].ToString();

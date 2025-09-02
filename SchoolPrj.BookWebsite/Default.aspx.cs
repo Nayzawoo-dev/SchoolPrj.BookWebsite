@@ -11,7 +11,19 @@ namespace SchoolPrj.BookWebsite
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-
+            if (!IsPostBack)
+            {
+                if (Session["UserId"] != null)
+                {
+                    HyperLink1.Visible = false;
+                    lnkRegister.Visible = false;
+                }
+                else
+                {
+                    HyperLink1.Visible = true;
+                    lnkRegister.Visible = true;
+                }
+            }
         }
     }
 }

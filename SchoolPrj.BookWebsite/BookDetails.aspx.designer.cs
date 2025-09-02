@@ -15,13 +15,22 @@ namespace SchoolPrj.BookWebsite
     {
 
         /// <summary>
-        /// upComments control.
+        /// ScriptManager1 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.UpdatePanel upComments;
+        protected global::System.Web.UI.ScriptManager ScriptManager1;
+
+        /// <summary>
+        /// upBookCard control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.UpdatePanel upBookCard;
 
         /// <summary>
         /// imgBook control.
@@ -69,6 +78,24 @@ namespace SchoolPrj.BookWebsite
         protected global::System.Web.UI.WebControls.Label lblDescription;
 
         /// <summary>
+        /// btnHeart control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnHeart;
+
+        /// <summary>
+        /// lblHeartCount control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblHeartCount;
+
+        /// <summary>
         /// lnkPdf control.
         /// </summary>
         /// <remarks>
@@ -96,31 +123,22 @@ namespace SchoolPrj.BookWebsite
         protected global::System.Web.UI.WebControls.Button btnSaveBook;
 
         /// <summary>
-        /// ScriptManager1 control.
+        /// upComments control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.ScriptManager ScriptManager1;
+        protected global::System.Web.UI.UpdatePanel upComments;
 
         /// <summary>
-        /// btnHeart control.
+        /// lblCommentCount control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnHeart;
-
-        /// <summary>
-        /// lblHeartCount control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblHeartCount;
+        protected global::System.Web.UI.WebControls.Label lblCommentCount;
 
         /// <summary>
         /// pnlAddComment control.
@@ -157,6 +175,15 @@ namespace SchoolPrj.BookWebsite
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnAddComment;
+
+        /// <summary>
+        /// pnlNoComments control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlNoComments;
 
         /// <summary>
         /// rptComments control.

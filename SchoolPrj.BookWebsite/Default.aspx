@@ -19,9 +19,9 @@
                     <a href="Book.aspx" class="bg-white text-indigo-700 hover:bg-indigo-50 font-semibold py-3 px-8 rounded-full transition duration-300 transform hover:-translate-y-1 shadow-lg flex items-center justify-center">
                         <i class="fas fa-book-open mr-2"></i>Browse Books
                     </a>
-                    <a href="Login.aspx" class="bg-indigo-800 hover:bg-indigo-900 text-white font-semibold py-3 px-8 rounded-full transition duration-300 border border-indigo-500 flex items-center justify-center">
+                    <asp:HyperLink ID="HyperLink1" NavigateUrl="Login.aspx" runat="server" class="bg-indigo-800 hover:bg-indigo-900 text-white font-semibold py-3 px-8 rounded-full transition duration-300 border border-indigo-500 flex items-center justify-center">
                         <i class="fas fa-key mr-2"></i>Get Started
-                    </a>
+                    </asp:HyperLink>
                 </div>
             </div>
         </div>

@@ -19,6 +19,7 @@ namespace SchoolPrj.BookWebsite
         private readonly string connStr = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
         protected int bookId => int.Parse(Request.QueryString["BookId"]);
         protected int userId => Session["UserId"] != null ? Convert.ToInt32(Session["UserId"]) : 0;
+
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
@@ -191,6 +192,8 @@ namespace SchoolPrj.BookWebsite
             ScriptManager.RegisterStartupScript(this, this.GetType(), "alert", "alert('Book Save Successfully');", true);
         }
 
+
+
         protected void btnAddComment_Click(object sender, EventArgs e)
         {
             if (Session["UserId"] == null)
@@ -202,7 +205,6 @@ namespace SchoolPrj.BookWebsite
             int userId = Convert.ToInt32(Session["UserId"]);
             string comment = txtComment.Text.Trim();
             string videoPath = null;
-
             // Upload Video if exists
             if (fuVideo.HasFile)
             {
@@ -241,6 +243,7 @@ namespace SchoolPrj.BookWebsite
                     }
 
                 }
+                pnlNoComments.Visible = false;
                 BindComments();
             }
             else
@@ -364,6 +367,9 @@ namespace SchoolPrj.BookWebsite
 
         protected void rptComments_ItemDataBound(object sender, RepeaterItemEventArgs e)
         {
+            Button btnUpload = (Button)e.Item.FindControl("btnReply");
+            ScriptManager scriptManager = ScriptManager.GetCurrent(Page);
+            scriptManager.RegisterPostBackControl(btnUpload);
             if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
             {
                 var dataItem = e.Item.DataItem;
@@ -497,6 +503,9 @@ namespace SchoolPrj.BookWebsite
         {
             if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
             {
+                Button btnUpload = (Button)e.Item.FindControl("btnNesReply");
+                ScriptManager scriptManager = ScriptManager.GetCurrent(Page);
+                scriptManager.RegisterPostBackControl(btnUpload);
                 var dataItem = e.Item.DataItem;
                 string replyUserId = DataBinder.Eval(dataItem, "UserId")?.ToString();
                 string sessionUserId = Session["UserId"]?.ToString();
@@ -523,6 +532,14 @@ namespace SchoolPrj.BookWebsite
                     {
                         BookId = bookId
                     }).ToList();
+                if (comments.Count == 0)
+                {
+                    pnlNoComments.Visible = true;
+                }
+                else
+                {
+                    pnlNoComments.Visible = false;
+                }
                 foreach (var comment in comments)
                 {
                     // Load replies for each comment
