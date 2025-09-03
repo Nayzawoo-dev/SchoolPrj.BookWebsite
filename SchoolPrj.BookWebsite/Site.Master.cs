@@ -17,6 +17,8 @@ namespace SchoolPrj.BookWebsite
                 loginLinkMobile.Visible = false;
                 profilePanel.Visible = true;
                 profilePanelMobile.Visible = true;
+                Popular.Visible = true;
+                PopularMobile.Visible = true;
                 lblUserName.Text = Session["Username"].ToString();
                 lblUserNameMobile.Text = Session["Username"].ToString();
                 imgProfile.ImageUrl = Session["ProfileImage"].ToString();
@@ -26,6 +28,7 @@ namespace SchoolPrj.BookWebsite
             {
                 loginLink.Visible = true;
                 loginLinkMobile.Visible = true;
+                PopularMobile.Visible= false;
                 profilePanel.Visible = false;
                 profilePanelMobile.Visible = false;
             }

@@ -42,6 +42,15 @@ namespace SchoolPrj.BookWebsite
         protected global::System.Web.UI.WebControls.HyperLink HyperLink1;
 
         /// <summary>
+        /// Popular control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HyperLink Popular;
+
+        /// <summary>
         /// loginLink control.
         /// </summary>
         /// <remarks>
@@ -148,6 +157,15 @@ namespace SchoolPrj.BookWebsite
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.HyperLink HyperLink1Mobile;
+
+        /// <summary>
+        /// PopularMobile control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HyperLink PopularMobile;
 
         /// <summary>
         /// loginLinkMobile control.

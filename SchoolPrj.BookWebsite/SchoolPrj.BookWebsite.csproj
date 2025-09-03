@@ -255,6 +255,7 @@
     <Content Include="GoogleCallback.aspx" />
     <Content Include="GoogleLogin.aspx" />
     <Content Include="Login.aspx" />
+    <Content Include="PopularBook.aspx" />
     <Content Include="Profile.aspx" />
     <Content Include="Register.aspx" />
     <Content Include="Scripts\bootstrap.bundle.js" />
@@ -422,6 +423,13 @@
     </Compile>
     <Compile Include="Login.aspx.designer.cs">
       <DependentUpon>Login.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PopularBook.aspx.cs">
+      <DependentUpon>PopularBook.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PopularBook.aspx.designer.cs">
+      <DependentUpon>PopularBook.aspx</DependentUpon>
     </Compile>
     <Compile Include="Profile.aspx.cs">
       <DependentUpon>Profile.aspx</DependentUpon>

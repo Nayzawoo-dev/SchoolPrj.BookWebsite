@@ -1,4 +1,6 @@
-﻿namespace SchoolPrj.BookWebsite
+﻿using System.Collections.Generic;
+
+namespace SchoolPrj.BookWebsite
 {
         public class Book
         {
@@ -11,6 +13,7 @@
             public string PdfPath { get; set; }
 
             public string keyword { get; set; }
+
         }
     
 }
