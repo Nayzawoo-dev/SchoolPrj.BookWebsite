@@ -14,7 +14,7 @@ namespace SchoolPrj.BookWebsite
         protected void btnRegister_Click(object sender, EventArgs e)
         {
             lblMessage.Text = string.Empty;
-            string fullName = txtFullName.Text.Trim().Replace(" ","");
+            string fullName = txtFullName.Text.Trim().Replace(" ", "");
             string username = txtUsername.Text.Trim();
             string email = txtEmail.Text.Trim();
             string password = txtPassword.Text.Trim();
@@ -64,7 +64,7 @@ namespace SchoolPrj.BookWebsite
                 }
 
                 string pattern = @"^[a-zA-Z0-9._]{8,16}@gmail\.com$";
-              
+
                 if (Regex.IsMatch(email, "[A-Z]"))
                 {
                     lblMessage.Text = "*Email must be in lowercase.";
@@ -72,7 +72,7 @@ namespace SchoolPrj.BookWebsite
                     Page.ClientScript.RegisterStartupScript(this.GetType(), "HideMsg", "hideMessageAfterDelay();", true);
                     return;
                 }
-                if (!Regex.IsMatch(email,pattern))
+                if (!Regex.IsMatch(email, pattern))
                 {
                     lblMessage.Text = "*Email must be a valid Gmail address and between 8 to 14 characters long.";
                     lblMessage.Visible = true;
@@ -84,11 +84,32 @@ namespace SchoolPrj.BookWebsite
                 if (result != null)
                 {
                     lblMessage.Text = "*Email already exists!";
-                    lblMessage.Visible= true;
+                    lblMessage.Visible = true;
                     Page.ClientScript.RegisterStartupScript(this.GetType(), "HideMsg", "hideMessageAfterDelay();", true);
                     return;
                 }
 
+                var ban = connection.QueryFirstOrDefault<Ban>(
+                    "SELECT * FROM Tb_BanList WHERE UserEmail = @UserEmail",
+                    new Ban { UserEmail = email });
+
+                if (ban != null)
+                {
+                    lblMessage.Text = "Your email has been banned!";
+                    lblMessage.Visible = true;
+                    // Session clear
+                    Session.Clear();
+                    Session.Abandon();
+
+                    // Authentication cookie (ASP.NET Forms Auth သုံးထားရင်)
+                    if (Request.Cookies["UserAuth"] != null)
+                    {
+                        Response.Cookies["UserAuth"].Expires = DateTime.Now.AddDays(-1);
+                    }
+
+                    Page.ClientScript.RegisterStartupScript(this.GetType(), "HideMsg", "hideMessageAfterDelay();", true);
+                    return;
+                }
 
                 string sql = @"INSERT INTO Users (Username, PasswordHash, PasswordSalt, FullName, Email, Role, ProfileImagePath)
                                VALUES (@Username, @PasswordHash, @PasswordSalt, @FullName, @Email, @Role, @ProfileImagePath)";

@@ -52,26 +52,40 @@ namespace SchoolPrj.BookWebsite
                     using (var connection = new SqlConnection(connStr))
                     {
                         var user = connection.QuerySingleOrDefault<User>("SELECT * FROM Users WHERE Email=@Email", new { Email = email });
+                        var ban = connection.QuerySingleOrDefault<Ban>("SELECT * FROM Tb_BanList WHERE UserEmail=@UserEmail", new Ban{ UserEmail = email });
+                        if (ban != null)
+                        {
+                            // Session clear
+                            Session.Clear();
+                            Session.Abandon();
 
+                            // Authentication cookie (ASP.NET Forms Auth သုံးထားရင်)
+                            if (Request.Cookies["UserAuth"] != null)
+                            {
+                                Response.Cookies["UserAuth"].Expires = DateTime.Now.AddDays(-1);
+                            }
+                            Response.Write("<script>alert('You are banned from this Email.'); window.location='Login.aspx';</script>");
+                            return;
+                        }
                         if (user == null)
                         {
                             string sql = @"INSERT INTO Users (Username, FullName, Email, Role, ProfileImagePath)
                                VALUES (@Username, @FullName, @Email, @Role, @ProfileImagePath)";
                             connection.Execute(sql, new User
                             {
-                                Username = name.Replace(" ",""),
+                                Username = name.Replace(" ", ""),
                                 FullName = "Default",
                                 Email = email,
                                 Role = "User",
-                                ProfileImagePath = "~/uploads/images/default.jpg"
+                                ProfileImagePath = "/uploads/images/default.jpg"
                             });
                         }
 
-                        Session["Username"] = name.Replace(" ","");
+                        Session["Username"] = name.Replace(" ", "");
                         Session["UserId"] = user?.UserId ?? connection.QuerySingle<int>("SELECT UserId FROM Users WHERE Email=@Email", new { Email = email });
                         Session["Role"] = "User";
                         Session["google"] = "google";
-                        Session["ProfileImage"] = "~/uploads/images/default.jpg"; // Default profile image
+                        Session["ProfileImage"] = "/uploads/images/default.jpg"; // Default profile image
                         var id = connection.QuerySingle<int>("SELECT UserId FROM Users WHERE Email=@Email", new User { Email = email });
                         HttpCookie authCookie = new HttpCookie("UserAuth");
                         authCookie.Values["UserId"] = id.ToString();

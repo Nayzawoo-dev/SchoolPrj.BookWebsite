@@ -29,7 +29,26 @@ namespace SchoolPrj.BookWebsite
                 var user = connection.QuerySingleOrDefault<User>(
                     "SELECT * FROM Users WHERE Username = @Username or Email = @Email",
                     new User { Username = txtUsername.Text.Trim(), Email = txtUsername.Text.Trim() });
+                var ban = connection.QuerySingleOrDefault<Ban>(
+                    "SELECT * FROM Tb_BanList WHERE Username = @Username or UserEmail = @UserEmail",
+                    new Ban { UserEmail = txtUsername.Text.Trim() ,Username = txtUsername.Text.Trim() });
 
+                if (ban != null)
+                {
+                    lblMessage.Text = "Your account has been banned!";
+                    lblMessage.Visible = true;
+                    // Session clear
+                    Session.Clear();
+                    Session.Abandon();
+
+                    // Authentication cookie (ASP.NET Forms Auth သုံးထားရင်)
+                    if (Request.Cookies["UserAuth"] != null)
+                    {
+                        Response.Cookies["UserAuth"].Expires = DateTime.Now.AddDays(-1);
+                    }
+                    Page.ClientScript.RegisterStartupScript(this.GetType(), "HideMsg", "hideMessageAfterDelay();", true);
+                    return;
+                }
 
                 var admin = connection.QueryFirstOrDefault<Admins>("SELECT * FROM Admins WHERE Username = @Username or Email = @Email",
                       new Admins { Username = txtUsername.Text.Trim(), Email = txtUsername.Text.Trim() });
@@ -38,7 +57,7 @@ namespace SchoolPrj.BookWebsite
                 if (admin != null)
                 {
                     bool res = CheckPassword(txtPassword.Text.Trim());
-                    if(res != true)
+                    if (res != true)
                     {
                         goto ERROR1;
                     }
@@ -82,6 +101,10 @@ namespace SchoolPrj.BookWebsite
 
         private bool VerifyPassword(string password, string storedHash, string storedSalt)
         {
+            if (storedHash == null)
+            {
+                return false;
+            }
             var saltBytes = Convert.FromBase64String(storedSalt);
             using (var pbkdf2 = new Rfc2898DeriveBytes(password, saltBytes, 10000))
             {
@@ -95,9 +118,9 @@ namespace SchoolPrj.BookWebsite
             object res;
             using (var connection = new SqlConnection(connStr))
             {
-                res = connection.QueryFirstOrDefault<Admins>("select * from Admins where Password = @Password",new {Password = Password});               
+                res = connection.QueryFirstOrDefault<Admins>("select * from Admins where Password = @Password", new { Password = Password });
             }
-            if(res == null)
+            if (res == null)
             {
                 return false;
             }

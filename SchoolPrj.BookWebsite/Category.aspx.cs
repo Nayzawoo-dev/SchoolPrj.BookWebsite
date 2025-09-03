@@ -97,7 +97,7 @@ namespace SchoolPrj.BookWebsite
                 {
                     pnlNoBooks.Visible = false;
                 }
-                    repBooks.DataSource = Books;
+                repBooks.DataSource = Books;
                 repBooks.DataBind();
             }
         }

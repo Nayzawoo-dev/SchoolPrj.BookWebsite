@@ -8,9 +8,14 @@
     <asp:ScriptManager ID="ScriptManager1" runat="server" EnablePartialRendering="true" />
     <asp:UpdatePanel ID="upBookCategoy" runat="server" UpdateMode="Conditional">
         <ContentTemplate>
+            <!-- Results Count -->
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-xl font-bold text-gray-800">Popular Book</h2>
+            </div>
+
             <!-- Books Grid -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                <asp:Repeater ID="rptBook" runat="server">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-12">
+                <asp:Repeater ID="rptBook" runat="server" OnItemDataBound="Repeater_ItemDataBound">
                     <ItemTemplate>
                         <!-- Book Card -->
                         <div class="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 border border-gray-100">
@@ -34,18 +39,36 @@
                                     <i class="fas fa-tag text-indigo-500 mr-2"></i>
                                     <span class="truncate"><%# Eval("Category") %></span>
                                 </div>
-                            </div>
 
-                            <div class="flex justify-between items-center">
-                                <a href='BookDetails.aspx?BookId=<%# Eval("BookId") %>'
-                                    class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-all text-sm font-medium flex items-center">
-                                    <i class="fas fa-eye mr-2"></i>View
-                                </a>
+                                <!-- Action Buttons -->
+                                <div class="flex justify-between items-center">
+                                    <a href='BookDetails.aspx?BookId=<%# Eval("BookId") %>'
+                                        class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-all text-sm font-medium flex items-center">
+                                        <i class="fas fa-eye mr-2"></i>View
+                                    </a>
+
+                                    <div class="flex space-x-2">
+                                        <asp:HyperLink ID="btnEditBook" runat="server"
+                                            NavigateUrl='<%# "EditBook.aspx?BookId=" + Eval("BookId") %>'
+                                            Visible="false"
+                                            CssClass="px-3 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition-all flex items-center">
+                                        <i class="fas fa-edit"></i>
+                                        </asp:HyperLink>
+
+                                        <asp:LinkButton ID="btnDelete" runat="server" Visible="false"
+                                            CommandArgument='<%# Eval("BookId") %>'
+                                            OnClientClick="return confirm('Are you sure you want to delete this book?');"
+                                            CssClass="px-3 py-2 bg-red-500 text-white rounded">
+                                        <i class="fas fa-trash"></i>
+                                        </asp:LinkButton>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </ItemTemplate>
                 </asp:Repeater>
             </div>
+
         </ContentTemplate>
     </asp:UpdatePanel>
 </asp:Content>

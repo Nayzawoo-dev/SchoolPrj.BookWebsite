@@ -63,14 +63,14 @@ namespace SchoolPrj.BookWebsite
             // Upload new profile image if selected
             if (fileUploadProfile.HasFile)
             {
-                string folderPath = Server.MapPath("~/uploads/");
+                string folderPath = Server.MapPath("/uploads/");
                 if (!Directory.Exists(folderPath))
                     Directory.CreateDirectory(folderPath);
 
                 string fileName = Guid.NewGuid() + Path.GetExtension(fileUploadProfile.FileName);
                 string filePath = Path.Combine(folderPath, fileName);
                 fileUploadProfile.SaveAs(filePath);
-                profilePath = "~/uploads/" + fileName;
+                profilePath = "/uploads/" + fileName;
             }
 
             // Hash password if changed

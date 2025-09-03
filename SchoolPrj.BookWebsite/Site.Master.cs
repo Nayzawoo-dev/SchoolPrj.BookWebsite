@@ -28,9 +28,20 @@ namespace SchoolPrj.BookWebsite
             {
                 loginLink.Visible = true;
                 loginLinkMobile.Visible = true;
+                Popular.Visible = false;
                 PopularMobile.Visible= false;
                 profilePanel.Visible = false;
                 profilePanelMobile.Visible = false;
+            }
+            if (Session["Role"] != null && Session["Role"].ToString() == "Admin" && Session["UserId"] != null)
+            {
+                DashboardDes.Visible = true;
+                DashboardMobile.Visible = true;
+            }
+            else
+            {
+                DashboardDes.Visible = false;
+                DashboardMobile.Visible = false;
             }
         }
     }

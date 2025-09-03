@@ -48,5 +48,23 @@ ORDER BY Heart DESC;";
             }
 
         }
+
+        protected void Repeater_ItemDataBound(object sender, RepeaterItemEventArgs e)
+        {
+            if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
+            {
+                var btnDelete = (LinkButton)e.Item.FindControl("btnDelete");
+                var btnEditBook = (HyperLink)e.Item.FindControl("btnEditBook");
+                if (btnDelete != null || btnEditBook != null) // Null ဖြစ်မဖြစ် စစ်ပေး
+                {
+                    if (Session["Role"] != null && Session["Role"].ToString() == "Admin")
+                    {
+                        btnDelete.Visible = true;
+                        btnEditBook.Visible = true;
+                    }
+
+                }
+            }
+        }
     }
 }

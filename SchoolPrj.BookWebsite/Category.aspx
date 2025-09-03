@@ -6,7 +6,7 @@
 
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
     <asp:ScriptManager ID="ScriptManager1" runat="server" EnablePartialRendering="true" />
-    <asp:UpdatePanel ID="upBookCategoy" runat="server" UpdateMode="Conditional">
+    <asp:UpdatePanel ID="upBookCategory" runat="server" UpdateMode="Conditional">
         <ContentTemplate>
             <!-- Filter Section -->
             <div class="bg-white rounded-xl p-4 shadow-md mb-4">
@@ -58,9 +58,6 @@
             <!-- Results Count -->
             <div class="flex justify-between items-center mb-6">
                 <h2 class="text-xl font-bold text-gray-800">Filtered Results</h2>
-                <span class="text-sm text-gray-500 bg-gray-100 px-3 py-1 rounded-full" id="resultsCount">
-                    <asp:Literal ID="litResultCount" runat="server" />
-                </span>
             </div>
 
             <!-- Books Grid -->

@@ -24,13 +24,13 @@ namespace SchoolPrj.BookWebsite
         protected global::System.Web.UI.ScriptManager ScriptManager1;
 
         /// <summary>
-        /// upBookCategoy control.
+        /// upBookCategory control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.UpdatePanel upBookCategoy;
+        protected global::System.Web.UI.UpdatePanel upBookCategory;
 
         /// <summary>
         /// ddlAuthor control.
@@ -58,15 +58,6 @@ namespace SchoolPrj.BookWebsite
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnFilter;
-
-        /// <summary>
-        /// litResultCount control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal litResultCount;
 
         /// <summary>
         /// repBooks control.

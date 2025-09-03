@@ -183,6 +183,23 @@ namespace SchoolPrj.BookWebsite
         /// </remarks>
         protected global::System.Web.UI.WebControls.ContentPlaceHolder MainContent;
 
+        /// <summary>
+        /// DashboardDes control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HyperLink DashboardDes;
+
+        /// <summary>
+        /// DashboardMobile control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HyperLink DashboardMobile;
 
     }
 }

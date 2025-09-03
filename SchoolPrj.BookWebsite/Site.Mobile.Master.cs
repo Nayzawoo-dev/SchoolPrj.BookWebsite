@@ -17,6 +17,8 @@ namespace SchoolPrj.BookWebsite
                 loginLinkMobile.Visible = false;
                 profilePanel.Visible = true;
                 profilePanelMobile.Visible = true;
+                Popular.Visible = true;
+                PopularMobile.Visible = true;
                 lblUserName.Text = Session["Username"].ToString();
                 lblUserNameMobile.Text = Session["Username"].ToString();
                 imgProfile.ImageUrl = Session["ProfileImage"].ToString();
@@ -26,8 +28,20 @@ namespace SchoolPrj.BookWebsite
             {
                 loginLink.Visible = true;
                 loginLinkMobile.Visible = true;
+                Popular.Visible = false;
+                PopularMobile.Visible = false;
                 profilePanel.Visible = false;
                 profilePanelMobile.Visible = false;
+            }
+            if (Session["Role"] != null && Session["Role"].ToString() == "Admin" && Session["UserId"] != null)
+            {
+                DashboardDes.Visible = true;
+                DashboardMobile.Visible = true;
+            }
+            else
+            {
+                DashboardDes.Visible = false;
+                DashboardMobile.Visible = false;
             }
         }
     }
