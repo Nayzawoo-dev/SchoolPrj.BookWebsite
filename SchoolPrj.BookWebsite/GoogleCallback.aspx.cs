@@ -77,7 +77,7 @@ namespace SchoolPrj.BookWebsite
                                 FullName = "Default",
                                 Email = email,
                                 Role = "User",
-                                ProfileImagePath = "/uploads/images/default.jpg"
+                                ProfileImagePath = "/uploads/images/default.png"
                             });
                         }
 

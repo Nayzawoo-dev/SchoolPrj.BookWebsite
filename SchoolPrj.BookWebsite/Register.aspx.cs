@@ -41,7 +41,7 @@ namespace SchoolPrj.BookWebsite
             CreatePasswordHash(password, out hash, out salt);
 
             // Profile image upload
-            string profilePath = "/uploads/images/default.jpg";
+            string profilePath = "/uploads/images/default.png";
             if (fuProfile.HasFile)
             {
                 string fileName = Guid.NewGuid().ToString() + System.IO.Path.GetExtension(fuProfile.FileName);
