@@ -14,7 +14,7 @@ namespace SchoolPrj.BookWebsite
         protected void btnRegister_Click(object sender, EventArgs e)
         {
             lblMessage.Text = string.Empty;
-            string fullName = txtFullName.Text.Trim().Replace(" ", "");
+            string fullName = txtFullName.Text.Trim();
             string username = txtUsername.Text.Trim();
             string email = txtEmail.Text.Trim();
             string password = txtPassword.Text.Trim();
@@ -28,9 +28,9 @@ namespace SchoolPrj.BookWebsite
                 return;
             }
 
-            if (email.Contains(" ") || username.Contains(" ") || password.Contains(" "))
+            if (email.Contains(" ") || password.Contains(" "))
             {
-                lblMessage.Text = "*Email and Username and Password are must no space";
+                lblMessage.Text = "*Email and Password are must no space";
                 lblMessage.Visible = true;
                 Page.ClientScript.RegisterStartupScript(this.GetType(), "HideMsg", "hideMessageAfterDelay();", true);
                 return;

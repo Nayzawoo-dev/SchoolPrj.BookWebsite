@@ -21,14 +21,14 @@
                         <div class="space-y-5">
                             <!-- Username Field -->
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Username or Email</label>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
                                 <div class="relative">
                                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                         <i class="fas fa-user text-gray-400"></i>
                                     </div>
                                     <asp:TextBox ID="txtUsername" runat="server"
                                         CssClass="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
-                                        placeholder="Enter your username or email" />
+                                        placeholder="Enter your email" />
                                 </div>
                             </div>
 

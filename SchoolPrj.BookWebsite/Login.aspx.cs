@@ -27,11 +27,11 @@ namespace SchoolPrj.BookWebsite
             using (var connection = new SqlConnection(connStr))
             {
                 var user = connection.QuerySingleOrDefault<User>(
-                    "SELECT * FROM Users WHERE Username = @Username or Email = @Email",
-                    new User { Username = txtUsername.Text.Trim(), Email = txtUsername.Text.Trim() });
+                    "SELECT * FROM Users WHERE Email = @Email",
+                    new User { Email = txtUsername.Text.Trim() });
                 var ban = connection.QuerySingleOrDefault<Ban>(
-                    "SELECT * FROM Tb_BanList WHERE Username = @Username or UserEmail = @UserEmail",
-                    new Ban { UserEmail = txtUsername.Text.Trim() ,Username = txtUsername.Text.Trim() });
+                    "SELECT * FROM Tb_BanList WHERE UserEmail = @UserEmail",
+                    new Ban { UserEmail = txtUsername.Text.Trim() });
 
                 if (ban != null)
                 {
@@ -50,8 +50,8 @@ namespace SchoolPrj.BookWebsite
                     return;
                 }
 
-                var admin = connection.QueryFirstOrDefault<Admins>("SELECT * FROM Admins WHERE Username = @Username or Email = @Email",
-                      new Admins { Username = txtUsername.Text.Trim(), Email = txtUsername.Text.Trim() });
+                var admin = connection.QueryFirstOrDefault<Admins>("SELECT * FROM Admins Email = @Email",
+                      new Admins { Email = txtUsername.Text.Trim() });
 
 
                 if (admin != null)
@@ -92,7 +92,7 @@ namespace SchoolPrj.BookWebsite
                 }
                 else
                 {
-                    lblMessage.Text = "Invalid username or password!";
+                    lblMessage.Text = "Invalid Email or Password!";
                     lblMessage.Visible = true;
                     Page.ClientScript.RegisterStartupScript(this.GetType(), "HideMsg", "hideMessageAfterDelay();", true);
                 }
