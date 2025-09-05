@@ -315,16 +315,7 @@
     <Content Include="Scripts\WebForms\WebParts.js" />
     <Content Include="Scripts\WebForms\WebUIValidation.js" />
     <Content Include="Site.Master" />
-    <Content Include="uploads\images\0965628f-d287-44e2-92dc-f0aee25e0c0a.jpg" />
-    <Content Include="uploads\images\1dce4129-2cea-4910-bdaa-31bb83c186f8.png" />
-    <Content Include="uploads\images\368ef5d7-1ca2-4131-b05c-251d2b0e549b.png" />
-    <Content Include="uploads\images\41c0d483-1979-4d57-a8a4-99299f6aac27.jpg" />
-    <Content Include="uploads\images\5bf6dd0c-7785-447d-818f-247f7a240275.png" />
-    <Content Include="uploads\images\92f62337-e6c6-4c86-94f8-09e6c897aa78.jpg" />
-    <Content Include="uploads\images\93cc9836-755a-418f-9bc1-755f9a0a4d85.jpg" />
-    <Content Include="uploads\images\a7f0a0c8-2764-48d2-b3e3-2d40bdfb5f00.jpg" />
-    <Content Include="uploads\images\d418bf39-1d64-4a98-aa19-33a4c647d8e9.jpg" />
-    <Content Include="uploads\images\default.jpg" />
+    <Content Include="uploads\images\default.png" />
     <Content Include="uploads\images\google.png" />
     <Content Include="ViewSwitcher.ascx" />
     <Content Include="Web.config" />
@@ -481,17 +472,12 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="uploads\pdfs\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
     <Content Include="Scripts\jquery-3.7.0.slim.min.map" />
     <Content Include="Scripts\jquery-3.7.0.min.map" />
-    <Content Include="uploads\pdfs\1e60eab6-aa2e-4afe-861d-5fe1cde73453.pdf" />
-    <Content Include="uploads\pdfs\7aa58d37-26b9-418b-8c22-dc5fca3721a0.pdf" />
-    <Content Include="uploads\pdfs\8b0eac2f-aa0f-45b6-8cbb-eb45d49740c8.pdf" />
-    <Content Include="uploads\pdfs\8f9488c3-540a-4e06-bbb5-dd39aa7d3e37.pdf" />
-    <Content Include="uploads\pdfs\f4d194a5-8928-44c3-9139-a5ae266c3645.pdf" />
-    <Content Include="uploads\pdfs\f4e342f5-a47b-4cbe-b973-e48d3d776acd.pdf" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
