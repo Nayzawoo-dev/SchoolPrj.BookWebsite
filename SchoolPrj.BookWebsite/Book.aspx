@@ -73,14 +73,14 @@
                                         <asp:HyperLink ID="btnEditBook" runat="server"
                                             NavigateUrl='<%# "EditBook.aspx?BookId=" + Eval("BookId") %>'
                                             Visible="false"
-                                            CssClass="px-3 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition-all flex items-center">
+                                            CssClass="px-3 py-2 bg-slate-400 text-white rounded-lg hover:bg-yellow-600 transition-all flex items-center">
                                     <i class="fas fa-edit"></i>
                                         </asp:HyperLink>
 
                                         <asp:LinkButton ID="btnDelete" runat="server" Visible="false"
                                             CommandArgument='<%# Eval("BookId") %>'
                                             OnClientClick="return confirm('Are you sure you want to delete this book?');"
-                                            CssClass="px-3 py-2 bg-red-500 text-white rounded">
+                                            CssClass="px-3 py-2 bg-rose-500 text-white rounded">
                                 <i class="fas fa-trash"></i>
                                         </asp:LinkButton>
                                     </div>

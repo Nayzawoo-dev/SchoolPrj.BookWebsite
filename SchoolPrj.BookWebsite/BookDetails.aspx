@@ -53,7 +53,7 @@
                                 <div class="flex items-center">
                                     <asp:Button ID="btnHeart" runat="server" Text="♡"
                                         CssClass="heart-btn text-2xl text-gray-400 hover:text-red-500 transition-all duration-300 focus:outline-none"
-                                        OnClick="btnHeart_Click" />
+                                        OnClick="btnHeart_Click" OnClientClick="var btn=this; setTimeout(function(){btn.disabled=true;}, 1); return true;" />
                                     <asp:Label ID="lblHeartCount" runat="server" Text="0" CssClass="text-gray-600 ml-1" />
                                 </div>
 
@@ -128,7 +128,7 @@
                                     CssClass="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" />
                             </div>
 
-                            <asp:Button ID="btnAddComment" runat="server" Text="Post Comment" OnClick="btnAddComment_Click"
+                            <asp:Button ID="btnAddComment" runat="server" Text="Post Comment" OnClick="btnAddComment_Click" OnClientClick="var btn=this; setTimeout(function(){btn.disabled=true; btn.value='Posting...';}, 5); return true;"
                                 CssClass="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg text-sm transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 whitespace-nowrap" />
                         </div>
                     </asp:Panel>
@@ -183,11 +183,9 @@
                                 </asp:PlaceHolder>
 
                                 <div class="flex flex-row items-center gap-2 mt-3 text-[9px] md:text-xs text-gray-500">
-                                    <span class="relative-time"
-                                        data-time='<%# Eval("Date", "{0:O}") %>'>
+                                    <span class="relative-time" data-time='<%# Eval("Date", "{0:O}") %>'>
                                         <%# GetRelativeTime(Convert.ToDateTime(Eval("Date"))) %>
                                     </span>
-
                                     <button type="button" class="text-blue-600 hover:text-blue-800 font-medium reply-trigger">Reply</button>
                                     <!-- View Replies Button -->
                                     <button type="button" class="view-replies-btn text-blue-600 hover:text-blue-800 font-medium flex items-center">
@@ -260,8 +258,7 @@
                                                         </asp:PlaceHolder>
 
                                                         <div class="flex items-center gap-2 mt-2 text-[9px] md:text-xs text-gray-500">
-                                                            <span class="relative-time"
-                                                                data-time='<%# Eval("Date", "{0:O}") %>'>
+                                                            <span class="relative-time" data-time='<%# Eval("Date", "{0:O}") %>'>
                                                                 <%# GetRelativeTime(Convert.ToDateTime(Eval("Date"))) %>
                                                             </span>
                                                             <button type="button" class="text-blue-600 hover:text-blue-800 font-medium nested-reply-trigger">Reply</button>
@@ -274,7 +271,7 @@
                                                         </div>
 
                                                         <!-- Nested Reply Form -->
-                                                        <asp:Panel ID="pnlReply" runat="server" CssClass="mt-3 pl-3 border-l-2 border-gray-200 hidden nested-reply-form">
+                                                        <asp:Panel ID="pnlReply" runat="server" CssClass="mt-3 pl-3 border-l-2 border-gray-200 hidden overflow-x-scroll nested-reply-form">
                                                             <h4 class="text-xs font-semibold text-gray-700 mb-1">Post a reply</h4>
                                                             <asp:TextBox ID="txtNesReply" runat="server"
                                                                 CssClass="max-w-xs px-3 py-1.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"

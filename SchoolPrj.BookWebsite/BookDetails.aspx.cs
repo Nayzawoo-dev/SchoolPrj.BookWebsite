@@ -1,9 +1,9 @@
 ﻿using Dapper;
 using System;
-using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
+using System.Drawing;
 using System.EnterpriseServices;
 using System.IO;
 using System.Linq;
@@ -19,6 +19,8 @@ namespace SchoolPrj.BookWebsite
         private readonly string connStr = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
         protected int bookId => int.Parse(Request.QueryString["BookId"]);
         protected int userId => Session["UserId"] != null ? Convert.ToInt32(Session["UserId"]) : 0;
+
+
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -77,11 +79,13 @@ namespace SchoolPrj.BookWebsite
 
         protected void btnHeart_Click(object sender, EventArgs e)
         {
+            btnHeart.Enabled = false;
             using (var conn = new SqlConnection(connStr))
             {
                 if (Session["UserId"] == null)
                 {
                     ScriptManager.RegisterStartupScript(this, this.GetType(), "alert", "alert('❌ Please login react this book');", true);
+                    btnHeart.Enabled=true;
                     return;
                 }
                 if (!IsHearted)
@@ -104,6 +108,7 @@ namespace SchoolPrj.BookWebsite
             }
 
             LoadHeartCount();
+            btnHeart.Enabled = true;
             UpdateHeartButton();
         }
 
@@ -163,7 +168,7 @@ namespace SchoolPrj.BookWebsite
             using (var connection = new SqlConnection(connStr))
             {
                 // 2. Duplicate Check
-                string checkQuery = @"SELECT COUNT(1) FROM Tb_SaveBook WHERE UserId = @UserId AND BookId = @BookId";
+                string checkQuery = @"SELECT COUNT(*) FROM Tb_SaveBook WHERE UserId = @UserId AND BookId = @BookId";
                 int exists = connection.ExecuteScalar<int>(checkQuery, new Save { UserId = userId, BookId = bookId });
 
                 if (exists > 0)
@@ -201,9 +206,12 @@ namespace SchoolPrj.BookWebsite
                 ScriptManager.RegisterStartupScript(this, this.GetType(), "alert", "alert('❌ Please login');", true);
                 return;
             }
-
+            btnAddComment.Enabled = false;
             int userId = Convert.ToInt32(Session["UserId"]);
             string comment = txtComment.Text.Trim();
+            DateTime utcNow = DateTime.UtcNow;
+            TimeZoneInfo myanmarTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Myanmar Standard Time");
+            DateTime localTime = TimeZoneInfo.ConvertTimeFromUtc(utcNow, myanmarTimeZone);
             string videoPath = null;
             // Upload Video if exists
             if (fuVideo.HasFile)
@@ -221,39 +229,43 @@ namespace SchoolPrj.BookWebsite
             {
                 using (var conn = new SqlConnection(connStr))
                 {
-                    string query = @"INSERT INTO Tb_Comment (BookId, UserId, Comment, VideoPath, Date,UserProfile,UserName,ImagePath,Role)
-                                 VALUES (@BookId, @UserId, @Comment, @VideoPath, @Date,@UserProfile,@UserName,@ImagePath,@Role)";
-
                     string ProfileImagePath = Session["ProfileImage"]?.ToString();
                     string Username = Session["Username"]?.ToString();
                     string Role = Session["Role"]?.ToString();
+                    string query = @"INSERT INTO Tb_Comment (BookId, UserId, Comment, VideoPath, Date,UserProfile,UserName,ImagePath,Role)
+                                 VALUES (@BookId, @UserId, @Comment, @VideoPath, @Date,@UserProfile,@UserName,@ImagePath,@Role)";
+
+
                     if (videoPath == null)
                     {
-                        conn.Execute(query, new _Comment { BookId = bookId, UserId = userId, Comment = comment, VideoPath = null, ImagePath = null, Date = DateTime.Now, UserProfile = ProfileImagePath, UserName = Username, Role = Role });
+                        conn.Execute(query, new _Comment { BookId = bookId, UserId = userId, Comment = comment, VideoPath = null, ImagePath = null, Date = localTime, UserProfile = ProfileImagePath, UserName = Username, Role = Role });
                     }
                     else
 
                     if (videoPath.ToLower().Contains(".mp4") || videoPath.ToLower().Contains(".mov") || videoPath.ToLower().Contains(".avi") || videoPath.ToLower().Contains(".wmv") || videoPath.ToLower().Contains(".flv") || videoPath.ToLower().Contains(".mkv"))
                     {
-                        conn.Execute(query, new _Comment { BookId = bookId, UserId = userId, Comment = comment, VideoPath = videoPath, ImagePath = null, Date = DateTime.Now, UserProfile = ProfileImagePath, UserName = Username, Role = Role });
+                        conn.Execute(query, new _Comment { BookId = bookId, UserId = userId, Comment = comment, VideoPath = videoPath, ImagePath = null, Date = localTime, UserProfile = ProfileImagePath, UserName = Username, Role = Role });
                     }
                     else
                     {
-                        conn.Execute(query, new _Comment { BookId = bookId, UserId = userId, Comment = comment, VideoPath = null, ImagePath = videoPath, Date = DateTime.Now, UserProfile = ProfileImagePath, UserName = Username, Role = Role });
+                        conn.Execute(query, new _Comment { BookId = bookId, UserId = userId, Comment = comment, VideoPath = null, ImagePath = videoPath, Date = localTime, UserProfile = ProfileImagePath, UserName = Username, Role = Role });
                     }
 
                 }
-                pnlNoComments.Visible = false;
+
                 BindComments();
+                txtComment.Text = "";
+                videoPath = null;
+                pnlNoComments.Visible = false;
+                btnAddComment.Enabled = true;
+                btnAddComment.Text = "Post Comment";
             }
             else
             {
                 ScriptManager.RegisterStartupScript(this, this.GetType(), "alert", "alert('❌ Please Write Something');", true);
+                btnAddComment.Enabled = true;
                 return;
             }
-
-            txtComment.Text = "";
-            videoPath = null;
         }
 
 
@@ -267,13 +279,13 @@ namespace SchoolPrj.BookWebsite
                     return;
                 }
                 int userId = Convert.ToInt32(Session["UserId"]);
-                string ProfileImagePath = Session["ProfileImage"]?.ToString();
-                string Username = Session["Username"]?.ToString();
-                string Role = Session["Role"]?.ToString();
                 int commentId = Convert.ToInt32(e.CommandArgument);
                 TextBox txtReply = (TextBox)e.Item.FindControl("txtReply");
                 string videoPath = null;
                 FileUpload fuReVideo = (FileUpload)e.Item.FindControl("fuReVideo");
+                DateTime utcNow = DateTime.UtcNow;
+                TimeZoneInfo myanmarTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Myanmar Standard Time");
+                DateTime localTime = TimeZoneInfo.ConvertTimeFromUtc(utcNow, myanmarTimeZone);
                 if (fuReVideo.HasFile)
                 {
                     string folder = Server.MapPath("~/uploads/videos/");
@@ -287,6 +299,9 @@ namespace SchoolPrj.BookWebsite
                 {
                     using (var con = new SqlConnection(connStr))
                     {
+                        string ProfileImagePath = Session["ProfileImage"]?.ToString();
+                        string Username = Session["Username"]?.ToString();
+                        string Role = Session["Role"]?.ToString();
                         string query = @"
                     INSERT INTO Tb_Reply 
                     (CommentId, UserId, ReplyText, UserProfile, UserName, Role,Date,ReplyUserName,VideoPath,ImagePath)
@@ -303,7 +318,7 @@ namespace SchoolPrj.BookWebsite
                                 UserProfile = ProfileImagePath,
                                 UserName = Username,
                                 ReplyUserName = replyusername,
-                                Date = DateTime.Now,
+                                Date = localTime,
                                 Role = Role
                             });
                         }
@@ -320,7 +335,7 @@ namespace SchoolPrj.BookWebsite
                                 VideoPath = videoPath,
                                 ImagePath = null,
                                 ReplyUserName = replyusername,
-                                Date = DateTime.Now,
+                                Date = localTime,
                                 Role = Role
                             });
                         }
@@ -336,13 +351,14 @@ namespace SchoolPrj.BookWebsite
                                 ImagePath = videoPath,
                                 UserName = Username,
                                 ReplyUserName = replyusername,
-                                Date = DateTime.Now,
+                                Date = localTime,
                                 Role = Role
                             });
                         }
                     }
 
-
+                    txtReply.Text = string.Empty;
+                    videoPath = null;
                     BindComments();
                 }
                 else
@@ -403,15 +419,16 @@ namespace SchoolPrj.BookWebsite
                 }
                 RepeaterItem replyItem = (RepeaterItem)e.Item;
                 int userId = Convert.ToInt32(Session["UserId"]);
-                string ProfileImagePath = Session["ProfileImage"]?.ToString();
-                string Username = Session["Username"]?.ToString();
-                string Role = Session["Role"]?.ToString();
+
                 int replyId = Convert.ToInt32(e.CommandArgument);
                 HiddenField hdnCommentId = (HiddenField)replyItem.FindControl("hdnCommentId");
                 string commentId = hdnCommentId.Value;
                 TextBox txtReply = (TextBox)e.Item.FindControl("txtNesReply");
                 string videoPath = null;
                 FileUpload fuNesVideo = (FileUpload)e.Item.FindControl("fuNesVideo");
+                DateTime utcNow = DateTime.UtcNow;
+                TimeZoneInfo myanmarTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Myanmar Standard Time");
+                DateTime localTime = TimeZoneInfo.ConvertTimeFromUtc(utcNow, myanmarTimeZone);
                 if (fuNesVideo.HasFile)
                 {
                     string folder = Server.MapPath("~/uploads/videos/");
@@ -424,6 +441,9 @@ namespace SchoolPrj.BookWebsite
                 {
                     using (var con = new SqlConnection(connStr))
                     {
+                        string ProfileImagePath = Session["ProfileImage"]?.ToString();
+                        string Username = Session["Username"]?.ToString();
+                        string Role = Session["Role"]?.ToString();
                         string query = @"
                     INSERT INTO Tb_Reply 
                     (CommentId, UserId, ReplyText, UserProfile, UserName, Role,Date,ReplyUserName,VideoPath,ImagePath)
@@ -440,7 +460,7 @@ namespace SchoolPrj.BookWebsite
                                 UserProfile = ProfileImagePath,
                                 UserName = Username,
                                 ReplyUserName = replyusername,
-                                Date = DateTime.Now,
+                                Date = localTime,
                                 Role = Role
                             });
                         }
@@ -457,7 +477,7 @@ namespace SchoolPrj.BookWebsite
                                 VideoPath = videoPath,
                                 ImagePath = null,
                                 ReplyUserName = replyusername,
-                                Date = DateTime.Now,
+                                Date = localTime,
                                 Role = Role
                             });
                         }
@@ -473,11 +493,12 @@ namespace SchoolPrj.BookWebsite
                                 ImagePath = videoPath,
                                 UserName = Username,
                                 ReplyUserName = replyusername,
-                                Date = DateTime.Now,
+                                Date = localTime,
                                 Role = Role
                             });
                         }
-
+                        txtReply.Text = string.Empty;
+                        videoPath = null;
                         BindComments();
                     }
                 }
@@ -560,67 +581,30 @@ namespace SchoolPrj.BookWebsite
 
 
 
-        public static string GetRelativeTime(DateTime dateTime)
-        {
-            var ts = DateTime.Now - dateTime;
 
-            if (ts.TotalMinutes < 1)
-                return "just now";
-            if (ts.TotalMinutes < 60)
-                return $"{Math.Floor(ts.TotalMinutes)} minutes ago";
-            if (ts.TotalHours < 24)
-                return $"{Math.Floor(ts.TotalHours)} hr ago";
-            if (ts.TotalDays < 7)
-                return $"{Math.Floor(ts.TotalDays)} day{(ts.TotalDays >= 2 ? "s" : "")} ago";
-            return dateTime.ToString("MMM dd, yyyy");
+        public string GetRelativeTime(DateTime pastTime)
+        {
+            DateTime utcNow = DateTime.UtcNow;
+            TimeZoneInfo myanmarTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Myanmar Standard Time");
+            DateTime myanmarNow = TimeZoneInfo.ConvertTimeFromUtc(utcNow, myanmarTimeZone);
+
+            TimeSpan ts = myanmarNow - pastTime;
+
+            if (ts.TotalSeconds < 60)
+                return "Just now";
+            else if (ts.TotalMinutes < 60)
+                return $"{(int)ts.TotalMinutes} min ago";
+            else if (ts.TotalHours < 24)
+                return $"{(int)ts.TotalHours} hr ago";
+            else if (ts.TotalDays < 7)
+                return $"{(int)ts.TotalDays} days ago";
+            else
+                return pastTime.ToString("yyyy-MM-dd"); // အရင်တုန်း date ပြချင်ရင်
         }
 
+
     }
 
-    public class Save
-    {
-        public int SaveId { get; set; }
-        public int UserId { get; set; }
-        public int BookId { get; set; }
-        public string BookImagePath { get; set; }
-        public string BookTitle { get; set; }
-        public string Category { get; set; }
-        public string Author { get; set; }
-    }
-    public class _Comment
-    {
-        public int CommentId { get; set; }
 
-        public string UserProfile { get; set; }
-        public string UserName { get; set; }
-        public int BookId { get; set; }
-        public int UserId { get; set; }
-        public string Comment { get; set; }
-        public string VideoPath { get; set; } = null;
-        public DateTime Date { get; set; }
-
-        public string ImagePath { get; set; } = null;
-
-        public List<Reply> Replies { get; set; } = new List<Reply>();
-
-        public string Role { get; set; }
-    }
-
-    public class Reply
-    {
-        public int ReplyId { get; set; }
-        public int CommentId { get; set; }
-        public int UserId { get; set; }
-        public string ReplyText { get; set; }
-        public string UserProfile { get; set; }
-        public string UserName { get; set; }
-        public string Role { get; set; }
-
-        public string VideoPath { get; set; }
-
-        public string ImagePath { get; set; }
-        public string ReplyUserName { get; set; }
-        public DateTime Date { get; set; }
-    }
 
 }

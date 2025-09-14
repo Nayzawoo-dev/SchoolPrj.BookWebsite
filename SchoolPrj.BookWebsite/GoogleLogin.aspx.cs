@@ -9,7 +9,7 @@ namespace SchoolPrj.BookWebsite
         protected void Page_Load(object sender, EventArgs e)
         {
             string clientId = WebConfigurationManager.AppSettings["GoogleClientId"];
-            string redirectUri = "https://localhost:44339/GoogleCallback.aspx";
+            string redirectUri = "https://PhatSaYar123.bsite.net/GoogleCallback.aspx";
             string scope = HttpUtility.UrlEncode("openid email profile");
             string state = Guid.NewGuid().ToString(); // CSRF protection
 

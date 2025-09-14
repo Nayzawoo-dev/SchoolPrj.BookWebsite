@@ -20,6 +20,18 @@
                                 <asp:ListItem Text="All Authors" Value="" Selected="True" />
                                 <asp:ListItem Text="Thaung Naing" Value="Thaung Naing" />
                                 <asp:ListItem Text="Saw Chit" Value="Saw Chit" />
+                                <asp:ListItem Text="Ei Maung" Value="Ei Maung" />
+                                <asp:ListItem Text="Saw Chit" Value="Saw Chit" />
+                                <asp:ListItem Text="Juu" Value="Juu" />
+                                <asp:ListItem Text="Thoe Saung" Value="Thoe Saung" />
+                                <asp:ListItem Text="Mya Than Tint" Value="Mya Than Tint" />
+                                <asp:ListItem Text="Aung Cheint" Value="Aung Cheint" />
+                                <asp:ListItem Text="Bhone Naing" Value="Bhone Naing" />
+                                <asp:ListItem Text="Mya Than Tint" Value="Mya Than Tint" />
+                                <asp:ListItem Text="Stephen Frosh" Value="Stephen Frosh" />
+                                <asp:ListItem Text="DR JULIE SMITH" Value="DR JULIE SMITH" />
+                                <asp:ListItem Text="Jostein Gaarder" Value="Jostein Gaarder" />
+                                <asp:ListItem Text="Richard Feynman lecture" Value="Richard Feynman lecture" />
                             </asp:DropDownList>
                             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                 <i class="fas fa-user-edit text-gray-400"></i>
@@ -39,6 +51,12 @@
                                 <asp:ListItem Text="All Categories" Value="" Selected="True" />
                                 <asp:ListItem Text="History" Value="History" />
                                 <asp:ListItem Text="Romance" Value="Romance" />
+                                <asp:ListItem Text="Programming" Value="Programming" />
+                                <asp:ListItem Text="Poem" Value="Poem" />
+                                <asp:ListItem Text="Fiction" Value="Fiction" />
+                                <asp:ListItem Text="Philosophy" Value="Philosophy" />
+                                <asp:ListItem Text="Psychology" Value="Psychology" />
+                                <asp:ListItem Text="Physics" Value="Physics" />
                             </asp:DropDownList>
                             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                 <i class="fas fa-tag text-gray-400"></i>
@@ -98,14 +116,14 @@
                                         <asp:HyperLink ID="btnEditBook" runat="server"
                                             NavigateUrl='<%# "EditBook.aspx?BookId=" + Eval("BookId") %>'
                                             Visible="false"
-                                            CssClass="px-3 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition-all flex items-center">
+                                            CssClass="px-3 py-2 bg-slate-400 text-white rounded-lg hover:bg-yellow-600 transition-all flex items-center">
                                   <i class="fas fa-edit"></i>
                                         </asp:HyperLink>
 
                                         <asp:LinkButton ID="btnDelete" runat="server" Visible="false"
                                             CommandArgument='<%# Eval("BookId") %>'
                                             OnClientClick="return confirm('Are you sure you want to delete this book?');"
-                                            CssClass="px-3 py-2 bg-red-500 text-white rounded">
+                                            CssClass="px-3 py-2 bg-rose-500 text-white rounded">
                               <i class="fas fa-trash"></i>
                                         </asp:LinkButton>
                                     </div>
@@ -130,6 +148,6 @@
                     OnClick="btnUnderstand_Click" />
             </asp:Panel>
         </ContentTemplate>
-      
+
     </asp:UpdatePanel>
 </asp:Content>

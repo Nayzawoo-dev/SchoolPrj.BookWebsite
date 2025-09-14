@@ -1,9 +1,10 @@
-﻿using System;
+﻿using Dapper;
+using System;
+using System.Collections.Generic;
+using System.Configuration;
 using System.Data.SqlClient;
 using System.IO;
-using Dapper;
 using System.Security.Cryptography;
-using System.Configuration;
 using static SchoolPrj.BookWebsite._Login;
 
 namespace SchoolPrj.BookWebsite
@@ -63,6 +64,14 @@ namespace SchoolPrj.BookWebsite
             // Upload new profile image if selected
             if (fileUploadProfile.HasFile)
             {
+                string ext = Path.GetExtension(fileUploadProfile.FileName).ToLower();
+                if (ext == ".pdf" || ext == ".mp4" || ext == ".mp3" || ext == ".docx")
+                {
+                    lblMessage.Text = "⚠ Only  files are allowed.";
+                    Page.ClientScript.RegisterStartupScript(this.GetType(), "HideMsg", "hideMessageAfterDelay();", true);
+                    return;
+                }
+
                 string folderPath = Server.MapPath("/uploads/images/");
                 if (!Directory.Exists(folderPath))
                     Directory.CreateDirectory(folderPath);
@@ -72,6 +81,8 @@ namespace SchoolPrj.BookWebsite
                 fileUploadProfile.SaveAs(filePath);
                 profilePath = "/uploads/images/" + fileName;
             }
+
+
 
             // Hash password if changed
             if (Session["Role"].ToString() == "User")
@@ -103,11 +114,57 @@ namespace SchoolPrj.BookWebsite
 
                 using (var connection = new SqlConnection(connectionString))
                 {
+                    var res = connection.Query<Reply>("select * from Tb_Reply");
+                    foreach (var item in res)
+                    {
+                        if (item.ReplyUserName == Session["Username"].ToString() && item.UserName == Session["Username"].ToString())
+                        {
+                            connection.Execute("Update Tb_Reply SET ReplyUserName = @ReplyUserName,UserName = @UserName Where ReplyUserName = @OldReplyUserName AND UserName = @OldUserName", new
+                            {
+                                ReplyUserName = fullName,
+                                UserName = fullName,
+                                OldReplyUserName = item.ReplyUserName,
+                                OldUserName = item.UserName,
+                            });
+                        }
+                        if (item.ReplyUserName == Session["Username"].ToString())
+                        {
+                            connection.Execute("Update Tb_Reply SET ReplyUserName = @Newname where ReplyUserName = @Oldname", new
+                            {
+                                Newname = fullName,
+                                Oldname = Session["Username"]
+                            });
+                        }
+                        if (item.UserName == Session["Username"].ToString())
+                        {
+                            connection.Execute("Update Tb_Reply SET UserName = @Newname where UserName = @Oldname", new
+                            {
+                                Newname = fullName,
+                                Oldname = Session["Username"]
+                            });
+                        }
+                    }
+
+                    connection.Execute("UPDATE Tb_Comment SET UserName=@UserName, UserProfile=@UserProfile where UserId = @UserId", new
+                    {
+                        UserName = fullName,
+                        UserProfile = profilePath,
+                        UserId = Session["UserId"]
+                    });
+                    connection.Execute(sql, parameters);
+                    connection.Execute("UPDATE Tb_Reply SET UserProfile=@UserProfile where UserId = @UserId", new
+                    {
+                        UserProfile = profilePath,
+                        UserId = Session["UserId"]
+                    });
                     connection.Execute(sql, parameters);
                     goto result;
+
                 }
 
             }
+
+
 
             if (Session["Role"].ToString() == "Admin")
             {
@@ -126,6 +183,48 @@ namespace SchoolPrj.BookWebsite
 
                 using (var connection = new SqlConnection(connectionString))
                 {
+                    var res = connection.Query<Reply>("select * from Tb_Reply");
+                    foreach (var item in res)
+                    {
+                        if (item.ReplyUserName == Session["Username"].ToString() && item.UserName == Session["Username"].ToString())
+                        {
+                            connection.Execute("Update Tb_Reply SET ReplyUserName = @ReplyUserName,UserName = @UserName Where ReplyUserName = @OldReplyUserName AND UserName = @OldUserName", new
+                            {
+                                ReplyUserName = fullName,
+                                UserName = fullName,
+                                OldReplyUserName = item.ReplyUserName,
+                                OldUserName = item.UserName,
+                            });
+                        }
+                        if (item.ReplyUserName == Session["Username"].ToString())
+                        {
+                            connection.Execute("Update Tb_Reply SET ReplyUserName = @Newname where ReplyUserName = @Oldname", new
+                            {
+                                Newname = fullName,
+                                Oldname = Session["Username"]
+                            });
+                        }
+                        if (item.UserName == Session["Username"].ToString())
+                        {
+                            connection.Execute("Update Tb_Reply SET UserName = @Newname where UserName = @Oldname", new
+                            {
+                                Newname = fullName,
+                                Oldname = Session["Username"]
+                            });
+                        }
+                    }
+                    connection.Execute("UPDATE Tb_Comment SET UserName=@UserName, UserProfile=@UserProfile where UserId = @UserId", new
+                    {
+                        UserName = fullName,
+                        UserProfile = profilePath,
+                        UserId = Session["UserId"]
+                    });
+                    connection.Execute(sql, parameters);
+                    connection.Execute("UPDATE Tb_Reply SET UserProfile=@UserProfile where UserId = @UserId", new
+                    {
+                        UserProfile = profilePath,
+                        UserId = Session["UserId"]
+                    });
                     connection.Execute(sql, parameters);
                     goto result;
                 }
@@ -138,7 +237,6 @@ namespace SchoolPrj.BookWebsite
             Session["ProfileMessage"] = "Profile updated successfully!";
             Response.Redirect("~/Profile.aspx");
         }
-
         private string HashPassword(string password, string salt)
         {
             using (var deriveBytes = new Rfc2898DeriveBytes(password, Convert.FromBase64String(salt), 10000))

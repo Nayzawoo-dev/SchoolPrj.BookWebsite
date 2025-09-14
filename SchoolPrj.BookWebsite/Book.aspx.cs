@@ -40,7 +40,7 @@ namespace SchoolPrj.BookWebsite
                         btnDelete.Visible = true;
                         btnEditBook.Visible = true;
                     }
-                       
+
                 }
             }
         }
@@ -62,12 +62,18 @@ namespace SchoolPrj.BookWebsite
         {
             using (var connection = new SqlConnection(connStr))
             {
-                string sql = "select * from Tb_Book where BookTitle like '%' + @keyword + '%' or Author like '%' + @keyword + '%' ";
+                string sql = @"select * 
+               from Tb_Book 
+               where REPLACE(Author, ' ', '') COLLATE SQL_Latin1_General_CP1_CI_AI 
+                     like '%' + REPLACE(@keyword, ' ', '') + '%' or REPLACE(Category, ' ', '') COLLATE SQL_Latin1_General_CP1_CI_AI 
+                     like '%' + REPLACE(@keyword, ' ', '') + '%'";
+
+
                 Books = connection.Query<Book>(sql, new Book { keyword = keyword }).AsList();
             }
             rptBooks.DataSource = Books;
             rptBooks.DataBind();
-           
+
 
             pnlNoBooks.Visible = (Books.Count == 0);
         }

@@ -27,11 +27,11 @@ namespace SchoolPrj.BookWebsite
             using (var connection = new SqlConnection(connStr))
             {
                 var user = connection.QuerySingleOrDefault<User>(
-                    "SELECT * FROM Users WHERE Email = @Email",
-                    new User { Email = txtUsername.Text.Trim() });
+                    "SELECT * FROM Users WHERE Email = @Email or Username = @Username",
+                    new User { Email = txtUsername.Text.Trim(), Username = txtUsername.Text.Trim() });
                 var ban = connection.QuerySingleOrDefault<Ban>(
-                    "SELECT * FROM Tb_BanList WHERE UserEmail = @UserEmail",
-                    new Ban { UserEmail = txtUsername.Text.Trim() });
+                    "SELECT * FROM Tb_BanList WHERE UserEmail = @UserEmail or Username = @Username",
+                    new Ban { UserEmail = txtUsername.Text.Trim(), Username = txtUsername.Text.Trim() });
 
                 if (ban != null)
                 {
@@ -50,7 +50,7 @@ namespace SchoolPrj.BookWebsite
                     return;
                 }
 
-                var admin = connection.QueryFirstOrDefault<Admins>("SELECT * FROM Admins Email = @Email",
+                var admin = connection.QueryFirstOrDefault<Admins>("SELECT * FROM Admins Where Email = @Email",
                       new Admins { Email = txtUsername.Text.Trim() });
 
 
@@ -92,7 +92,7 @@ namespace SchoolPrj.BookWebsite
                 }
                 else
                 {
-                    lblMessage.Text = "Invalid Email or Password!";
+                    lblMessage.Text = "Invalid Username or Email or Password!";
                     lblMessage.Visible = true;
                     Page.ClientScript.RegisterStartupScript(this.GetType(), "HideMsg", "hideMessageAfterDelay();", true);
                 }
