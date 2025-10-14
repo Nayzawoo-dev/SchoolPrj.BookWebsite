@@ -44,26 +44,31 @@ namespace SchoolPrj.BookWebsite
                 var user = connection.QuerySingleOrDefault<User>(checkBan, new User { Email = email });
                 // Add to BanList
                 string insertBan = @"INSERT INTO [dbo].[Tb_BanList]
-           ([UserEmail]
+           ([UserId]
+           ,[UserEmail]
            ,[Username]
            ,[PasswordHash]
            ,[PasswordSalt]
            ,[Role]
            ,[ProfileImagePath])
      VALUES
-           (@UserEmail
+           (
+            @UserId
+           ,@UserEmail
            ,@Username
            ,@PasswordHash
            ,@PasswordSalt
            ,@Role
            ,@ProfileImagePath)";
-                connection.Execute(insertBan, new Ban { UserEmail = user.Email, Username = user.Username, PasswordHash = user.PasswordHash, PasswordSalt = user.PasswordSalt, Role = user.Role, ProfileImagePath = user.ProfileImagePath });
+                connection.Execute(insertBan, new Ban {UserId = user.UserId, UserEmail = user.Email, Username = user.Username, PasswordHash = user.PasswordHash, PasswordSalt = user.PasswordSalt, Role = user.Role, ProfileImagePath = user.ProfileImagePath });
 
                 // Delete from Users
                 string deleteUser = "DELETE FROM Users WHERE Email = @Email";
                 string deleteReact = "DELETE FROM Tb_React WHERE UserId = @UserId";
-                connection.Execute(deleteUser, new User { Email = email });
-                connection.Execute(deleteReact, new React{ UserId = user.UserId });
+                string deleteComments = "DELETE FROM Tb_Comment WHERE UserId = @UserId";
+              int res  =  connection.Execute(deleteUser, new User { Email = email , UserId = user.UserId });
+              int rest =  connection.Execute(deleteReact, new React{ UserId = user.UserId });
+              int rei  =  connection.Execute(deleteComments, new _Comment { UserId = user.UserId }); 
             }
         }
 

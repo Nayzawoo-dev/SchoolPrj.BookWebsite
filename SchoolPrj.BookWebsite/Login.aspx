@@ -9,7 +9,7 @@
                     <!-- Decorative Header -->
                     <div class="bg-gradient-to-r from-indigo-600 to-purple-700 py-6 px-8 text-center">
                         <h1 class="text-3xl font-bold text-white mb-2 flex items-center justify-center">
-                            <i class="fas fa-book-reader mr-3"></i>MyBookShelf
+                            <i class="fas fa-book-reader mr-3"></i>Phat Sa Yar
                         </h1>
                         <p class="text-indigo-100">Sign in to your reading journey</p>
                     </div>

@@ -60,7 +60,7 @@
     <!-- Features Section -->
     <section class="mb-16">
         <div class="container mx-auto px-4">
-            <h2 class="text-3xl md:text-4xl font-bold text-center text-gray-800 mb-12" data-aos="fade-up">Why Choose <span class="text-indigo-600">MyBookShelf</span>?</h2>
+            <h2 class="text-3xl md:text-4xl font-bold text-center text-gray-800 mb-12" data-aos="fade-up">Why Choose <span class="text-indigo-600">Phat Sa Yar</span>?</h2>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                 <!-- Feature 1 -->

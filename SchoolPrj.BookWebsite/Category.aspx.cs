@@ -1,11 +1,12 @@
-﻿using System;
+﻿using Dapper;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Web;
 using System.Web.UI.WebControls;
-using Dapper;
 using static SchoolPrj.BookWebsite._Category;
 
 
@@ -19,6 +20,28 @@ namespace SchoolPrj.BookWebsite
         public List<Book> Books { get; set; }
         protected void Page_Load(object sender, EventArgs e)
         {
+            if (HttpContext.Current.Session != null && HttpContext.Current.Session["UserId"] != null)
+            {
+                using (var connection = new SqlConnection(connStr))
+                {
+                    var res = connection.QueryFirstOrDefault<int>(
+                        "SELECT COUNT(1) FROM Tb_BanList WHERE UserId = @UserId",
+                        new { UserId = HttpContext.Current.Session["UserId"] });
+
+                    if (res > 0)
+                    {
+                        HttpContext.Current.Session.Clear();
+                        HttpContext.Current.Session.Abandon();
+
+                        if (HttpContext.Current.Request.Cookies["UserAuth"] != null)
+                        {
+                            HttpContext.Current.Response.Cookies["UserAuth"].Expires = DateTime.Now.AddDays(-1);
+                        }
+
+                        HttpContext.Current.Response.Redirect("~/Login.aspx?msg=banned", true);
+                    }
+                }
+            }
             if (!IsPostBack)
             {
                 LoadBooks();

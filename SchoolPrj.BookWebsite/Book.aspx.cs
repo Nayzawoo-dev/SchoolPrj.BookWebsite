@@ -1,11 +1,12 @@
-﻿using System;
+﻿using Dapper;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Web;
 using System.Web.UI.WebControls;
-using Dapper;
 using static SchoolPrj.BookWebsite._Book;
 
 namespace SchoolPrj.BookWebsite
@@ -16,6 +17,28 @@ namespace SchoolPrj.BookWebsite
         public List<Book> Books { get; set; }
         protected void Page_Load(object sender, EventArgs e)
         {
+            if (HttpContext.Current.Session != null && HttpContext.Current.Session["UserId"] != null)
+            {
+                using (var connection = new SqlConnection(connStr))
+                {
+                    var res = connection.QueryFirstOrDefault<int>(
+                        "SELECT COUNT(1) FROM Tb_BanList WHERE UserId = @UserId",
+                        new { UserId = HttpContext.Current.Session["UserId"] });
+
+                    if (res > 0)
+                    {
+                        HttpContext.Current.Session.Clear();
+                        HttpContext.Current.Session.Abandon();
+
+                        if (HttpContext.Current.Request.Cookies["UserAuth"] != null)
+                        {
+                            HttpContext.Current.Response.Cookies["UserAuth"].Expires = DateTime.Now.AddDays(-1);
+                        }
+
+                        HttpContext.Current.Response.Redirect("~/Login.aspx?msg=banned", true);
+                    }
+                }
+            }
             if (!IsPostBack)
             {
                 if (Session["Role"] != null && Session["Role"].ToString() == "Admin")
@@ -50,7 +73,7 @@ namespace SchoolPrj.BookWebsite
         {
             using (var connection = new SqlConnection(connStr))
             {
-                string sql = "SELECT * FROM Tb_Book";
+                string sql = "select * from Tb_Book ORDER By BookId DESC";
                 Books = connection.Query<Book>(sql).AsList();
             }
 
@@ -60,13 +83,19 @@ namespace SchoolPrj.BookWebsite
 
         private void LoadBooks(string keyword = null)
         {
+            keyword = keyword.Replace(" ", "").Replace("\u200B", "");
             using (var connection = new SqlConnection(connStr))
             {
-                string sql = @"select * 
-               from Tb_Book 
-               where REPLACE(Author, ' ', '') COLLATE SQL_Latin1_General_CP1_CI_AI 
-                     like '%' + REPLACE(@keyword, ' ', '') + '%' or REPLACE(Category, ' ', '') COLLATE SQL_Latin1_General_CP1_CI_AI 
-                     like '%' + REPLACE(@keyword, ' ', '') + '%'";
+                string sql = @"
+    select * 
+    from Tb_Book 
+    where REPLACE(REPLACE(BookTitle, ' ', ''), NCHAR(8203), '') COLLATE SQL_Latin1_General_CP1_CI_AI 
+              like '%' + REPLACE(REPLACE(@keyword, ' ', ''), NCHAR(8203), '') + '%'
+       or REPLACE(REPLACE(Author, ' ', ''), NCHAR(8203), '') COLLATE SQL_Latin1_General_CP1_CI_AI 
+              like '%' + REPLACE(REPLACE(@keyword, ' ', ''), NCHAR(8203), '') + '%'
+       or REPLACE(REPLACE(Category, ' ', ''), NCHAR(8203), '') COLLATE SQL_Latin1_General_CP1_CI_AI 
+              like '%' + REPLACE(REPLACE(@keyword, ' ', ''), NCHAR(8203), '') + '%'
+";
 
 
                 Books = connection.Query<Book>(sql, new Book { keyword = keyword }).AsList();
