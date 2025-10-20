@@ -33,13 +33,13 @@ namespace SchoolPrj.BookWebsite
         protected global::System.Web.UI.HtmlControls.HtmlForm form1;
 
         /// <summary>
-        /// HyperLink1 control.
+        /// HomeNav control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.HyperLink HyperLink1;
+        protected global::System.Web.UI.WebControls.HyperLink HomeNav;
 
         /// <summary>
         /// DashboardDes control.
@@ -51,6 +51,15 @@ namespace SchoolPrj.BookWebsite
         protected global::System.Web.UI.WebControls.HyperLink DashboardDes;
 
         /// <summary>
+        /// react control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HyperLink react;
+
+        /// <summary>
         /// Popular control.
         /// </summary>
         /// <remarks>
@@ -58,6 +67,15 @@ namespace SchoolPrj.BookWebsite
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.HyperLink Popular;
+
+        /// <summary>
+        /// customer control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HyperLink customer;
 
         /// <summary>
         /// loginLink control.
@@ -177,6 +195,15 @@ namespace SchoolPrj.BookWebsite
         protected global::System.Web.UI.WebControls.HyperLink DashboardMobile;
 
         /// <summary>
+        /// reactmobile control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HyperLink reactmobile;
+
+        /// <summary>
         /// PopularMobile control.
         /// </summary>
         /// <remarks>
@@ -184,6 +211,15 @@ namespace SchoolPrj.BookWebsite
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.HyperLink PopularMobile;
+
+        /// <summary>
+        /// customermobile control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HyperLink customermobile;
 
         /// <summary>
         /// loginLinkMobile control.

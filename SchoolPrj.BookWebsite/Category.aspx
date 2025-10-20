@@ -17,21 +17,6 @@
                         <div class="relative">
                             <asp:DropDownList ID="ddlAuthor" runat="server"
                                 CssClass="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent appearance-none bg-white">
-                                <asp:ListItem Text="All Authors" Value="" Selected="True" />
-                                <asp:ListItem Text="Thaung Naing" Value="Thaung Naing" />
-                                <asp:ListItem Text="Saw Chit" Value="Saw Chit" />
-                                <asp:ListItem Text="Ei Maung" Value="Ei Maung" />
-                                <asp:ListItem Text="Saw Chit" Value="Saw Chit" />
-                                <asp:ListItem Text="Juu" Value="Juu" />
-                                <asp:ListItem Text="Thoe Saung" Value="Thoe Saung" />
-                                <asp:ListItem Text="Mya Than Tint" Value="Mya Than Tint" />
-                                <asp:ListItem Text="Aung Cheint" Value="Aung Cheint" />
-                                <asp:ListItem Text="Bhone Naing" Value="Bhone Naing" />
-                                <asp:ListItem Text="Mya Than Tint" Value="Mya Than Tint" />
-                                <asp:ListItem Text="Stephen Frosh" Value="Stephen Frosh" />
-                                <asp:ListItem Text="DR JULIE SMITH" Value="DR JULIE SMITH" />
-                                <asp:ListItem Text="Jostein Gaarder" Value="Jostein Gaarder" />
-                                <asp:ListItem Text="Richard Feynman lecture" Value="Richard Feynman lecture" />
                             </asp:DropDownList>
                             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                 <i class="fas fa-user-edit text-gray-400"></i>
@@ -48,16 +33,8 @@
                         <div class="relative">
                             <asp:DropDownList ID="ddlCategory" runat="server"
                                 CssClass="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent appearance-none bg-white">
-                                <asp:ListItem Text="All Categories" Value="" Selected="True" />
-                                <asp:ListItem Text="History" Value="History" />
-                                <asp:ListItem Text="Romance" Value="Romance" />
-                                <asp:ListItem Text="Programming" Value="Programming" />
-                                <asp:ListItem Text="Poem" Value="Poem" />
-                                <asp:ListItem Text="Fiction" Value="Fiction" />
-                                <asp:ListItem Text="Philosophy" Value="Philosophy" />
-                                <asp:ListItem Text="Psychology" Value="Psychology" />
-                                <asp:ListItem Text="Physics" Value="Physics" />
                             </asp:DropDownList>
+
                             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                 <i class="fas fa-tag text-gray-400"></i>
                             </div>
@@ -71,11 +48,6 @@
                     <asp:Button ID="btnFilter" runat="server" Text="Apply Filters" OnClick="btnFilter_Click"
                         CssClass="w-full md:w-auto px-6 py-3 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 transition-all font-medium shadow-md hover:shadow-lg" />
                 </div>
-            </div>
-
-            <!-- Results Count -->
-            <div class="flex justify-between items-center mb-6">
-                <h2 class="text-xl font-bold text-gray-800">Filtered Results</h2>
             </div>
 
             <!-- Books Grid -->
@@ -112,6 +84,12 @@
                                         <i class="fas fa-eye mr-2"></i>View
                                     </a>
 
+                                    <div class="flex items-center text-sm text-gray-600 mb-3">
+                                        <asp:Label ID="lblLikeCount" runat="server"
+                                            Text=''
+                                            CssClass="text-gray-700 font-medium" />
+                                    </div>
+
                                     <div class="flex space-x-2">
                                         <asp:HyperLink ID="btnEditBook" runat="server"
                                             NavigateUrl='<%# "EditBook.aspx?BookId=" + Eval("BookId") %>'
@@ -134,6 +112,19 @@
                 </asp:Repeater>
             </div>
 
+            <!-- Pagination Controls -->
+            <div class="flex justify-center items-center mt-10 space-x-4">
+                <asp:Button ID="btnPrev" runat="server" Text="&laquo; Previous"
+                    CssClass="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-all font-medium"
+                    OnClick="btnPrev_Click" />
+
+                <asp:Label ID="lblPageInfo" runat="server"
+                    CssClass="text-gray-700 font-semibold text-sm"></asp:Label>
+
+                <asp:Button ID="btnNext" runat="server" Text="Next &raquo;"
+                    CssClass="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-all font-medium"
+                    OnClick="btnNext_Click" />
+            </div>
 
             <!-- No Books Found Message -->
             <asp:Panel ID="pnlNoBooks" runat="server" Visible="false"

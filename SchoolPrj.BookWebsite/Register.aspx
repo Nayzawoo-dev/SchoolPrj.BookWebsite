@@ -99,14 +99,6 @@
                         </div>
                     </div>
 
-                    <!-- Terms and Conditions -->
-                    <div class="flex items-center">
-                        <input id="terms" name="terms" type="checkbox" class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded">
-                        <label for="terms" class="ml-2 block text-sm text-gray-700">
-                            I agree to the <a href="#" class="text-indigo-600 hover:text-indigo-500">Terms and Conditions</a>
-                        </label>
-                    </div>
-
                     <!-- Register Button -->
                     <asp:Button ID="btnRegister" runat="server" Text="Create Account" OnClick="btnRegister_Click"
                         CssClass="w-full bg-indigo-600 text-white py-3.5 rounded-xl hover:bg-indigo-700 transition-all font-medium shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" />
@@ -122,14 +114,13 @@
     </div>
 
     <script type="text/javascript">
-
         function hideMessageAfterDelay() {
             setTimeout(function () {
                 var msg = document.getElementById('<%= lblMessage.ClientID %>');
                 if (msg) {
                     msg.style.display = 'none';
                 }
-            }, 5000);
+            }, 10000); // 10 seconds for better reading
         }
 
         // Password visibility toggle function
@@ -171,7 +162,6 @@
         document.addEventListener('DOMContentLoaded', function () {
             hideMessageAfterDelay();
             setupPasswordToggle();
-            // ❌ No need to add click event for label anymore
         });
     </script>
 </asp:Content>

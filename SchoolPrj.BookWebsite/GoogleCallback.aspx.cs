@@ -65,10 +65,8 @@ namespace SchoolPrj.BookWebsite
                             var user = connection.QuerySingleOrDefault<User>(
                                 "SELECT * FROM Users WHERE Email=@Email", new { Email = email });
 
-                            var ban = connection.QuerySingleOrDefault<Ban>(
-                                "SELECT * FROM Tb_BanList WHERE UserEmail=@UserEmail", new { UserEmail = email });
 
-                            if (ban != null)
+                            if (user != null && user.BanStatus > 0)
                             {
                                 Session.Clear();
                                 Session.Abandon();
@@ -83,15 +81,15 @@ namespace SchoolPrj.BookWebsite
                             // Insert new user if not exists
                             if (user == null)
                             {
-                                string sql = @"INSERT INTO Users (Username, FullName, Email, Role, ProfileImagePath)
-                                               VALUES (@Username, @FullName, @Email, @Role, @ProfileImagePath)";
+                                string sql = @"INSERT INTO Users (Username, FullName, Email, Role, ProfileImagePath,IsEmailConfirmed)
+                                               VALUES (@Username, @FullName, @Email, @Role, @ProfileImagePath,1)";
                                 connection.Execute(sql, new User
                                 {
                                     Username = name,
                                     FullName = "Default",
                                     Email = email,
                                     Role = "User",
-                                    ProfileImagePath = "/uploads/images/default.png"
+                                    ProfileImagePath = "/uploads/images/default.jpg",                                    
                                 });
                             }
 

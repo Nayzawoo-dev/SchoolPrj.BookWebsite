@@ -5,9 +5,11 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
+
+
 namespace SchoolPrj.BookWebsite
 {
-    public partial class Site_Mobile : System.Web.UI.MasterPage
+    public partial class Site_Mobile : MasterPage
     {
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -37,6 +39,12 @@ namespace SchoolPrj.BookWebsite
             {
                 DashboardDes.Visible = true;
                 DashboardMobile.Visible = true;
+                react.Visible = true;
+                reactmobile.Visible = true;
+                HomeNav.Visible = false;
+                HyperLink1Mobile.Visible = false;
+                customer.Visible = false;
+                customermobile.Visible = false;
             }
             else
             {

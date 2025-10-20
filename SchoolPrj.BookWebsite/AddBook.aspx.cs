@@ -11,11 +11,34 @@ namespace SchoolPrj.BookWebsite
     {
         private readonly string connStr = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
 
+        protected void Page_Load(object sender, EventArgs e)
+        {
+            if (!IsPostBack)
+            {
+                LoadCategory();
+            }
+            if (Session["UserId"] == null || Session["Role"].ToString() != "Admin")
+            {
+                // Session clear
+                Session.Clear();
+                Session.Abandon();
+
+                // Authentication cookie (ASP.NET Forms Auth သုံးထားရင်)
+                if (Request.Cookies["UserAuth"] != null)
+                {
+                    Response.Cookies["UserAuth"].Expires = DateTime.Now.AddDays(-1);
+                }
+
+                // Website အစ Login Page သို့ ပြန်ပို့
+                Response.Redirect("~/Login.aspx");
+            }
+        }
+
         protected void btnSave_Click(object sender, EventArgs e)
         {
             lblMessage.Text = string.Empty;
             string title = txtTitle.Text.Trim();
-            string category = txtCategory.Text.Trim();
+            string category = ddlCategory.SelectedItem.Text;
             string author = txtAuthor.Text.Trim();
             string description = txtDescription.Text.Trim();
 
@@ -150,9 +173,25 @@ namespace SchoolPrj.BookWebsite
             txtTitle.Text = string.Empty;
             txtAuthor.Text = string.Empty;
             txtDescription.Text = string.Empty;
-            txtCategory.Text = string.Empty;
+            ddlCategory.Text = string.Empty;
             Page.ClientScript.RegisterStartupScript(this.GetType(), "HideMsg", "hideMessageAfterDelay();", true);
             // Redirect to Books Page
+        }
+
+        private void LoadCategory()
+        {
+            using (var con = new SqlConnection(connStr))
+            {
+                var categories = con.Query<Category>("SELECT CategoryId, Category FROM Tb_Category ORDER BY Category").ToList();
+
+                ddlCategory.Items.Clear();
+                ddlCategory.Items.Add(new System.Web.UI.WebControls.ListItem("-- Select Category --", ""));
+
+                foreach (var cat in categories)
+                {
+                    ddlCategory.Items.Add(new System.Web.UI.WebControls.ListItem(cat.category, cat.CategoryId.ToString()));
+                }
+            }
         }
     }
 }

@@ -1,130 +1,310 @@
-﻿using System;
+﻿using Dapper;
+using System;
+using System.Configuration;
 using System.Data.SqlClient;
-using Dapper;
+using System.Net;
+using System.Net.Mail;
 using System.Security.Cryptography;
 using System.Web;
-using System.Configuration;
+using System.Web.UI;
 
 namespace SchoolPrj.BookWebsite
 {
     public partial class _Login : System.Web.UI.Page
     {
+        string connStr = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (Session["RegisterMessage"] != null)
+            if (!IsPostBack)
             {
-                lblMessage.CssClass = "text-green-500 mb-4 block text-sm bg-green-50 p-3 rounded-lg text-center";
-                lblMessage.Text = Session["RegisterMessage"].ToString();
-                lblMessage.Visible = true;
-                Session["RegisterMessage"] = null;
+                // Check for success messages from other pages
+                if (Session["RegisterMessage"] != null)
+                {
+                    ShowMessage(Session["RegisterMessage"].ToString(), "success");
+                    Session["RegisterMessage"] = null;
+                }
 
-                Page.ClientScript.RegisterStartupScript(this.GetType(), "HideMsg", "hideMessageAfterDelay();", true);
+                if (Session["VerifyMessage"] != null)
+                {
+                    ShowMessage(Session["VerifyMessage"].ToString(), "success");
+                    Session["VerifyMessage"] = null;
+                }
+
+                if (Session["PasswordResetMessage"] != null)
+                {
+                    ShowMessage(Session["PasswordResetMessage"].ToString(), "success");
+                    Session["PasswordResetMessage"] = null;
+                }
             }
         }
-        string connStr = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+
         protected void btnLogin_Click(object sender, EventArgs e)
         {
-            using (var connection = new SqlConnection(connStr))
+            string usernameOrEmail = txtUsername.Text.Trim();
+            string password = txtPassword.Text.Trim();
+
+            // Validation
+            if (string.IsNullOrEmpty(usernameOrEmail) || string.IsNullOrEmpty(password))
             {
-                var user = connection.QuerySingleOrDefault<User>(
-                    "SELECT * FROM Users WHERE Email = @Email or Username = @Username",
-                    new User { Email = txtUsername.Text.Trim(), Username = txtUsername.Text.Trim() });
-                var ban = connection.QuerySingleOrDefault<Ban>(
-                    "SELECT * FROM Tb_BanList WHERE UserEmail = @UserEmail or Username = @Username",
-                    new Ban { UserEmail = txtUsername.Text.Trim(), Username = txtUsername.Text.Trim() });
+                ShowMessage("*Please enter both username/email and password.", "error");
+                return;
+            }
 
-                if (ban != null)
+            try
+            {
+                using (var connection = new SqlConnection(connStr))
                 {
-                    lblMessage.Text = "Your account has been banned!";
-                    lblMessage.Visible = true;
-                    // Session clear
-                    Session.Clear();
-                    Session.Abandon();
+                    // Check if user exists in Users table
+                    var user = connection.QuerySingleOrDefault<User>(
+                        @"SELECT UserId, Username, PasswordHash, PasswordSalt, Email, Role, 
+                                  ProfileImagePath, IsEmailConfirmed, EmailVerificationCode, BanStatus
+                           FROM Users 
+                           WHERE Email = @Email OR Username = @Username",
+                        new { Email = usernameOrEmail, Username = usernameOrEmail });
 
-                    // Authentication cookie (ASP.NET Forms Auth သုံးထားရင်)
-                    if (Request.Cookies["UserAuth"] != null)
+                    // Check if admin exists
+                    var admin = connection.QueryFirstOrDefault<Admins>(
+                        "SELECT * FROM Admins WHERE Email = @Email OR Username = @Username",
+                        new { Email = usernameOrEmail , Username = usernameOrEmail });
+                    // Check if user is banned
+                    if (user != null && user.BanStatus > 0)
                     {
-                        Response.Cookies["UserAuth"].Expires = DateTime.Now.AddDays(-1);
+                        ShowMessage("*Your account has been banned. Please contact support for more information.", "error");
+                        return;
                     }
-                    Page.ClientScript.RegisterStartupScript(this.GetType(), "HideMsg", "hideMessageAfterDelay();", true);
-                    return;
-                }
-
-                var admin = connection.QueryFirstOrDefault<Admins>("SELECT * FROM Admins Where Email = @Email",
-                      new Admins { Email = txtUsername.Text.Trim() });
-
-
-                if (admin != null)
-                {
-                    bool res = CheckPassword(txtPassword.Text.Trim());
-                    if (res != true)
+                    // Handle Admin Login
+                    if (admin != null)
                     {
-                        goto ERROR1;
+                        if (CheckAdminPassword(password, admin.Password))
+                        {
+                            SetUserSession(admin.UserId, admin.Username, admin.Role, admin.ProfileImagePath);
+                            CreateAuthCookie(admin.UserId.ToString(), 5); // 5 days for admin
+                            Response.Redirect("Book.aspx");
+                            return;
+                        }
+                        else
+                        {
+                            ShowMessage("*Invalid admin password!", "error");
+                            return;
+                        }
                     }
-                    Session["UserId"] = admin.UserId;
-                    Session["Username"] = admin.Username;
-                    Session["Role"] = admin.Role;
-                    Session["ProfileImage"] = admin.ProfileImagePath;
 
-                    // Cookie (3 days login)
-                    HttpCookie authCookie = new HttpCookie("UserAuth");
-                    authCookie.Values["UserId"] = admin.UserId.ToString();
-                    authCookie.Expires = DateTime.Now.AddDays(5);
-                    Response.Cookies.Add(authCookie);
-                    Response.Redirect("Book.aspx");
-                }
+                    // Handle User Login
+                    if (user != null)
+                    {
+                        // Check if email is verified
+                        if (!user.IsEmailConfirmed)
+                        {
+                            ShowMessage("*Please verify your email before logging in. Check your email (including spam folder) for verification link.", "warning");
 
-            ERROR1:
-                if (user != null && VerifyPassword(txtPassword.Text, user.PasswordHash, user.PasswordSalt))
-                {
-                    // Save Session
-                    Session["UserId"] = user.UserId;
-                    Session["Username"] = user.Username;
-                    Session["Role"] = user.Role;
-                    Session["ProfileImage"] = user.ProfileImagePath;
+                            // Optionally resend verification email
+                            ResendVerificationEmail(user.Email, user.Username);
+                            return;
+                        }
 
-                    // Cookie (3 days login)
-                    HttpCookie authCookie = new HttpCookie("UserAuth");
-                    authCookie.Values["UserId"] = user.UserId.ToString();
-                    authCookie.Expires = DateTime.Now.AddDays(3);
-                    Response.Cookies.Add(authCookie);
-                    Response.Redirect("Book.aspx");
-                }
-                else
-                {
-                    lblMessage.Text = "Invalid Username or Email or Password!";
-                    lblMessage.Visible = true;
-                    Page.ClientScript.RegisterStartupScript(this.GetType(), "HideMsg", "hideMessageAfterDelay();", true);
+                        // Verify password
+                        if (VerifyPassword(password, user.PasswordHash, user.PasswordSalt))
+                        {
+                            SetUserSession(user.UserId, user.Username, user.Role, user.ProfileImagePath);
+                            CreateAuthCookie(user.UserId.ToString(), 3); // 3 days for user
+                            Response.Redirect("Book.aspx");
+                        }
+                        else
+                        {
+                            ShowMessage("*Invalid password!", "error");
+                        }
+                    }
+                    else
+                    {
+                        ShowMessage("*Invalid username or email!", "error");
+                    }
                 }
             }
+            catch (SqlException sqlEx)
+            {
+                ShowMessage("*Database error occurred. Please try again.", "error");
+                // Log the error
+                System.Diagnostics.Debug.WriteLine($"Login SQL Error: {sqlEx.Message}");
+            }
+            catch (Exception ex)
+            {
+                ShowMessage("*An error occurred during login. Please try again.", "error");
+                // Log the error
+                System.Diagnostics.Debug.WriteLine($"Login Error: {ex.Message}");
+            }
+        }
+
+        private bool CheckAdminPassword(string inputPassword, string storedPassword)
+        {
+            // Simple comparison for admin (you might want to hash admin passwords too)
+            return inputPassword == storedPassword;
         }
 
         private bool VerifyPassword(string password, string storedHash, string storedSalt)
         {
-            if (storedHash == null)
+            if (string.IsNullOrEmpty(storedHash) || string.IsNullOrEmpty(storedSalt))
             {
                 return false;
             }
-            var saltBytes = Convert.FromBase64String(storedSalt);
-            using (var pbkdf2 = new Rfc2898DeriveBytes(password, saltBytes, 10000))
+
+            try
             {
-                var hash = Convert.ToBase64String(pbkdf2.GetBytes(32));
-                return hash == storedHash;
+                var saltBytes = Convert.FromBase64String(storedSalt);
+                using (var pbkdf2 = new Rfc2898DeriveBytes(password, saltBytes, 10000, HashAlgorithmName.SHA256))
+                {
+                    var hash = Convert.ToBase64String(pbkdf2.GetBytes(32));
+                    return hash == storedHash;
+                }
+            }
+            catch
+            {
+                return false;
             }
         }
 
-        private bool CheckPassword(string Password)
+        private void SetUserSession(int userId, string username, string role, string profileImage)
         {
-            object res;
-            using (var connection = new SqlConnection(connStr))
+            Session["UserId"] = userId;
+            Session["Username"] = username;
+            Session["Role"] = role;
+            Session["ProfileImage"] = profileImage ?? "/uploads/images/default.png";
+        }
+
+        private void CreateAuthCookie(string userId, int expireDays)
+        {
+            HttpCookie authCookie = new HttpCookie("UserAuth");
+            authCookie.Values["UserId"] = userId;
+            authCookie.Expires = DateTime.Now.AddDays(expireDays);
+            Response.Cookies.Add(authCookie);
+        }
+
+        private void ResendVerificationEmail(string email, string username)
+        {
+            try
             {
-                res = connection.QueryFirstOrDefault<Admins>("select * from Admins where Password = @Password", new { Password = Password });
+                using (var connection = new SqlConnection(connStr))
+                {
+                    // Get or create new verification code
+                    string verificationCode = Guid.NewGuid().ToString();
+
+                    var result = connection.Execute(
+                        @"UPDATE Users 
+                          SET EmailVerificationCode = @VerificationCode 
+                          WHERE Email = @Email",
+                        new { VerificationCode = verificationCode, Email = email });
+
+                    if (result > 0)
+                    {
+                        SendVerificationEmail(email, username, verificationCode);
+                    }
+                }
             }
-            if (res == null)
+            catch (Exception ex)
             {
+                // Log the error but don't show to user
+                System.Diagnostics.Debug.WriteLine($"Resend verification email error: {ex.Message}");
+            }
+        }
+
+        private bool SendVerificationEmail(string toEmail, string username, string verificationCode)
+        {
+            try
+            {
+                string baseUrl = HttpContext.Current.Request.Url.GetLeftPart(UriPartial.Authority);
+                string verifyUrl = $"{baseUrl}/VerifyEmail.aspx?code={HttpUtility.UrlEncode(verificationCode)}";
+
+                string subject = "Verify Your Email - MyBookShelf";
+                string body = $@"
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {{ font-family: Arial, sans-serif; line-height: 1.6; color: #333; }}
+        .container {{ max-width: 600px; margin: 0 auto; padding: 20px; }}
+        .header {{ background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 30px; text-align: center; color: white; }}
+        .content {{ padding: 30px; background: #f9f9f9; }}
+        .button {{ display: inline-block; padding: 12px 30px; background: #667eea; color: white; text-decoration: none; border-radius: 5px; font-weight: bold; }}
+        .footer {{ padding: 20px; text-align: center; font-size: 12px; color: #666; }}
+    </style>
+</head>
+<body>
+    <div class='container'>
+        <div class='header'>
+            <h1>MyBookShelf</h1>
+            <p>Email Verification Request</p>
+        </div>
+        <div class='content'>
+            <h2>Hello {username},</h2>
+            <p>We noticed you tried to login but your email hasn't been verified yet. Please verify your email address by clicking the button below:</p>
+            <p style='text-align: center;'>
+                <a href='{verifyUrl}' class='button'>Verify Email Address</a>
+            </p>
+            <p>Or copy and paste this link in your browser:</p>
+            <p style='word-break: break-all;'>{verifyUrl}</p>
+            <p>If you didn't request this email, please ignore it.</p>
+        </div>
+        <div class='footer'>
+            <p>&copy; {DateTime.Now.Year} MyBookShelf. All rights reserved.</p>
+        </div>
+    </div>
+</body>
+</html>";
+
+                using (MailMessage mail = new MailMessage())
+                {
+                    mail.From = new MailAddress("nayzawoo.ace@gmail.com", "MyBookShelf");
+                    mail.To.Add(toEmail);
+                    mail.Subject = subject;
+                    mail.Body = body;
+                    mail.IsBodyHtml = true;
+                    mail.Priority = MailPriority.Normal;
+
+                    mail.Headers.Add("X-Mailer", "MyBookShelf");
+                    mail.Headers.Add("X-Priority", "3");
+
+                    using (SmtpClient smtp = new SmtpClient("smtp.gmail.com", 587))
+                    {
+                        smtp.Credentials = new NetworkCredential("nayzawoo.ace@gmail.com", "ijkz bsvx vsrp aukg");
+                        smtp.EnableSsl = true;
+                        smtp.Timeout = 30000;
+
+                        smtp.Send(mail);
+                        return true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Verification email sending failed: {ex.Message}");
                 return false;
             }
-            return true;
+        }
+
+        private void ShowMessage(string msg, string type = "info")
+        {
+            lblMessage.Text = msg;
+            lblMessage.Visible = true;
+
+            // Set different styles based on message type
+            switch (type.ToLower())
+            {
+                case "success":
+                    lblMessage.CssClass = "text-green-700 mb-4 block text-sm bg-green-50 p-3 rounded-lg text-center border border-green-200";
+                    break;
+                case "error":
+                    lblMessage.CssClass = "text-red-700 mb-4 block text-sm bg-red-50 p-3 rounded-lg text-center border border-red-200";
+                    break;
+                case "warning":
+                    lblMessage.CssClass = "text-yellow-700 mb-4 block text-sm bg-yellow-50 p-3 rounded-lg text-center border border-yellow-200";
+                    break;
+                default:
+                    lblMessage.CssClass = "text-blue-700 mb-4 block text-sm bg-blue-50 p-3 rounded-lg text-center border border-blue-200";
+                    break;
+            }
+
+            // Register script to hide message after delay
+            ScriptManager.RegisterStartupScript(this, this.GetType(), "HideMsg", "hideMessageAfterDelay();", true);
         }
     }
 }

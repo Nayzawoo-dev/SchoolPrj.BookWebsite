@@ -29,11 +29,11 @@ namespace SchoolPrj.BookWebsite
             {
                 using (var connection = new SqlConnection(connStr))
                 {
-                    var res = connection.QueryFirstOrDefault<int>(
-                        "SELECT COUNT(1) FROM Tb_BanList WHERE UserId = @UserId",
+                    var res = connection.QueryFirstOrDefault<User>(
+                        "select * from Users where UserId = @UserId",
                         new { UserId = HttpContext.Current.Session["UserId"] });
 
-                    if (res > 0)
+                    if (res != null && res.BanStatus > 0)
                     {
                         HttpContext.Current.Session.Clear();
                         HttpContext.Current.Session.Abandon();
@@ -58,7 +58,6 @@ namespace SchoolPrj.BookWebsite
             {
                 LoadBookDetails(bookId);
             }
-
         }
         protected bool IsHearted
         {
@@ -108,7 +107,7 @@ namespace SchoolPrj.BookWebsite
                 if (Session["UserId"] == null)
                 {
                     ScriptManager.RegisterStartupScript(this, this.GetType(), "alert", "alert('❌ Please login react this book');", true);
-                    btnHeart.Enabled=true;
+                    btnHeart.Enabled = true;
                     return;
                 }
                 if (!IsHearted)
@@ -136,7 +135,7 @@ namespace SchoolPrj.BookWebsite
         }
 
         private void UpdateHeartButton()
-        { 
+        {
             btnHeart.Text = IsHearted ? "❤️" : "♡";
             btnHeart.CssClass = IsHearted ? "heart-btn text-3sm heart-active" : "heart-btn text-3xl";
         }
@@ -158,20 +157,24 @@ namespace SchoolPrj.BookWebsite
                     lblCategory.Text = book.Category;
                     lblAuthor.Text = book.Author;
                     lblDescription.Text = book.Description;
-                    lnkPdf.HRef = book.PdfPath;
+                    
                     imgBook.Src = book.ImagePath;
                     imgBook.Alt = book.BookTitle;
                     if (Session["UserID"] == null)
                     {
                         // Logged in user – enable download
                         lnkDownload.HRef = "#";
+                        lnkPdf.HRef = "#";
+                        lnkPdf.Attributes["onclick"] = "alert('Please log in to read the book.'); return false;";
                         lnkDownload.Attributes["onclick"] = "alert('Please log in to download the book.'); return false;";
                         return;
                     }
 
                     // Not logged in – keep link visible but show alert
-                    lnkDownload.HRef = book.PdfPath; // prevent navigation
-                    lnkDownload.Attributes.Remove("onclick"); // remove any previous onclick
+                    lnkDownload.HRef = book.PdfPath;
+                    lnkPdf.HRef = book.PdfPath; // prevent navigation
+                    lnkDownload.Attributes.Remove("onclick");
+                    lnkPdf.Attributes.Remove("onclick");// remove any previous onclick
                 }
             }
         }
@@ -248,6 +251,12 @@ namespace SchoolPrj.BookWebsite
                 videoPath = "~/uploads/videos/" + filename;
             }
 
+            if (string.IsNullOrEmpty(comment) && videoPath == null)
+            {
+                btnAddComment.Enabled = false;
+                return;
+            }
+
             if (!string.IsNullOrEmpty(comment) || videoPath != null)
             {
                 using (var conn = new SqlConnection(connStr))
@@ -282,12 +291,6 @@ namespace SchoolPrj.BookWebsite
                 pnlNoComments.Visible = false;
                 btnAddComment.Enabled = true;
                 btnAddComment.Text = "Post Comment";
-            }
-            else
-            {
-                ScriptManager.RegisterStartupScript(this, this.GetType(), "alert", "alert('❌ Please Write Something');", true);
-                btnAddComment.Enabled = true;
-                return;
             }
         }
 

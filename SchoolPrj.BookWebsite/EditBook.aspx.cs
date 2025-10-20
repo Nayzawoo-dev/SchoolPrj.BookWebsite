@@ -1,8 +1,9 @@
-﻿using System;
+﻿using Dapper;
+using System;
 using System.Configuration;
 using System.Data.SqlClient;
 using System.IO;
-using Dapper;
+using System.Linq;
 
 namespace SchoolPrj.BookWebsite
 {
@@ -14,11 +15,28 @@ namespace SchoolPrj.BookWebsite
         {
             if (!IsPostBack)
             {
+                LoadCategory();
                 string bookId = Request.QueryString["BookId"];
                 if (!string.IsNullOrEmpty(bookId))
                 {
                     LoadBook(bookId);
                 }
+
+            }
+            if (Session["UserId"] == null || Session["Role"].ToString() != "Admin")
+            {
+                // Session clear
+                Session.Clear();
+                Session.Abandon();
+
+                // Authentication cookie (ASP.NET Forms Auth သုံးထားရင်)
+                if (Request.Cookies["UserAuth"] != null)
+                {
+                    Response.Cookies["UserAuth"].Expires = DateTime.Now.AddDays(-1);
+                }
+
+                // Website အစ Login Page သို့ ပြန်ပို့
+                Response.Redirect("~/Login.aspx");
             }
         }
 
@@ -28,15 +46,37 @@ namespace SchoolPrj.BookWebsite
             {
                 string sql = "SELECT * FROM Tb_Book WHERE BookId=@BookId";
                 var book = connection.QuerySingleOrDefault(sql, new { BookId = bookId });
+                var category = connection.Query<Category>("SELECT CategoryId, Category FROM Tb_Category WHERE Category=@Category", new { category = book.Category }).ToList();
+
                 if (book != null)
                 {
                     hfBookId.Value = book.BookId.ToString();
                     txtTitle.Text = book.BookTitle;
                     txtAuthor.Text = book.Author;
-                    txtCategory.Text = book.Category;
                     imgPreview.ImageUrl = book.ImagePath;
                     lnkPdf.NavigateUrl = book.PdfPath;
                     txtDescription.Text = book.Description;
+
+                    // Category ကို Select ပြုလုပ်ခြင်း
+                    ddlCategory.ClearSelection();
+                    var item = ddlCategory.Items.FindByText(book.Category);
+                    if (item != null)
+                    {
+                        item.Selected = true;
+                    }
+
+                }
+            }
+        }
+
+        private void LoadCategory()
+        {
+            using (var con = new SqlConnection(connStr))
+            {
+                var categories = con.Query<Category>("SELECT CategoryId, Category FROM Tb_Category ORDER BY Category").ToList();
+                foreach (var cat in categories)
+                {
+                    ddlCategory.Items.Add(new System.Web.UI.WebControls.ListItem(cat.category, cat.CategoryId.ToString()));
                 }
             }
         }
@@ -95,7 +135,7 @@ namespace SchoolPrj.BookWebsite
                     BookId = bookId,
                     BookTitle = txtTitle.Text,
                     Author = txtAuthor.Text,
-                    Category = txtCategory.Text,
+                    Category = ddlCategory.SelectedItem.Text,
                     ImagePath = imagePath,
                     PdfPath = pdfPath
                 });

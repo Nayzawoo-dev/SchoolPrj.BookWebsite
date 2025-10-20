@@ -20,11 +20,11 @@ namespace SchoolPrj.BookWebsite
             {
                 using (var connection = new SqlConnection(connStr))
                 {
-                    var res = connection.QueryFirstOrDefault<int>(
-                        "SELECT COUNT(1) FROM Tb_BanList WHERE UserId = @UserId",
+                    var res = connection.QueryFirstOrDefault<User>(
+                        "select * from Users where UserId = @UserId",
                         new { UserId = HttpContext.Current.Session["UserId"] });
 
-                    if (res > 0)
+                    if (res != null && res.BanStatus > 0)
                     {
                         HttpContext.Current.Session.Clear();
                         HttpContext.Current.Session.Abandon();
@@ -41,6 +41,10 @@ namespace SchoolPrj.BookWebsite
             if (!IsPostBack)
             {
                 LoadBooks();
+            }
+            if (Session["UserId"] == null)
+            {
+                Response.Redirect("~/Login.aspx");
             }
         }
 

@@ -50,7 +50,7 @@
 
                 <!-- Right Image -->
                 <div class="relative flex justify-center md:justify-end" data-aos="fade-left">
-                    <img src="/uploads/images/default.png" alt="Books" class="rounded-full size-[300px] shadow-2xl transform hover:scale-105 transition duration-500">
+                    <img src="/uploads/images/default.jpg" alt="Books" class="rounded-full size-[300px] shadow-2xl transform hover:scale-105 transition duration-500">
                 </div>
             </div>
         </div>

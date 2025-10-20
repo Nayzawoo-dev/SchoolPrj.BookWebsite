@@ -17,6 +17,28 @@ namespace SchoolPrj.BookWebsite
         public List<Save> SavedBooks { get; set; }
         protected void Page_Load(object sender, EventArgs e)
         {
+            if (HttpContext.Current.Session != null && HttpContext.Current.Session["UserId"] != null)
+            {
+                using (var connection = new SqlConnection(connStr))
+                {
+                    var res = connection.QueryFirstOrDefault<User>(
+                        "select * from Users where UserId = @UserId",
+                        new { UserId = HttpContext.Current.Session["UserId"] });
+
+                    if (res != null && res.BanStatus > 0)
+                    {
+                        HttpContext.Current.Session.Clear();
+                        HttpContext.Current.Session.Abandon();
+
+                        if (HttpContext.Current.Request.Cookies["UserAuth"] != null)
+                        {
+                            HttpContext.Current.Response.Cookies["UserAuth"].Expires = DateTime.Now.AddDays(-1);
+                        }
+
+                        HttpContext.Current.Response.Redirect("~/Login.aspx?msg=banned", true);
+                    }
+                }
+            }
             if (Session["UserId"] == null)
             {
                 Response.Redirect("~/Login.aspx");

@@ -13,16 +13,16 @@
 
         <!-- Message Alert -->
         <div class="bg-white rounded-2xl shadow-lg overflow-hidden p-6 md:p-8">
-             <asp:Label ID="lblMessage" runat="server" CssClass="bg-red-50 text-red-700 p-4 rounded-xl mb-6 block text-center" Visible="false"></asp:Label>
+            <asp:Label ID="lblMessage" runat="server" CssClass="bg-red-50 text-red-700 p-4 rounded-xl mb-6 block text-center" Visible="false"></asp:Label>
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 <!-- Preview Box -->
                 <div class="lg:col-span-1">
                     <div class="bg-indigo-50 rounded-2xl p-4 h-full flex flex-col">
                         <h3 class="text-lg font-semibold text-indigo-800 mb-4">Book Cover Preview</h3>
                         <div class="flex-1 flex items-center justify-center border-2 border-dashed border-indigo-200 rounded-xl bg-white p-4">
-                            <img id="imgPreview" class="w-full h-64 object-contain rounded-lg" 
-                                 src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%239C92AC'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='1' d='M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z'%3E%3C/path%3E%3C/svg%3E" 
-                                 alt="Book cover preview" />
+                            <img id="imgPreview" class="w-full h-64 object-contain rounded-lg"
+                                src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%239C92AC'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='1' d='M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z'%3E%3C/path%3E%3C/svg%3E"
+                                alt="Book cover preview" />
                         </div>
                         <p class="text-sm text-gray-500 mt-3 text-center">Image will appear here after selection</p>
                     </div>
@@ -35,22 +35,22 @@
                         <div class="space-y-5">
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Book Title <span class="text-red-500">*</span></label>
-                                <asp:TextBox ID="txtTitle" runat="server" 
-                                    CssClass="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all" 
+                                <asp:TextBox ID="txtTitle" runat="server"
+                                    CssClass="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
                                     placeholder="Enter book title" />
                             </div>
-                            
+
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Category <span class="text-red-500">*</span></label>
-                                <asp:TextBox ID="txtCategory" runat="server" 
-                                    CssClass="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all" 
-                                    placeholder="e.g., Fiction, Science, History" />
+                                <asp:DropDownList ID="ddlCategory" runat="server"
+                                    CssClass="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all">
+                                </asp:DropDownList>
                             </div>
-                            
+
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Author <span class="text-red-500">*</span></label>
-                                <asp:TextBox ID="txtAuthor" runat="server" 
-                                    CssClass="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all" 
+                                <asp:TextBox ID="txtAuthor" runat="server"
+                                    CssClass="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
                                     placeholder="Author's full name" />
                             </div>
                         </div>
@@ -65,10 +65,10 @@
                                         onchange="previewImage(event)" />
                                 </div>
                             </div>
-                            
+
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">PDF File</label>
-                                <asp:FileUpload ID="fuPdf" runat="server" 
+                                <asp:FileUpload ID="fuPdf" runat="server"
                                     CssClass="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100" />
                             </div>
                         </div>
@@ -77,8 +77,8 @@
                     <!-- Description Field -->
                     <div class="mt-6">
                         <label class="block text-sm font-medium text-gray-700 mb-2">Description</label>
-                        <asp:TextBox ID="txtDescription" runat="server" TextMode="MultiLine" Rows="5" 
-                            CssClass="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all" 
+                        <asp:TextBox ID="txtDescription" runat="server" TextMode="MultiLine" Rows="5"
+                            CssClass="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
                             placeholder="Enter a brief description of the book..." />
                     </div>
 

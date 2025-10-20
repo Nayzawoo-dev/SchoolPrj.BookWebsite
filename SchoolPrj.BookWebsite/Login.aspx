@@ -15,8 +15,8 @@
                     </div>
 
                     <div class="py-4 px-4">
-                        <!-- Error Message -->
-                        <asp:Label ID="lblMessage" runat="server" CssClass="text-red-500 mb-4 block text-sm bg-red-50 p-3 rounded-lg text-center" Visible="false"></asp:Label>
+                        <!-- Success/Error Message -->
+                        <asp:Label ID="lblMessage" runat="server" CssClass="mb-4 block text-sm p-3 rounded-lg text-center" Visible="false"></asp:Label>
 
                         <div class="space-y-5">
                             <!-- Username Field -->
@@ -51,6 +51,14 @@
                                 </div>
                             </div>
 
+                            <!-- Forgot Password Link -->
+                            <div class="text-right">
+                                <asp:HyperLink ID="lnkForgotPassword" runat="server" NavigateUrl="~/ForgotPassword.aspx"
+                                    CssClass="text-sm text-indigo-600 hover:text-indigo-500 font-medium">
+                                    Forgot your password?
+                                </asp:HyperLink>
+                            </div>
+
                             <!-- Login Button -->
                             <asp:Button ID="btnLogin" runat="server" Text="Sign In" OnClick="btnLogin_Click"
                                 CssClass="w-full bg-indigo-600 text-white py-3.5 rounded-xl hover:bg-indigo-700 transition-all font-medium shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" />
@@ -69,8 +77,8 @@
                             <asp:HyperLink ID="lnkGoogleLogin" runat="server"
                                 NavigateUrl="~/GoogleLogin.aspx"
                                 CssClass="w-full bg-white border border-gray-300 text-gray-700 py-3 rounded-xl hover:bg-gray-50 transition-all font-medium shadow-sm flex items-center justify-center">
-                        <img src="/uploads/images/google.png" class="w-5 h-5 mr-2" alt="Google logo">
-                        Sign in with Google
+                                <img src="/uploads/images/google.png" class="w-5 h-5 mr-2" alt="Google logo">
+                                Sign in with Google
                             </asp:HyperLink>
 
                             <!-- Register Link -->
@@ -92,7 +100,7 @@
                 if (msg) {
                     msg.style.display = 'none';
                 }
-            }, 5000);
+            }, 8000); // 8 seconds for better reading
         }
 
         // Password visibility toggle function

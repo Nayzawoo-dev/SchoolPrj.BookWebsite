@@ -128,7 +128,7 @@
                                     CssClass="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" />
                             </div>
 
-                            <asp:Button ID="btnAddComment" runat="server" Text="Post Comment" OnClick="btnAddComment_Click" OnClientClick="var btn=this; setTimeout(function(){btn.disabled=true; btn.value='Posting...';}, 5); return true;"
+                            <asp:Button ID="btnAddComment" runat="server" Text="Post Comment" OnClick="btnAddComment_Click" OnClientClick="var btn=this; setTimeout(function(){btn.disabled=true;}, 5); return true;"
                                 CssClass="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg text-sm transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 whitespace-nowrap" />
                         </div>
                     </asp:Panel>
