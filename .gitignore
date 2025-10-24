@@ -362,3 +362,6 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 /SchoolPrj.BookWebsite.sln
+/SchoolPrj.BookWebsite/Web.config
+/SchoolPrj.BookWebsite/Web.Debug.config
+/SchoolPrj.BookWebsite/Web.Release.config
