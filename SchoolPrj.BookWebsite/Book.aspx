@@ -119,7 +119,7 @@
             </div>
 
             <!-- 🔄 Pagination -->
-            <div class="flex flex-col sm:flex-row justify-center items-center mt-10 space-y-3 sm:space-y-0 sm:space-x-4">
+            <div class="flex justify-between items-center mt-10 space-y-3 sm:space-y-0 sm:space-x-4">
                 <asp:Button ID="btnPrev" runat="server" Text="&laquo; Previous"
                     CssClass="px-5 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition-all"
                     OnClick="btnPrev_Click" />
